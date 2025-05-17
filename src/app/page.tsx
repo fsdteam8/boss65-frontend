@@ -1,3 +1,4 @@
+import AsSeen from "@/components/AsSeen";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWork";
 import PrivateRoomPromo from "@/components/PrivateRoom";
@@ -10,6 +11,7 @@ export default function Home() {
  <ShowRoom/>
  <HowItWorks/>
  <PrivateRoomPromo/>
+ <AsSeen/>
   </div>
   );
 }
