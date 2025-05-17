@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import PrivateRoomPromo from "@/components/PrivateRoom";
 import ShowRoom from "@/components/ShowRoom";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
   <div>
  <Hero/>
  <ShowRoom/>
+ <PrivateRoomPromo/>
   </div>
   );
 }
