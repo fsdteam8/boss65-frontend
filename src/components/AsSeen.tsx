@@ -45,10 +45,10 @@ export default function AsSeen() {
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center text-[#FF6B00] mb-12">As Seen On</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12  h-[400px]">
           {logos.map((logo, index) => (
             <div key={index} className="flex items-center justify-center">
-              <div className="relative h-20 w-full">
+              <div className="relative h-16 sm:h-20 w-full">
                 <Image
                   src={logo.src || "/placeholder.svg"}
                   alt={logo.alt}
