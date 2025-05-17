@@ -1,4 +1,4 @@
-import { Clock, Shield, Award, HeartHandshake } from "lucide-react"
+import { Clock,  Award, HeartHandshake } from "lucide-react"
 
 export default function HowItWorks() {
   return (
