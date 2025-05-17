@@ -1,8 +1,17 @@
+import AsSeen from "@/components/AsSeen";
+import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWork";
+import PrivateRoomPromo from "@/components/PrivateRoom";
+import ShowRoom from "@/components/ShowRoom";
 
 export default function Home() {
   return (
   <div>
-    <h1>Boss65</h1>
+ <Hero/>
+ <ShowRoom/>
+ <HowItWorks/>
+ <PrivateRoomPromo/>
+ <AsSeen/>
   </div>
   );
 }
