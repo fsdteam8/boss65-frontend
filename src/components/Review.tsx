@@ -123,7 +123,7 @@ export default function ReviewCarousel() {
                           />
                         ))}
                       </div>
-                      <p className="text-gray-700 mb-2">"{testimonial.quote}"</p>
+                      <p className="text-gray-700 mb-2">&ldquo;{testimonial.quote}&ldquo;</p>
                       <p className="font-medium text-gray-500">{testimonial.name}</p>
                     </div>
                   </div>
