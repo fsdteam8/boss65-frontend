@@ -15,10 +15,12 @@ export default function HowItWorks() {
                 <HeartHandshake className="w-6 h-6" />
               </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3">You Can Trust</h3>
+          <div className="pr-12">
+          <h3 className="text-xl md:text-2xl font-bold mb-3">You Can Trust</h3>
             <p className="text-sm md:text-base opacity-90">
               Lorem ipsum dolor sit amet consectetur. Donec blandit nisi elementum sed sed odio.
             </p>
+          </div>
           </div>
 
           {/* Feature 2 - Positioned lower */}
@@ -29,10 +31,12 @@ export default function HowItWorks() {
                 <Clock className="w-6 h-6" />
               </div>
             </div>
+            <div className="pr-12">
             <h3 className="text-xl md:text-2xl font-bold mb-3">Fast & Reliable</h3>
             <p className="text-sm md:text-base opacity-90">
               Lorem ipsum dolor sit amet consectetur. Donec blandit nisi elementum sed sed odio.
             </p>
+            </div>
           </div>
 
           {/* Feature 3 - Positioned higher */}
@@ -43,10 +47,12 @@ export default function HowItWorks() {
                 <Award className="w-6 h-6" />
               </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3">Safety and Quality</h3>
+          <div className="pr-12">
+          <h3 className="text-xl md:text-2xl font-bold mb-3">Safety and Quality</h3>
             <p className="text-sm md:text-base opacity-90">
               Lorem ipsum dolor sit amet consectetur. Donec blandit nisi elementum sed sed odio.
             </p>
+          </div>
           </div>
         </div>
       </div>

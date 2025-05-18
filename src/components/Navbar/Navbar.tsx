@@ -6,6 +6,8 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 
+const landingPages = ["/", "/space", "/our-unique-experience","/contact"]
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
@@ -14,10 +16,12 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const ifWhiteColorNav = landingPages.includes(pathname)
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/space", label: "Space" },
-    { href: "/experience", label: "Our Unique Experience" },
+    { href: "/our-unique-experience", label: "Our Unique Experience" },
     { href: "/updates", label: "Updates" },
     { href: "/contact", label: "Contact Us" },
   ]
@@ -39,7 +43,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className={`font-medium transition-colors ${
-                pathname === link.href ? "text-[#ff6b00]" : "text-white hover:text-[#ff6b00]"
+                pathname === link.href ? "text-[#ff6b00]" : ifWhiteColorNav ? "text-white hover:text-[#ff6b00]" : "hover:text-[#ff6b00] text-black"
               }`}
             >
               {link.label}
