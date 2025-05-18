@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-const landingPages = ["/", "/space"]
+const landingPages = ["/", "/space", "/our-unique-experience"]
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -21,7 +21,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/space", label: "Space" },
-    { href: "/experience", label: "Our Unique Experience" },
+    { href: "/our-unique-experience", label: "Our Unique Experience" },
     { href: "/updates", label: "Updates" },
     { href: "/contact", label: "Contact Us" },
   ]
