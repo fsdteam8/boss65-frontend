@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
-const landingPages = ["/", "/space", "/our-unique-experience","/updates"]
+const landingPages = ["/", "/space", "/our-unique-experience", "/updates"];
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-  const ifWhiteColorNav = landingPages.includes(pathname)
+  const ifWhiteColorNav = landingPages.includes(pathname);
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -24,7 +24,7 @@ export default function Navbar() {
     { href: "/our-unique-experience", label: "Our Unique Experience" },
     { href: "/updates", label: "Updates" },
     { href: "/contact", label: "Contact Us" },
-  ]
+  ];
 
   return (
     <header className="absolute top-0 left-0 w-full py-4 px-4 md:px-8 lg:px-12 z-50">
@@ -32,7 +32,12 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <div className="relative h-14 w-14 md:h-16 md:w-16">
-            <Image src="/img/logo.png" alt="Social Chamber" fill className="object-contain" />
+            <Image
+              src="/img/logo.png"
+              alt="Social Chamber"
+              fill
+              className="object-contain"
+            />
           </div>
         </Link>
 
@@ -43,7 +48,11 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className={`font-medium transition-colors ${
-                pathname === link.href ? "text-[#ff6b00]" : ifWhiteColorNav ? "text-white hover:text-[#ff6b00]" : "hover:text-[#ff6b00] text-black"
+                pathname === link.href
+                  ? "text-[#ff6b00]"
+                  : ifWhiteColorNav
+                    ? "text-white hover:text-[#ff6b00]"
+                    : "hover:text-[#ff6b00] text-black"
               }`}
             >
               {link.label}
@@ -60,7 +69,11 @@ export default function Navbar() {
         </Link>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden text-white" onClick={toggleMenu} aria-label="Toggle menu">
+        <button
+          className="md:hidden text-white"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -74,7 +87,9 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`text-xl font-medium ${
-                  pathname === link.href ? "text-[#ff6b00]" : "text-white hover:text-[#ff6b00]"
+                  pathname === link.href
+                    ? "text-[#ff6b00]"
+                    : "text-white hover:text-[#ff6b00]"
                 }`}
                 onClick={toggleMenu}
               >
@@ -92,5 +107,5 @@ export default function Navbar() {
         </div>
       )}
     </header>
-  )
+  );
 }

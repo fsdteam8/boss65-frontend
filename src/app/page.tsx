@@ -5,16 +5,18 @@ import HowItWorks from "@/components/HowItWork";
 import PrivateRoomPromo from "@/components/PrivateRoom";
 import ReviewCarousel from "@/components/Review";
 import ShowRoom from "@/components/ShowRoom";
+import Updates from "@/components/ui/Updates";
 
 export default function Home() {
   return (
-  <div>
- <HeroSection heading={<PrivateRoomH1 />} />
- <ShowRoom/>
- <HowItWorks/>
- <PrivateRoomPromo/>
- <AsSeen/>
- <ReviewCarousel/>
-  </div>
+    <div>
+      <HeroSection heading={<PrivateRoomH1 />} />
+      <ShowRoom />
+      <HowItWorks />
+      <PrivateRoomPromo />
+      <AsSeen />
+      <Updates />
+      <ReviewCarousel />
+    </div>
   );
 }
