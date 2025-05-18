@@ -5,7 +5,7 @@ const PrivateRoomH1 = () => {
     <>
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
         Private Rooms for Unforgettable
-        <span className="block text-[#ff6b00] mt-5">Experiences</span>
+        <span className="block text-[#ff6b00]">Experiences</span>
       </h1>
 
       <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
@@ -38,9 +38,8 @@ export const Experience = () => {
   return (
     <>
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-        Why Choose The Social
-        <span className=" text-[#ff6b00] "> Social</span> <br />{" "}
-        <span className="mt-5">Chamber?</span>
+        Why Choose The
+        <span className=" text-[#ff6b00]"> Social</span> <br /> Chamber?
       </h1>
 
       <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
@@ -56,12 +55,28 @@ export const Stay = () => {
     <>
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
         Stay in the Loop with Social
-        <span className="block text-[#ff6b00] mt-5">Chamber</span>
+        <span className="block text-[#ff6b00]">Chamber</span>
       </h1>
 
       <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
         Explore fresh updates, behind-the-scenes stories, and tips to make the
         most of your private room experience.
+      </p>
+    </>
+  );
+};
+
+export const Contact = () => {
+  return (
+    <>
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+        Your Most <span className=" text-[#ff6b00] inline-block">Intimate</span>{" "}
+        Date Yet
+      </h1>
+
+      <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
+        Escape the ordinary and reconnect in a private room designed for
+        unforgettable moments together.
       </p>
     </>
   );
