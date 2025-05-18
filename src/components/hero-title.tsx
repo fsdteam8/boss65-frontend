@@ -5,7 +5,7 @@ const PrivateRoomH1 = () => {
 <>
 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
           Private Rooms for Unforgettable
-          <span className="block text-[#ff6b00]">Experiences</span>
+          <span className="block text-[#ff6b00] mt-5">Experiences</span>
         </h1>
 
         <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
@@ -42,7 +42,7 @@ Celebrate your connection in an intimate, cozy space designed for unforgettable 
     <>
     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
     Why Choose The Social 
-          <span className=" text-[#ff6b00]"> Social</span> <br /> Chamber?
+          <span className=" text-[#ff6b00] "> Social</span> <br />  <span className='mt-5'>Chamber?</span>
         </h1>
 
 <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
@@ -57,7 +57,7 @@ Because your moments deserve more than ordinary. Discover what makes our private
     <>
     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
     Stay in the Loop with Social
-          <span className="block text-[#ff6b00]">Chamber</span>
+          <span className="block text-[#ff6b00] mt-5">Chamber</span>
         </h1>
 
 <p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
