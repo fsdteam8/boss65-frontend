@@ -28,7 +28,7 @@ export default function ContactForm() {
   }
 
   return (
-    <section className="w-full max-w-5xl  mx-auto px-4 py-12">
+    <section className="w-full max-w-5xl  mx-auto px-4 py-16">
       <div className="grid  md:grid-cols-2 gap-8 rounded-lg overflow-hidden ">
         {/* Left side - Contact Information */}
         <div className=" p-8 relative max-w-md border border-gray-200 rounded-lg overflow-hidden">
