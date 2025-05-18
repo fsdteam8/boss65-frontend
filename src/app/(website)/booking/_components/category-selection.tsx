@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import SkeletonWrapper from "@/components/ui/skeleton-wrapper";
+import { cn } from "@/lib/utils";
 import { CategoryName, useBookingStore } from "@/store/booking/index";
 import { Category, CategoryApiResponse } from "@/types/category";
 import { useQuery } from "@tanstack/react-query";
@@ -55,7 +56,9 @@ export default function CategorySelection() {
 }
 
 const CategoryCard = ({ category }: { category?: Category }) => {
-  const { selectCategory } = useBookingStore();
+  const { selectCategory, categoryId } = useBookingStore();
+
+  const isSelected = categoryId === category?._id;
   return (
     <div className="relative overflow-hidden rounded-lg h-80">
       <div className="absolute inset-0">
@@ -65,7 +68,7 @@ const CategoryCard = ({ category }: { category?: Category }) => {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
       <div className="absolute top-6 left-6">
         <h3 className="text-white text-3xl font-bold">{category?.name}</h3>
@@ -79,9 +82,15 @@ const CategoryCard = ({ category }: { category?: Category }) => {
             )
           }
           variant="outline"
-          className="w-full border border-white/70 bg-transparent text-white hover:bg-white/20 hover:text-white transition-colors"
+          className={cn(
+            "w-full border  text-white  hover:text-white ",
+            isSelected
+              ? "bg-orange-500 "
+              : " bg-transparent transition-colors hover:bg-white/20 border-white/70"
+          )}
+          disabled={isSelected}
         >
-          Select
+          {isSelected ? "Selected" : "Select"}
         </Button>
       </div>
     </div>

@@ -1,13 +1,6 @@
 import { create } from "zustand";
 
 export type CategoryName = "Hourly" | "Packages";
-export type Room =
-  | "dungeon"
-  | "japanese"
-  | "jungle"
-  | "mystery"
-  | "space"
-  | "wizard";
 export type Service = {
   id: string;
   name: string;
@@ -35,7 +28,7 @@ interface BookingState {
   selectedCategoryName: CategoryName | null;
   categoryId: string | null; // <-- Add this line
 
-  selectedRoom: Room | null;
+  selectedRoom: string | null;
   selectedService: Service | null;
   selectedDate: Date | null;
   selectedTimeSlot: TimeSlot | null;
@@ -44,7 +37,7 @@ interface BookingState {
   // Actions
   setStep: (step: BookingState["currentStep"]) => void;
   selectCategory: (category: CategoryName, categoryId: string) => void;
-  selectRoom: (room: Room) => void;
+  selectRoom: (room: string) => void;
   selectService: (service: Service) => void;
   selectDate: (date: Date) => void;
   selectTimeSlot: (timeSlot: TimeSlot) => void;
