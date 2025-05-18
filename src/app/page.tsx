@@ -1,5 +1,5 @@
 import AsSeen from "@/components/AsSeen";
-import Hero from "@/components/Hero";
+import HeroSection from "@/components/Hero";
 import PrivateRoomH1 from "@/components/hero-title";
 import HowItWorks from "@/components/HowItWork";
 import PrivateRoomPromo from "@/components/PrivateRoom";
@@ -9,7 +9,7 @@ import ShowRoom from "@/components/ShowRoom";
 export default function Home() {
   return (
   <div>
- <Hero heading={<PrivateRoomH1 />} />
+ <HeroSection heading={<PrivateRoomH1 />} />
  <ShowRoom/>
  <HowItWorks/>
  <PrivateRoomPromo/>
