@@ -36,12 +36,11 @@ Celebrate your connection in an intimate, cozy space designed for unforgettable 
 
   }
 
-
   export const Experience  = () => {
     return (
     <>
     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-    Why Choose The Social 
+    Why Choose The 
           <span className=" text-[#ff6b00]"> Social</span> <br /> Chamber?
         </h1>
 
@@ -67,3 +66,18 @@ Explore fresh updates, behind-the-scenes stories, and tips to make the most of y
       )
   }
      
+  export const Contact  = () => {
+    return (
+   <>
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+      Your Most <span className=" text-[#ff6b00] inline-block">Intimate</span>  Date Yet 
+            
+          </h1>
+
+<p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
+Escape the ordinary and reconnect in a private room designed for unforgettable moments together.
+</p>
+   </>
+    )
+
+  }

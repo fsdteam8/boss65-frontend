@@ -1,9 +1,11 @@
+import HeroSection from '@/components/Hero'
+import { Contact } from '@/components/hero-title'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <h1>contact</h1>
+      <HeroSection heading={<Contact/>}/>
     </div>
   )
 }
