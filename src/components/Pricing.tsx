@@ -77,43 +77,54 @@ export default function Pricing() {
               {/* Packages content */}
               <TabsContent value="packages" className="space-y-6 mt-6">
                 <div className="space-y-4">
-                  <div className="p-4 border rounded-lg">
-                    <h4 className="font-medium text-lg">Weekend Package</h4>
-                    <p className=" mb-2">Perfect for weekend gatherings</p>
-                    <ul className="space-y-2 mb-4">
-                      <li className="flex items-start">
-                        <span className="mr-2">•</span>
-                        <span>4 hours for $39.90 per person</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="mr-2">•</span>
-                        <span>Includes free flow of snacks</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="mr-2">•</span>
-                        <span>Minimum 4 pax</span>
-                      </li>
-                    </ul>
-                  </div>
+               
+         
 
-                  <div className="p-4 border rounded-lg">
-                    <h4 className="font-medium text-lg">Weekday Special</h4>
-                    <p className=" mb-2">Great for team meetings</p>
-                    <ul className="space-y-2 mb-4">
-                      <li className="flex items-start">
-                        <span className="mr-2">•</span>
-                        <span>6 hours for $49.90 per person</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="mr-2">•</span>
-                        <span>Includes beverages and light refreshments</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="mr-2">•</span>
-                        <span>Available Monday to Thursday only</span>
-                      </li>
-                    </ul>
-                  </div>
+                  <div className="flex items-center justify-between w-full max-w-md p-4 bg-white rounded-lg shadow-sm">
+      <div className="flex flex-col">
+        <h3 className="text-xl font-bold text-gray-900">Early Bird</h3>
+        <div className="flex items-center mt-2 space-x-2">
+          <div className="flex items-center justify-center px-2 py-1 text-xs text-white bg-orange-500 rounded-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-3 h-3 mr-1"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            "1h"
+          </div>
+          <div className="flex items-center justify-center px-2 py-1 text-xs text-white bg-orange-500 rounded-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-3 h-3 mr-1"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            "1/5"
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-center px-3 py-2 text-sm font-bold text-gray-900 bg-yellow-400 rounded-full">
+      "$55.90"
+      </div>
+    </div>
+                  
                 </div>
               </TabsContent>
             </Tabs>
