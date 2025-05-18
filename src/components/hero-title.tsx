@@ -12,7 +12,7 @@ const PrivateRoomH1 = () => {
 export default PrivateRoomH1
 
 
-export const PrivateExcapeH1 = () => {
+export const PrivateEscapeH1 = () => {
     return (
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
             A Private <span className=" text-[#ff6b00] inline-block">Escape</span> , Just for Two 

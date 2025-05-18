@@ -1,9 +1,11 @@
+import HeroSection from '@/components/Hero'
+import { PrivateEscapeH1 } from '@/components/hero-title'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <h1>space </h1>
+<HeroSection heading={<PrivateEscapeH1 />}/>
     
     </div>
   )
