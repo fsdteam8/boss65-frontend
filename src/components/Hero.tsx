@@ -12,10 +12,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      {/* String Lights Effect */}
-      {/* <div className="absolute top-0 w-full h-24 z-10 opacity-70">
-        <Image src="/lights.png" alt="String lights" fill className="object-contain" />
-      </div> */}
+     
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto text-center pt-16">
@@ -35,6 +32,9 @@ export default function HeroSection() {
           Reserve Now <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
       </div>
+
+
+  
     </section>
   )
 }
