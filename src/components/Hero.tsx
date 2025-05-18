@@ -23,9 +23,9 @@ export default function HeroSection({heading}: Props) {
       <div className="relative z-10 max-w-5xl mx-auto text-center pt-16">
         {heading}
 
-        <p className="text-white text-lg md:text-xl max-w-3xl mx-auto mb-10 opacity-90">
+        {/* <p className="text-white text-lg md:text-xl max-w-3xl mx-auto mb-10 opacity-90">
           Enjoy a cozy, immersive movie experience with friends, family, or your special someone in our themed rooms.
-        </p> 
+        </p>  */}
 
         <Link
           href="/reserve"
