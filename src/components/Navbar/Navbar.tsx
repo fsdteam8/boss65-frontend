@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-const landingPages = ["/", "/space", "/our-unique-experience"]
+const landingPages = ["/", "/space", "/our-unique-experience","/contact"]
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
