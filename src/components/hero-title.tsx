@@ -17,10 +17,9 @@ const PrivateRoomH1 = () => {
   )
 }
 
-
 export default PrivateRoomH1
 
-
+ 
 export const PrivateEscapeH1 = () => {
     return (
    <>
@@ -37,6 +36,22 @@ Celebrate your connection in an intimate, cozy space designed for unforgettable 
 
   }
 
+
+  export const Experience  = () => {
+    return (
+    <>
+    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+    Why Choose The Social 
+          <span className=" text-[#ff6b00]"> Social</span> <br /> Chamber?
+        </h1>
+
+<p className="text-white text-lg md:text-xl max-w-3xl mx-auto my-10 opacity-90">
+Because your moments deserve more than ordinary. Discover what makes our private spaces unlike any other in Singapore.
+</p>
+    </>
+      )
+  }
+
   export const Stay  = () => {
     return (
     <>
@@ -51,4 +66,4 @@ Explore fresh updates, behind-the-scenes stories, and tips to make the most of y
     </>
       )
   }
-    
+     
