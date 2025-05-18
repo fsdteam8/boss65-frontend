@@ -4,7 +4,14 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
 
 interface Testimonial {
@@ -15,9 +22,10 @@ interface Testimonial {
   rating: number
 }
 
-export default function ReviewCarousel() {
-  const [api, setApi] = useState<any>()
+export default function ReviewCarousel() { 
+  const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
+
 
   const testimonials: Testimonial[] = [
     {
@@ -81,7 +89,7 @@ export default function ReviewCarousel() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-16">
       <div className="text-center mb-12">
-        <p className="text-[#FCB900] font-medium mb-2">3840+ Happy Landingfolio Users</p>
+        <p className="text-orange-500 font-medium mb-2">3840+ Happy Landingfolio Users</p>
         <h2 className="text-4xl font-bold text-orange-500 md:text-5xl">Don&apos;t just take our words</h2>
       </div>
 
@@ -100,10 +108,10 @@ export default function ReviewCarousel() {
       >
         <CarouselContent>
           {testimonials.map((testimonial) => (
-            <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/2 pl-4">
+            <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/2 pl-4 ">
               <Card className="border-none shadow-none">
                 <CardContent className="p-6">
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 ">
                     <div className="relative h-24 w-24 overflow-hidden rounded-lg flex-shrink-0">
                       <Image
                         src={testimonial.image || "/placeholder.svg"}
@@ -123,7 +131,7 @@ export default function ReviewCarousel() {
                           />
                         ))}
                       </div>
-                      <p className="text-gray-700 mb-2">&ldquo;{testimonial.quote}&ldquo;</p>
+                      <p className="text-gray-700 mb-2">&quot;{testimonial.quote}&quot;</p>
                       <p className="font-medium text-gray-500">{testimonial.name}</p>
                     </div>
                   </div>
