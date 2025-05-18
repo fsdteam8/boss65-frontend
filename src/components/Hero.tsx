@@ -1,8 +1,13 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
+import { ReactNode } from "react"
 
-export default function HeroSection() {
+
+interface Props {
+  heading: ReactNode
+}
+export default function HeroSection({heading}: Props) {
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center px-4 md:px-8 lg:px-12 py-12 overflow-hidden pt-24">
       {/* Background Image */}
@@ -16,14 +21,11 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto text-center pt-16">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-          Private Rooms for Unforgettable
-          <span className="block text-[#ff6b00]">Experiences</span>
-        </h1>
+        {heading}
 
         <p className="text-white text-lg md:text-xl max-w-3xl mx-auto mb-10 opacity-90">
           Enjoy a cozy, immersive movie experience with friends, family, or your special someone in our themed rooms.
-        </p>
+        </p> 
 
         <Link
           href="/reserve"
