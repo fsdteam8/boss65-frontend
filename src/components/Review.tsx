@@ -89,7 +89,7 @@ export default function ReviewCarousel() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-16">
       <div className="text-center mb-12">
-        <p className="text-orange-500 font-medium mb-2">3840+ Happy Landingfolio Users</p>
+        <p className="text-[#FCB900] text-xl font-medium mb-2">3940+ Happy Landingfolio Users</p>
         <h2 className="text-4xl font-bold text-orange-500 md:text-5xl">Don&apos;t just take our words</h2>
       </div>
 
