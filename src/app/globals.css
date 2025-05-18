@@ -76,3 +76,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+/* Custom Swiper pagination color */
+.swiper-pagination-bullet {
+  background-color: #ccc !important;
+  opacity: 1;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #ff6900 !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+
+
