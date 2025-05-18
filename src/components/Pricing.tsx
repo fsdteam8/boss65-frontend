@@ -98,7 +98,7 @@ export default function Pricing() {
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </svg>
-            "1h"
+            &ldquo;1h&ldquo;
           </div>
           <div className="flex items-center justify-center px-2 py-1 text-xs text-white bg-orange-500 rounded-full">
             <svg
@@ -116,12 +116,11 @@ export default function Pricing() {
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            "1/5"
-          </div>
+            &ldquo;1/5&ldquo;          </div>
         </div>
       </div>
       <div className="flex items-center justify-center px-3 py-2 text-sm font-bold text-gray-900 bg-yellow-400 rounded-full">
-      "$55.90"
+      &ldquo;$55.90&ldquo;
       </div>
     </div>
                   

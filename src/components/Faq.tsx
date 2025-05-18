@@ -37,7 +37,7 @@ export default function Faq() {
         <AccordionItem value="item-4" className="border rounded-lg px-4">
           <AccordionTrigger className="py-4  text-[18px] text-left font-medium">Where are you guys located?</AccordionTrigger>
           <AccordionContent className="pb-4 pt-1  text-lg">
-            We are located at [Your Address]. We're conveniently situated near public transportation and major
+            We are located at [Your Address]. We&ldquo;re conveniently situated near public transportation and major
             attractions in the area.
           </AccordionContent>
         </AccordionItem>
