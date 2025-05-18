@@ -1,3 +1,4 @@
+import Faq from '@/components/Faq'
 import HeroSection from '@/components/Hero'
 import { PrivateEscapeH1 } from '@/components/hero-title'
 import HowItWorks from '@/components/HowItWork'
@@ -12,6 +13,7 @@ const page = () => {
     <MovieRoomSection/>
     <HowItWorks/>
     <Pricing/>
+    <Faq/>
     </div>
   )
 }
