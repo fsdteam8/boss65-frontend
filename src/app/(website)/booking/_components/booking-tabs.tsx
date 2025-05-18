@@ -1,0 +1,77 @@
+"use client";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useBookingStore } from "@/store/booking";
+import { useEffect, useState } from "react";
+import CategorySelection from "./category-selection";
+import RoomSelection from "./room-selection";
+
+export function BookingTabs() {
+  const { currentStep, setStep } = useBookingStore();
+  const [mounted, setMounted] = useState(false);
+
+  // Hydration fix
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <Tabs
+      value={currentStep}
+      onValueChange={(value: any) => setStep(value as any)}
+      className="w-full  mx-auto"
+    >
+      <TabsList className="grid grid-cols-5 mb-[80px]">
+        <TabsTrigger
+          value="category"
+          className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full"
+        >
+          Category
+        </TabsTrigger>
+        <TabsTrigger
+          value="rooms"
+          className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full"
+        >
+          Rooms
+        </TabsTrigger>
+        <TabsTrigger
+          value="services"
+          className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full"
+        >
+          Services
+        </TabsTrigger>
+        <TabsTrigger
+          value="time"
+          className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full"
+        >
+          Time
+        </TabsTrigger>
+        <TabsTrigger
+          value="confirm"
+          className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full"
+        >
+          Confirm details
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="category">
+        <CategorySelection />
+      </TabsContent>
+      <TabsContent value="rooms">
+        <RoomSelection />
+      </TabsContent>
+      {/* <TabsContent value="services">
+        <ServiceSelection />
+      </TabsContent>
+      <TabsContent value="time">
+        <TimeSelection />
+      </TabsContent>
+      <TabsContent value="confirm">
+        <ConfirmDetails />
+      </TabsContent> */}
+    </Tabs>
+  );
+}
