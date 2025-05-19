@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Play, Pause, Volume2, VolumeX } from "lucide-react"
+import { Play, Pause, Volume2, VolumeX, ArrowRight } from "lucide-react"
 
 export default function MovieRoomSection() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -28,23 +28,21 @@ export default function MovieRoomSection() {
   }
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+    <section className="container mx-auto py-10 md:py-[70px] lg:py-[100px]">
       <div className="flex flex-col items-center text-center">
-        <h2 className="text-2xl  md:text-[32px] font-bold text-[#FF6600] mb-4">PRIVATE MOVIE ROOM DATE IDEA</h2>
+        <h2 className="font-poppins text-2xl md:text-[28px] lg:text-[32px] font-semibold text-[#FF6900] leading-[120%] tracking-[0%] mb-6 md:mb-8 lg:mb-10">PRIVATE MOVIE ROOM DATE IDEA</h2>
 
-        <p className="text-base sm:text-lg md:text-xl mb-6 max-w-2xl">
+        <p className="text-lg md:text-xl 2xl:text-2xl text-black font-normal leading-[120%] tracking-[0%] font-poppins pb-6 md:pb-8 lg:pb-10">
           Looking for a private space to watch movie/series with your date
         </p>
 
-        <Button
-          className="bg-[#FF6600] hover:bg-[#E55500] text-white mb-10 px-6 py-2 rounded-md flex items-center gap-2"
+        <button
+          className="bg-[#FF6900] hover:bg-[#E55500] text-white font-medium leading-[120%] font-poppins tracking-[0%] px-6 md:px-8 py-3 lg:py-4 rounded-md flex items-center gap-2 mb-10 md:mb-16 lg:mb-[100px]"
           onClick={() => window.open("#pricing", "_self")}
         >
           Click here to view pricing/packages
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z" fill="currentColor" />
-          </svg>
-        </Button>
+          <ArrowRight />
+        </button>
 
         <div className="w-full max-w-[984px] mx-auto relative rounded-lg overflow-hidden shadow-sm">
           <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
@@ -84,7 +82,7 @@ export default function MovieRoomSection() {
             </div>
           </div>
 
-          <div className="bg-gray-100 p-3 text-start text-[#FF6600] font-medium rounded-b-[8px]">This is the Video Title</div>
+          <div className="bg-[#E4E4E4] py-4 md:py-5 lg:py-6 px-3 md:px-4 text-lg text-[#FF6900] font-semibold text-left font-poppins rounded-b-[8px]">This is the Video Title</div>
         </div>
       </div>
     </section>

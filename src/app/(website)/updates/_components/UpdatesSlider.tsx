@@ -55,16 +55,16 @@ const UpdatesSlider = () => {
               className="w-full h-[300px] object-cover rounded-t-[8px]"
             />
             <div className="pt-[16px] md:pt-[21px] lg:pt-[26px]">
-              <h4 className="text-base font-semibold text-[#2A2A2A] leading-[120%]">
+              <h4 className="font-poppins text-base font-semibold text-[#2A2A2A] leading-[120%]">
                 {update.title}
               </h4>
-              <p className="text-base font-medium text-[#5A5A5A] leading-[120%] pt-2">
+              <p className="font-poppins text-base font-medium text-[#5A5A5A] leading-[120%] pt-2">
                 {update.desc}
               </p>
               <div className="pt-3 md:pt-4">
                 <Link href={`/updates/${update.id}`} passHref>
                   <button
-                    className="w-full flex items-center justify-between text-lg font-medium text-[#FF6900]"
+                    className="font-poppins w-full flex items-center justify-between text-lg font-medium text-[#FF6900]"
                     aria-label={`Read more about ${update.title}`}
                   >
                     Explore Blog <ArrowRight />

@@ -21,15 +21,15 @@ const UpdateCart = ({ update }: { update: UpdateCartProps }) => {
         className="w-full h-[300px] object-cover rounded-t-[8px]"
       />
       <div className="pt-[16px] md:pt-[21px] lg:pt-[26px] px-[10px]">
-        <h4 className="text-base font-semibold text-[#2A2A2A] leading-[120%] tracking-[0%]">
+        <h4 className="font-poppins text-base font-semibold text-[#2A2A2A] leading-[120%] tracking-[0%]">
           {update.title}
         </h4>
-        <p className="text-base font-medium text-[#5A5A5A] tracking-[0%] leading-[120%] pt-2">
+        <p className="font-poppins text-base font-medium text-[#5A5A5A] tracking-[0%] leading-[120%] pt-2">
           {update.desc}
         </p>
         <div className="pt-3 md:pt-4">
           <Link href={`/updates/${update.id}`}>
-            <button className="w-full flex items-center justify-between text-lg font-medium text-[#FF6900] tracking-[0%] leading-[120%]">
+            <button className="font-poppins w-full flex items-center justify-between text-lg font-medium text-[#FF6900] tracking-[0%] leading-[120%]">
               Explore Blog <ArrowRight />
             </button>
           </Link>

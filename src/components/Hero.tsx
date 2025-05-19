@@ -29,7 +29,7 @@ export default function HeroSection({heading}: Props) {
 
         <Link
           href="/reserve"
-          className="inline-flex items-center justify-center bg-[#ff6b00] hover:bg-[#ff5500] text-white font-bold py-3 px-8 rounded-md transition-colors"
+          className="inline-flex items-center justify-center bg-[#FF6900] hover:bg-[#ff5500] text-white text-base font-medium py-3 md:py-4 px-6 md:px-8 rounded-[8px] transition-colors"
         >
           Reserve Now <ArrowRight className="ml-2 h-5 w-5" />
         </Link>

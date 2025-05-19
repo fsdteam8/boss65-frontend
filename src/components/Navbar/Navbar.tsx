@@ -6,8 +6,13 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-
-const landingPages = ["/", "/space", "/our-unique-experience", "/updates", "/contact"];
+const landingPages = [
+  "/",
+  "/space",
+  "/our-unique-experience",
+  "/updates",
+  "/contact",
+];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,7 +33,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="absolute top-0 left-0 w-full py-4 px-4 md:px-8 lg:px-12 z-50">
+    <header className="absolute top-0 left-0 w-full py-[30px] px-4 md:px-8 lg:px-12 z-50">
       <div className="flex items-center justify-between container mx-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -48,12 +53,12 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`font-medium transition-colors ${
+              className={`font-poppins text-base font-normal leading-[120%] tracking-[0%] transition-colors ${
                 pathname === link.href
-                  ? "text-[#ff6b00]"
+                  ? "text-[#FF6900] "
                   : ifWhiteColorNav
-                    ? "text-white hover:text-[#ff6b00]"
-                    : "hover:text-[#ff6b00] text-black"
+                    ? "text-white hover:text-[#FF6900]"
+                    : "hover:text-[#FF6900] text-black"
               }`}
             >
               {link.label}
@@ -64,7 +69,7 @@ export default function Navbar() {
         {/* Reserve Button */}
         <Link
           href="/reserve"
-          className="hidden md:flex items-center justify-center bg-[#ffb800] hover:bg-[#ffa600] text-black font-bold py-2 px-6 rounded-md transition-colors"
+          className="font-poppins hidden md:flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-4 px-8 rounded-[8px] transition-colors"
         >
           Reserve Now
         </Link>
@@ -87,10 +92,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-xl font-medium ${
+                className={`font-poppins text-base font-normal leading-[120%] tracking-[0%] ${
                   pathname === link.href
-                    ? "text-[#ff6b00]"
-                    : "text-white hover:text-[#ff6b00]"
+                    ? "text-[#FF6900]"
+                    : "text-white hover:text-[#FF6900]"
                 }`}
                 onClick={toggleMenu}
               >
@@ -99,7 +104,7 @@ export default function Navbar() {
             ))}
             <Link
               href="/reserve"
-              className="flex items-center justify-center bg-[#ffb800] hover:bg-[#ffa600] text-black font-bold py-3 px-6 rounded-md transition-colors mt-4"
+              className="font-poppins flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-4 px-8 rounded-[8px] transition-colors mt-4"
               onClick={toggleMenu}
             >
               Reserve Now

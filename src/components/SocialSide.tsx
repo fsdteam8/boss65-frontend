@@ -34,12 +34,12 @@ export default function SocialSide() {
   }, [isMobile])
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
-      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-[#FF6B00] mb-10 md:mb-16">
+    <section className="container mx-auto py-[60px] md:py-[100px] lg:py-[150px]">
+      <h1 className="text-3xl md:text-4xl lg:text-[40px] font-semibol font-poppins text-center tracking-[0%] text-[#FF6900] mb-10 md:mb-12 lg:pb-[60px]">
         Join the Social Side
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] md:gap-[45px] lg:gap-[60px]">
         {/* Card 1 */}
         <div className="relative rounded-2xl overflow-hidden shadow-lg h-[500px] md:h-[600px] lg:h-[650px]">
           {isMobile ? (
@@ -78,8 +78,8 @@ export default function SocialSide() {
             </div>
           )}
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-            <h3 className="text-white text-xl font-semibold">Albert Flores</h3>
-            <p className="text-white/80 text-sm">Founder of GearUp</p>
+            <h3 className="font-manrope text-white text-lg font-bold leading-[120%] tracking-[0%] pl-4 md:pl-6 lg:pl-8 ">Albert Flores</h3>
+            <p className="text-sm font-normal font-manrope leading-[120%] text-[#D4D4D8] pt-[5px] pl-4 md:pl-6 lg:pl-8 pb-4 md:pb-6 lg:pb-8">Founder of GearUp</p>
           </div>
         </div>
 
@@ -121,8 +121,8 @@ export default function SocialSide() {
             </div>
           )}
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-            <h3 className="text-white text-xl font-semibold">Leslie Alexander</h3>
-            <p className="text-white/80 text-sm">Co-Founder of Womenia</p>
+            <h3 className="font-manrope text-white text-lg font-bold leading-[120%] tracking-[0%] pl-4 md:pl-6 lg:pl-8 ">Leslie Alexander</h3>
+            <p className="text-sm font-normal font-manrope leading-[120%] text-[#D4D4D8] pt-[5px] pl-4 md:pl-6 lg:pl-8 pb-4 md:pb-6 lg:pb-8">Co-Founder of Womenia</p>
           </div>
         </div>
 
@@ -164,16 +164,16 @@ export default function SocialSide() {
             </div>
           )}
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-            <h3 className="text-white text-xl font-semibold">Courtney Henry</h3>
-            <p className="text-white/80 text-sm">Founder of CH Beauty</p>
+            <h3 className="font-manrope text-white text-lg font-bold leading-[120%] tracking-[0%] pl-4 md:pl-6 lg:pl-8 ">Courtney Henry</h3>
+            <p className="text-sm font-normal font-manrope leading-[120%] text-[#D4D4D8] pt-[5px] pl-4 md:pl-6 lg:pl-8 pb-4 md:pb-6 lg:pb-8">Founder of CH Beauty</p>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-8 md:mt-12 lg:mt-[60px]">
         <a
           href="#reserve"
-          className="bg-[#FF6B00] hover:bg-[#E05F00] text-white font-medium py-3 px-8 rounded-full transition-colors duration-300"
+          className="font-poppins bg-[#FF6B00] hover:bg-[#E05F00] text-white font-medium py-3 md:py-4 px-6 md:px-8 rounded-full leading-[120%] tracking-[0%] transition-colors duration-300"
         >
           Reserve Now
         </a>
