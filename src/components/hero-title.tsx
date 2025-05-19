@@ -44,7 +44,7 @@ export const Experience = () => {
     <>
       <h1 className="font-poppins text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[120%] tracking-[0%] mb-5 md:mb-6 lg:mb-[30px]">
         Why Choose The
-        <span className="text-[#FF6900]"> Social</span> <br /> Chamber?
+        <span className="text-[#FF6900]"> Social </span> <br /> <span className="block pt-6">Chamber?</span>
       </h1>
 
       <p className="font-poppins text-white text-lg md:text-xl lg:text-2xl text-center tracking-[0%] font-medium leading-[34px] pb-[30px] md:pb-[45px] lg:pb-[60px]">

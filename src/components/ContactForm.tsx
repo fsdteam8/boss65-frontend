@@ -33,7 +33,7 @@ export default function ContactForm() {
     <section className="container  mx-auto pt-[40px] md:pt-[70px] lg:pt-[100px]">
       <div className="flex flex-col md:flex-row gap-[23px] rounded-lg overflow-hidden ">
         {/* Left side - Contact Information */}
-        <div className="py-6 md:py-8 px-4 md:px-6 relative w-full md:max-w-[529px] border border-black/10 rounded-lg overflow-hidden">
+        <div className="contact__bg py-6 md:py-8 px-4 md:px-6 relative w-full md:max-w-[529px] border border-black/10 rounded-lg overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-lg font-poppins leading-[120%] tracking-[0%] font-semibold text-[#FF6900] mb-2 md:mb-[10px]">
               Contact Information
@@ -69,12 +69,12 @@ export default function ContactForm() {
           </div>
 
           {/* Decorative background element */}
-          <div className="absolute bottom-0 right-0 w-64 h-64 bg-orange-100 rounded-full opacity-50 -mr-20 -mb-20"></div>
+          <div className="absolute bottom-0 -right-14 w-64 h-64 bg-[#FFDEC7]/80 rounded-full opacity-50 -mr-20 -mb-20"></div>
         </div>
 
         {/* Right side - Contact Form */}
         <div className="w-full md:w-[500px] lg:w-[732px] bg-white p-5 border border-black/10 rounded-lg ">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-[15px]">
             <div>
               <input
                 type="text"
@@ -82,7 +82,7 @@ export default function ContactForm() {
                 placeholder="Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-3 border border-black/10 text-[#2A2A2A] font-normal leading-[120%] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="h-[46px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"
                 required
               />
             </div>
@@ -94,7 +94,7 @@ export default function ContactForm() {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-3 border border-black/10 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="h-[46px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export default function ContactForm() {
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full p-3 border border-black/10 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="h-[46px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"
               />
             </div>
 
@@ -117,17 +117,19 @@ export default function ContactForm() {
                 value={formData.message}
                 onChange={handleChange}
                 rows={5}
-                className="w-full p-3 border border-black/10 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="h-[233px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"
                 required
               ></textarea>
             </div>
 
-            <button
+            <div className="mt-[20px] md:mt-[25px] lg:mt-[30px]">
+              <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-md transition-colors"
+              className="w-full bg-[#FF6900] text-base font-poppins leading-[120%] tracking-[0%] text-white font-medium py-4 px-4 rounded-md transition-colors"
             >
               Send Message
             </button>
+            </div>
           </form>
         </div>
       </div>
