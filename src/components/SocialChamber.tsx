@@ -1,39 +1,38 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Play, Pause, Volume2, VolumeX } from "lucide-react"
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 export default function SocialChamber() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
-        videoRef.current.pause()
+        videoRef.current.pause();
       } else {
-        videoRef.current.play()
+        videoRef.current.play();
       }
-      setIsPlaying(!isPlaying)
+      setIsPlaying(!isPlaying);
     }
-  }
+  };
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted
-      setIsMuted(!isMuted)
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
-  }
+  };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16 lg:pt-20">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-16 lg:pt-[75px]">
       <div className="flex flex-col items-center text-center">
-        <h2 className="text-2xl  md:text-[32px] font-bold text-[#FF6600] mb-8">The Social Chamber  Difference</h2>
-
-
-    
+        <h2 className="font-poppins text-2xl md:text-[28px] lg:text-[32px] font-semibold text-[#FF6900] leading-[120%] tracking-[0%] mb-[25px] md:pb-[40px] lg:pb-[54px]">
+          The Social Chamber Difference
+        </h2>
 
         <div className="w-full max-w-[984px] mx-auto relative rounded-lg overflow-hidden shadow-sm">
           <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
@@ -58,7 +57,11 @@ export default function SocialChamber() {
                   className="bg-white/20 hover:bg-white/30 text-white rounded-full w-10 h-10"
                   onClick={togglePlay}
                 >
-                  {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                  {isPlaying ? (
+                    <Pause className="h-5 w-5" />
+                  ) : (
+                    <Play className="h-5 w-5" />
+                  )}
                 </Button>
 
                 <Button
@@ -67,15 +70,21 @@ export default function SocialChamber() {
                   className="bg-white/20 hover:bg-white/30 text-white rounded-full w-10 h-10"
                   onClick={toggleMute}
                 >
-                  {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                  {isMuted ? (
+                    <VolumeX className="h-5 w-5" />
+                  ) : (
+                    <Volume2 className="h-5 w-5" />
+                  )}
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-100 p-3 text-start text-[#FF6600] font-medium rounded-b-[8px]">This is the Video Title</div>
+          <div className="bg-[#E4E4E4] py-4 md:py-5 lg:py-6 px-3 md:px-4 text-lg text-[#FF6900] font-semibold text-left font-poppins rounded-b-[8px]">
+            This is the Video Title
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
