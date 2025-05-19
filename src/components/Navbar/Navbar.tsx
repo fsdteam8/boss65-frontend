@@ -33,7 +33,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="absolute top-0 left-0 w-full py-4 px-4 md:px-8 lg:px-12 z-50">
+    <header className="absolute top-0 left-0 w-full py-[30px] px-4 md:px-8 lg:px-12 z-50">
       <div className="flex items-center justify-between container mx-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center">

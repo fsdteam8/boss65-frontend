@@ -6,7 +6,7 @@ import React from "react";
 const UpdatesComponent = () => {
   return (
     <div>
-      <div className="container mx-auto py-[40px] md:py-[70px] lg:py-[100px]">
+      <div className="container mx-auto pt-[40px] md:pt-[70px] lg:pt-[100px]">
         <h2 className="font-poppins text-[32px] md:text-[40px] lg:text-[48px] text-[#FF6900] leading-[120%] tracking-[0%] text-center font-semibold pb-[20px] md:pb-[30px] lg:pb-[40px]">
           Updates
         </h2>
