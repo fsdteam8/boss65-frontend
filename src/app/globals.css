@@ -97,4 +97,12 @@ body {
 }
 
 
+.contact__bg {
+  background-image: url('/images/contact_telephone.png');
+  background-repeat: no-repeat;
+  background-position: center top;
+  width: 100%;
+}
+
+
 
