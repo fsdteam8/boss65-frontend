@@ -41,11 +41,11 @@ export default function AsSeen() {
   ]
 
   return (
-    <section className="w-full py-12 bg-white">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-[#FF6B00] mb-12">As Seen On</h2>
+    <section className="w-full bg-white pt-[50px] md:pt-[100px] lg:pt-[150px] pb-[40px] md:pb-[62px] lg:pb-[83px]">
+      <div className="container mx-auto">
+        <h2 className="font-poppins text-4xl md:text-[40px] lg:text-[48px] font-semibold text-center text-[#FF6900] mb-10 md:mb-[60px] lg:mb-[80px]">As Seen On</h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12  h-[400px]">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
           {logos.map((logo, index) => (
             <div key={index} className="flex items-center justify-center">
               <div className="relative h-16 sm:h-20 w-full">
