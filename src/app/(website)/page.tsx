@@ -5,6 +5,7 @@ import HowItWorks from "@/components/HowItWork";
 import PrivateRoomPromo from "@/components/PrivateRoom";
 import ReviewCarousel from "@/components/Review";
 import ShowRoom from "@/components/ShowRoom";
+import SocialSide from "@/components/SocialSide";
 import Updates from "@/components/ui/Updates";
 
 export default function Home() {
@@ -14,9 +15,11 @@ export default function Home() {
       <ShowRoom />
       <HowItWorks />
       <PrivateRoomPromo />
-      <AsSeen />
+      <SocialSide/>
       <Updates />
+      <AsSeen />
       <ReviewCarousel />
     </div>
   );
 }
+
