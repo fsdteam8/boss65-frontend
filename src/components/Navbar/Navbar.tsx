@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 
-const landingPages = ["/", "/space", "/our-unique-experience", "/updates"];
+const landingPages = ["/", "/space", "/our-unique-experience", "/updates", "/contact"];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
