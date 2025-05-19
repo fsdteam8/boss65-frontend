@@ -41,7 +41,7 @@ export default function ReviewCarousel() {
       id: 2,
       name: "Devon Lane",
       quote:
-        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.Our designers were using it for their projects, so we already knew what kind of design they want.",
+        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
       image:
         "/img/user2.png",
       rating: 5,
@@ -50,7 +50,7 @@ export default function ReviewCarousel() {
       id: 3,
       name: "Alex Johnson",
       quote:
-        "Landingfolio has transformed how we approach design. The templates are not just beautiful but also highly functional.",
+        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
       image: "/img/user1.png",
       rating: 4,
     },
@@ -58,7 +58,7 @@ export default function ReviewCarousel() {
       id: 4,
       name: "Sarah Williams",
       quote:
-        "As a freelancer, Landingfolio has saved me countless hours. My clients are always impressed with the final results.",
+        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
       image: "/img/user2.png",
       rating: 4,
     },
@@ -66,7 +66,7 @@ export default function ReviewCarousel() {
       id: 5,
       name: "Michael Chen",
       quote:
-        "The variety of designs available on Landingfolio is impressive. There's something for every industry and style preference.",
+        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
       image: "/img/user2.png",
       rating: 5,
     },
@@ -87,10 +87,10 @@ export default function ReviewCarousel() {
   }, [api])
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16">
-      <div className="text-center mb-12">
-        <p className="text-[#FCB900] text-xl font-medium mb-2">3940+ Happy Landingfolio Users</p>
-        <h2 className="text-4xl font-bold text-orange-500 md:text-5xl">Don&apos;t just take our words</h2>
+    <div className="container mx-auto pt-[40px] md:pt-[70px] lg:pt-[104px] pb-[40px] md:pb-[60px] lg:pb-[80px]">
+      <div className="text-center pb-[40px] md:pb-[70px] lg:pb-[99px]">
+        <p className="font-poppins text-[#FCB900] text-lg font-semibold leading-[30px] tracking-[-0.22x] pb-[15px] md:pb-[20px] lg:pb-[25px]">3940+ Happy Landingfolio Users</p>
+        <h2 className="text-4xl md:text-5xl lg:text-[56px] text-[#FF6900] font-semibold font-poppins leading-[67px] tracking-[-2.16px]">Don&apos;t just take our words</h2>
       </div>
 
       <Carousel
@@ -106,22 +106,23 @@ export default function ReviewCarousel() {
           }),
         ]}
       >
-        <CarouselContent>
+        <CarouselContent className="">
           {testimonials.map((testimonial) => (
-            <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/2 pl-4 ">
+            <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/2 px-0">
               <Card className="border-none shadow-none">
-                <CardContent className="p-6">
-                  <div className="flex gap-4 ">
-                    <div className="relative h-24 w-24 overflow-hidden rounded-lg flex-shrink-0">
+                <CardContent className=" pr-0">
+                  <div className="flex flex-col md:flex-row gap-[15px] md:gap-[25px] lg:gap-[43px] ">
+                    <div className="relative overflow-hidden rounded-lg flex-shrink-0 ">
                       <Image
                         src={testimonial.image || "/placeholder.svg"}
                         alt={testimonial.name}
-                        fill
-                        className="object-cover"
+                        width={258}
+                        height={258}
+                        className="w-full md:w-[258px] h-[258px] object-cover"
                       />
                     </div>
-                    <div className="flex flex-col">
-                      <div className="flex mb-2">
+                    <div className="flex flex-col justify-center">
+                      <div className="flex gap-2 mb-2">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
@@ -131,8 +132,8 @@ export default function ReviewCarousel() {
                           />
                         ))}
                       </div>
-                      <p className="text-gray-700 mb-2">&quot;{testimonial.quote}&quot;</p>
-                      <p className="font-medium text-gray-500">{testimonial.name}</p>
+                      <p className="text-[17px] md:text-lg lg:text-xl font-medium font-poppins leading-[30px] tracking-[0%] text-[#090914]">&quot;{testimonial.quote}&quot;</p>
+                      <p className="text-base md:text-lg leading-[120%] tracking-[0%] text-[#595959] font-medium pt-4 md:pt-5 lg:pt-[25px]">{testimonial.name}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -140,7 +141,7 @@ export default function ReviewCarousel() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8 md:mt-12 lg:mt-[80px]">
           <CarouselPrevious className="relative static mr-2 translate-y-0" />
           <div className="flex items-center justify-center gap-2">
             {testimonials.map((_, index) => (

@@ -61,6 +61,7 @@ const config: Config = {
       },
        fontFamily: {
         poppins: ['var(--font-poppins)', 'sans-serif'],
+        manrope: ['var(--font-manrope)'],
       },
       borderRadius: {
         lg: "var(--radius)",

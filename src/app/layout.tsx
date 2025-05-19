@@ -1,8 +1,8 @@
 import AppProvider from "@/provider/app-provider";
 import type { Metadata } from "next";
-// import localFont from "next/font/local";
 import "./globals.css";
 import { Poppins } from 'next/font/google';
+import { Manrope } from 'next/font/google'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -11,16 +11,15 @@ const poppins = Poppins({
   display: 'swap', 
 });
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'], // Choose weights you need
+  variable: '--font-manrope', // Optional: useful for Tailwind integration
+  display: 'swap', // Optional: avoids blocking rendering
+})
+
+
 
 export const metadata: Metadata = {
   title: "Social Chamber 24/7",
@@ -35,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body
-        className={`${poppins.variable} antialiased min-h-screen flex flex-col`}
+        className={`${poppins.variable} ${manrope.variable} antialiased min-h-screen flex flex-col`}
       >
         <AppProvider>{children}</AppProvider>
       </body>
