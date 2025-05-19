@@ -28,7 +28,7 @@ export default function SocialChamber() {
   }
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16 lg:pt-20">
       <div className="flex flex-col items-center text-center">
         <h2 className="text-2xl  md:text-[32px] font-bold text-[#FF6600] mb-8">The Social Chamber  Difference</h2>
 
