@@ -7,7 +7,7 @@ import { RevenueTrends } from "./_components/revenue-trends";
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 py-[50px] px-[40px]">
       <DashboardHeader />
       <DashboardCards />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

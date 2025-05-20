@@ -24,6 +24,11 @@ export function DashboardSidebar() {
       href: "/dashboard/content",
       icon: FileText,
     },
+    {
+      name: "Blog",
+      href: "/dashboard/blog",
+      icon: FileText,
+    },
   ];
 
   return (

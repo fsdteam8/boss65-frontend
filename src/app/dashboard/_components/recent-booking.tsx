@@ -25,9 +25,9 @@ const bookings = [
 
 export function RecentBookings() {
   return (
-    <Card className="h-[300px]">
+    <Card className="">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-medium text-orange-500">
+        <CardTitle className="text-[20px] font-medium text-[#FF6900] ">
           Recent Bookings
         </CardTitle>
         <Link
@@ -38,11 +38,11 @@ export function RecentBookings() {
         </Link>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           {bookings.map((booking) => (
-            <div key={booking.id} className="flex items-center justify-between">
+            <div key={booking.id} className="flex items-center justify-between border border-[#0000001A] px-[12px] py-[8px] rounded-xl">
               <div>
-                <div className="font-medium">{booking.room}</div>
+                <div className="font-medium text-[14px] text-[#000000] mb-[6px]">{booking.room}</div>
                 <div className="text-sm text-muted-foreground">
                   {booking.time}
                 </div>
@@ -53,8 +53,8 @@ export function RecentBookings() {
                 }
                 className={
                   booking.status === "confirmed"
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-red-500 hover:bg-red-600"
+                    ? "bg-[#DCFCE7] text-[#166534] hover:bg-[#DCFCE7] "
+                    : "bg-[#FEE2E2] text-[#991B1B] hover:bg-[#FEE2E2]"
                 }
               >
                 {booking.status === "confirmed" ? "Confirmed" : "Cancelled"}
