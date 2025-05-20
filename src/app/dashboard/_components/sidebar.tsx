@@ -24,6 +24,16 @@ export function DashboardSidebar() {
       href: "/dashboard/content",
       icon: FileText,
     },
+    {
+      name: "Faq",
+      href: "/dashboard/faq",
+      icon: FileText,
+    },
+    {
+      name: "Promo",
+      href: "/dashboard/promo",
+      icon: FileText,
+    },
   ];
 
   return (
