@@ -1,25 +1,22 @@
 import AppProvider from "@/provider/app-provider";
 import type { Metadata } from "next";
+import { Manrope, Poppins } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
-import { Poppins } from 'next/font/google';
-import { Manrope } from 'next/font/google'
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-poppins',
-  display: 'swap', 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
 });
 
-
 const manrope = Manrope({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'], // Choose weights you need
-  variable: '--font-manrope', // Optional: useful for Tailwind integration
-  display: 'swap', // Optional: avoids blocking rendering
-})
-
-
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"], // Choose weights you need
+  variable: "--font-manrope", // Optional: useful for Tailwind integration
+  display: "swap", // Optional: avoids blocking rendering
+});
 
 export const metadata: Metadata = {
   title: "Social Chamber 24/7",
@@ -32,11 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
+    <html lang="en">
       <body
         className={`${poppins.variable} ${manrope.variable} antialiased min-h-screen flex flex-col`}
       >
         <AppProvider>{children}</AppProvider>
+
+        <NextTopLoader showSpinner={false} color="#FF5500" />
       </body>
     </html>
   );
