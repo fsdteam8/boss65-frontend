@@ -104,16 +104,16 @@ const PromoPage = () => {
           <TableBody>
             {currentPromoCodes.map((code) => (
               <TableRow key={code.id}>
-                <TableCell className="px-20 py-3 text-[14px] text-black">
+                <TableCell className="px-20 py-6 text-[14px] text-black">
                   {code.code}
                 </TableCell>
-                <TableCell className="px-20 py-3 text-[14px] text-black">
+                <TableCell className="px-20 py-6 text-[14px] text-black">
                   {code.discount}
                 </TableCell>
-                <TableCell className="px-20 py-3 text-[14px] text-black">
+                <TableCell className="px-20 py-6 text-[14px] text-black">
                   {code.expiration}
                 </TableCell>
-                <TableCell className="px-20 py-3 text-[14px] text-black">
+                <TableCell className="px-20 py-6 text-[14px] text-black">
                   {code.usage}
                 </TableCell>
                 <TableCell className="px-[75px]">
@@ -149,7 +149,7 @@ const PromoPage = () => {
           </TableBody>
         </Table>
 
-        <div className="p-4">
+        <div className="">
           <BookingPagination
             currentPage={currentPage}
             totalPages={totalPages}
