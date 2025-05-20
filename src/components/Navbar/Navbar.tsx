@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const landingPages = [
   "/",
@@ -37,7 +37,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between container mx-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <div className="relative h-14 w-14 md:h-16 md:w-16">
+          <div className="relative h-14 w-14 md:h-14 md:w-16">
             <Image
               src="/img/logo.png"
               alt="Social Chamber"
@@ -68,8 +68,8 @@ export default function Navbar() {
 
         {/* Reserve Button */}
         <Link
-          href="/reserve"
-          className="font-poppins hidden md:flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-4 px-8 rounded-[8px] transition-colors"
+          href="/booking"
+          className="font-poppins hidden md:flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-3 px-6 rounded-[8px] transition-colors"
         >
           Reserve Now
         </Link>

@@ -9,7 +9,6 @@ export type Service = {
 };
 
 export type TimeSlot = {
-  id: string;
   start: string;
   end: string;
 };
@@ -28,8 +27,8 @@ interface BookingState {
   selectedCategoryName: CategoryName | null;
   categoryId: string | null; // <-- Add this line
 
-  selectedRoom: string | null;
-  selectedService: Service | null;
+  roomId: string | null;
+  serviceId: string | null;
   selectedDate: Date | null;
   selectedTimeSlot: TimeSlot | null;
   userInfo: UserInfo;
@@ -37,9 +36,9 @@ interface BookingState {
   // Actions
   setStep: (step: BookingState["currentStep"]) => void;
   selectCategory: (category: CategoryName, categoryId: string) => void;
-  selectRoom: (room: string) => void;
-  selectService: (service: Service) => void;
-  selectDate: (date: Date) => void;
+  selectRoomId: (room: string) => void;
+  setSelectService: (service: string) => void;
+  selectDate: (date: Date | null) => void;
   selectTimeSlot: (timeSlot: TimeSlot) => void;
   updateUserInfo: (info: Partial<UserInfo>) => void;
   incrementPeople: () => void;
@@ -52,8 +51,8 @@ export const useBookingStore = create<BookingState>((set) => ({
   selectedCategoryName: null,
   categoryId: null, // <-- Initialize here
 
-  selectedRoom: null,
-  selectedService: null,
+  roomId: null,
+  serviceId: null,
   selectedDate: null,
   selectedTimeSlot: null,
   userInfo: {
@@ -72,9 +71,8 @@ export const useBookingStore = create<BookingState>((set) => ({
       categoryId,
       currentStep: "rooms",
     }),
-  selectRoom: (room) => set({ selectedRoom: room, currentStep: "services" }),
-  selectService: (service) =>
-    set({ selectedService: service, currentStep: "time" }),
+  selectRoomId: (room) => set({ roomId: room, currentStep: "services" }),
+  setSelectService: (id) => set({ serviceId: id, currentStep: "time" }),
   selectDate: (date) => set({ selectedDate: date }),
   selectTimeSlot: (timeSlot) =>
     set({
@@ -103,8 +101,8 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({
       selectedCategoryName: null,
       categoryId: null, // <-- Reset it here
-      selectedRoom: null,
-      selectedService: null,
+      roomId: null,
+      serviceId: null,
       selectedDate: null,
       selectedTimeSlot: null,
       userInfo: {
