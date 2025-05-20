@@ -11,10 +11,10 @@ export default function RoomSelection() {
   const { categoryId, setStep } = useBookingStore();
 
   const { data, isLoading, isError, error } = useQuery<RoomResponse>({
-    queryKey: ["rooms", categoryId],
+    queryKey: ["rooms"],
     queryFn: () =>
       fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/room/get-all-rooms?categoryId=${categoryId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/room/get-all-rooms`
       ).then((res) => res.json()),
     enabled: !!categoryId,
   });
