@@ -59,9 +59,9 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
       },
-       fontFamily: {
-        poppins: ['var(--font-poppins)', 'sans-serif'],
-        manrope: ['var(--font-manrope)'],
+      fontFamily: {
+        poppins: ["var(--font-poppins)", "sans-serif"],
+        manrope: ["var(--font-manrope)"],
       },
       borderRadius: {
         lg: "var(--radius)",

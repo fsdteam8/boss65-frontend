@@ -4,7 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBookingStore } from "@/store/booking";
 import { useEffect, useState } from "react";
 import CategorySelection from "./category-selection";
+import ConfirmDetails from "./confirm-details";
 import RoomSelection from "./room-selection";
+import ServiceSelection from "./service-selection";
+import TimeSelection from "./time-selection";
 
 export function BookingTabs() {
   const { currentStep, setStep } = useBookingStore();
@@ -63,7 +66,7 @@ export function BookingTabs() {
       <TabsContent value="rooms">
         <RoomSelection />
       </TabsContent>
-      {/* <TabsContent value="services">
+      <TabsContent value="services">
         <ServiceSelection />
       </TabsContent>
       <TabsContent value="time">
@@ -71,7 +74,7 @@ export function BookingTabs() {
       </TabsContent>
       <TabsContent value="confirm">
         <ConfirmDetails />
-      </TabsContent> */}
+      </TabsContent>
     </Tabs>
   );
 }
