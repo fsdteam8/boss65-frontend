@@ -5,7 +5,6 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -55,9 +54,10 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="">
         {/* Email field */}
-        <FormField
+        <div>
+          <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -68,7 +68,7 @@ export function LoginForm() {
                     {...field}
                     placeholder="Enter your email"
                     type="email"
-                    className="border-primary border-[1px]  min-h-[45px] "
+                    className="w-full h-[50px] border border-black rounded-[8px] text-base font-normal font-poppins leading-[120%] pl-10  tracking-[0%] text-black placeholder:text-[#999999] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 "
                     disabled={loading}
                     startIcon={Mail}
                   />
@@ -78,9 +78,11 @@ export function LoginForm() {
             </FormItem>
           )}
         />
+        </div>
 
         {/* Password field */}
-        <FormField
+        <div className="mt-6"> 
+          <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
@@ -92,14 +94,14 @@ export function LoginForm() {
                     placeholder="Enter your Password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    className=" pr-10 border-primary border-[1px]  min-h-[45px]"
+                    className="w-full h-[50px] border border-black rounded-[8px] text-base font-normal font-poppins leading-[120%] pl-10  tracking-[0%] text-black placeholder:text-[#999999] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                     startIcon={Lock}
                     disabled={loading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400"
+                    className="absolute right-3 top-4 text-gray-400"
                     tabIndex={-1}
                   >
                     {showPassword ? (
@@ -114,9 +116,10 @@ export function LoginForm() {
             </FormItem>
           )}
         />
+        </div>
 
         {/* Remember me and Forgot password */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-4 mb-8">
           <FormField
             control={form.control}
             name="rememberMe"
@@ -130,7 +133,7 @@ export function LoginForm() {
                 />
                 <label
                   htmlFor="rememberMe"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-sm font-poppins font-normal leading-[120%] tracking-[0%] text-black"
                 >
                   Remember me
                 </label>
@@ -138,17 +141,17 @@ export function LoginForm() {
             )}
           />
           <Link
-            href="/reset-request"
-            className="text-sm font-medium text-black"
+            href="/forgot-password"
+            className="text-sm font-normal font-poppins leading-[120%] trackin-[0%] text-black"
           >
             Forgot password?
           </Link>
         </div>
 
         {/* Submit button */}
-        <Button
+        <button
           type="submit"
-          className="w-full  min-h-[45px] bg-orange-500 hover:bg-orange-500/80"
+          className="w-full h-[52px] bg-[#FF6900] rounded-[8px] py-[15px] px-[169px] text-lg font-semibold font-poppins leading-[120%] tracking-[0%] text-[#F4F4F4]"
           disabled={loading}
         >
           {pending
@@ -156,7 +159,7 @@ export function LoginForm() {
             : isLoading
               ? "Just a second..."
               : "Sign In"}
-        </Button>
+        </button>
       </form>
     </Form>
   );
