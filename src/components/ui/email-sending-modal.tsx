@@ -1,7 +1,11 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useState, ReactNode } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,7 +27,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ReactNode, useState } from "react";
 
 // Define the form schema
 const formSchema = z.object({
@@ -44,7 +47,7 @@ export default function EmailSendingModal({
   trigger,
 }: EmailModalProps) {
   const [open, onOpenChange] = useState(false);
-  // Initialize the form with default values
+
   const form = useForm<EmailFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,28 +56,56 @@ export default function EmailSendingModal({
       body: "",
     },
   });
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
 
-  // Handle form submission
+  const mutation = useMutation({
+    mutationFn: async (data: EmailFormValues) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/email/send`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to send email");
+      }
+
+      return res.json();
+    },
+    onSuccess: (success) => {
+      toast.success(success.message || "Email sent successfully");
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to send email");
+    },
+  });
+
   const onSubmit = (data: EmailFormValues) => {
-    console.log("Email data:", data);
-    // Here you would typically send the email via an API
-    alert("Email sent successfully!");
     onOpenChange(false);
+    mutation.mutate(data);
     form.reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogHeader>
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
-      </DialogHeader>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-orange-500">
             Send Email
           </DialogTitle>
         </DialogHeader>
-        <div className="border-t border-orange-200 my-2"></div>
+
+        <div className="border-t border-orange-200 my-2" />
+
         <div className="bg-gray-50 p-4 rounded-md">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -85,12 +116,17 @@ export default function EmailSendingModal({
                   <FormItem className="grid grid-cols-[80px_1fr] items-center gap-4">
                     <FormLabel className="text-right">Email:</FormLabel>
                     <FormControl>
-                      <Input {...field} readOnly className="bg-white" />
+                      <Input
+                        {...field}
+                        className="bg-white"
+                        placeholder="user@example.com"
+                      />
                     </FormControl>
                     <FormMessage className="col-start-2" />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="subject"
@@ -108,6 +144,7 @@ export default function EmailSendingModal({
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="body"
@@ -130,6 +167,7 @@ export default function EmailSendingModal({
             </form>
           </Form>
         </div>
+
         <DialogFooter className="flex items-center justify-between sm:justify-between">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatar.png" alt="User" />
@@ -147,8 +185,9 @@ export default function EmailSendingModal({
               type="button"
               className="bg-orange-500 hover:bg-orange-600"
               onClick={() => form.handleSubmit(onSubmit)()}
+              disabled={mutation.isPending}
             >
-              Save
+              {mutation.isPending ? "Sending..." : "Send"}
             </Button>
           </div>
         </DialogFooter>

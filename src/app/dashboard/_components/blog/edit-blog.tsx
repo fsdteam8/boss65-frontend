@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -19,7 +19,7 @@ import {
   List,
 } from "lucide-react";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 function dataURLtoBlob(dataUrl: string) {
@@ -34,9 +34,18 @@ function dataURLtoBlob(dataUrl: string) {
   return new Blob([u8arr], { type: mime });
 }
 
-export default function BlogAdd() {
+interface EditBlogProps {
+  id?: string; // Optional for add/edit
+}
+
+const EditBlog: React.FC<EditBlogProps> = ({ id }) => {
   const [title, setTitle] = useState("");
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const [existingThumbnail, setExistingThumbnail] = useState<string | null>(
+    null
+  );
+  const isEditMode = Boolean(id);
+
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
 
@@ -45,33 +54,61 @@ export default function BlogAdd() {
     content: "",
   });
 
-  const mutation = useMutation({
-    mutationFn: async (formData: FormData) => {
+  // Fetch blog for editing
+  const { data: blogData } = useQuery({
+    queryKey: ["blog", id],
+    enabled: isEditMode,
+    queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/create`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/${id}`,
         {
-          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: formData,
         }
       );
+      if (!res.ok) throw new Error("Failed to fetch blog");
+      return res.json();
+    },
+  });
 
-      if (!res.ok) {
-        throw new Error("Failed to submit blog");
-      }
+  useEffect(() => {
+    if (isEditMode && blogData?.data) {
+      setTitle(blogData.data.title || "");
+      editor?.commands.setContent(blogData.data.description || "");
+      setExistingThumbnail(blogData.data.thumbnail || null);
+    }
+  }, [blogData, editor,isEditMode]);
 
+  const mutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const url = isEditMode
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/${id}`
+        : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/create`;
+
+      const res = await fetch(url, {
+        method: isEditMode ? "PUT" : "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Failed to submit blog");
       return res.json();
     },
     onSuccess: (success) => {
-      toast.success(success.message ||"Blog published successfully");
-      setTitle("");
-      editor?.commands.setContent("");
-      setThumbnail(null);
+      toast.success(
+        success.message || (isEditMode ? "Blog updated" : "Blog published")
+      );
+      if (!isEditMode) {
+        setTitle("");
+        setThumbnail(null);
+        editor?.commands.setContent("");
+      }
     },
     onError: (err: any) => {
-      toast.error(err.message || "Failed to publish blog");
+      toast.error(err.message || "Failed to submit blog");
     },
   });
 
@@ -90,7 +127,6 @@ export default function BlogAdd() {
       const file = new File([blob], "thumbnail.jpg", { type: blob.type });
       formData.append("thumbnail", file);
     }
-    console.log(formData)
 
     mutation.mutate(formData);
   };
@@ -118,10 +154,14 @@ export default function BlogAdd() {
     reader.readAsDataURL(file);
   };
 
+  const displayThumbnail = thumbnail || existingThumbnail;
+
   return (
     <div className="bg-gray-50">
       <div className="p-[40px]">
-        <h1 className="text-2xl font-bold mb-[80px]">Blog Management</h1>
+        <h1 className="text-2xl font-bold mb-[80px]">
+          {isEditMode ? "Edit Blog" : "Add Blog"}
+        </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
@@ -191,7 +231,6 @@ export default function BlogAdd() {
                   >
                     <UnderlineIcon size={16} />
                   </button>
-
                   <label htmlFor="editor-image-upload">
                     <div className="p-1 rounded hover:bg-gray-100 cursor-pointer">
                       <ImageIcon size={16} />
@@ -233,12 +272,12 @@ export default function BlogAdd() {
               <label htmlFor="thumbnail" className="cursor-pointer">
                 <div
                   className={`border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center h-[350px] ${
-                    thumbnail ? "p-0" : "p-4"
+                    displayThumbnail ? "p-0" : "p-4"
                   }`}
                 >
-                  {thumbnail ? (
+                  {displayThumbnail ? (
                     <NextImage
-                      src={thumbnail}
+                      src={displayThumbnail}
                       alt="Thumbnail preview"
                       width={300}
                       height={300}
@@ -268,10 +307,18 @@ export default function BlogAdd() {
             onClick={handlePublish}
             disabled={mutation.isPending}
           >
-            {mutation.isPending ? "Publishing..." : "Publish blog"}
+            {mutation.isPending
+              ? isEditMode
+                ? "Updating..."
+                : "Publishing..."
+              : isEditMode
+                ? "Update Blog"
+                : "Publish Blog"}
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default EditBlog;

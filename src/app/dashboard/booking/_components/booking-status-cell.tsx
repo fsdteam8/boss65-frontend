@@ -29,19 +29,25 @@ export function BookingStatusCell({
 }: BookingStatusCellProps) {
   const [open, setOpen] = useState(false);
 
+  const normalizedStatus = status?.toLowerCase();
+
   const statuses = [
     { value: "confirmed", label: "Confirmed" },
-    { value: "canceled", label: "Cancel" },
+    { value: "canceled", label: "Canceled" },
     { value: "refunded", label: "Refunded" },
   ] as const;
 
-  const statusStyles = {
-    confirmed: "bg-green-100 text-green-800 border-green-200",
-    canceled: "bg-red-100 text-red-800 border-red-200",
-    refunded: "bg-orange-100 text-orange-800 border-orange-200",
+  const statusStyles: Record<string, string> = {
+    confirmed: "bg-green-100 text-green-700 border-green-300",
+    canceled: "bg-red-100 text-red-700 border-red-300",
+    refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
   };
 
-  const currentStatus = statuses.find((s) => s.value === status);
+  const currentStatus = statuses.find((s) => s.value === normalizedStatus);
+
+  const buttonStyle =
+    statusStyles[normalizedStatus] ??
+    "bg-muted text-muted-foreground border-border";
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,10 +58,10 @@ export function BookingStatusCell({
           aria-expanded={open}
           className={cn(
             "w-[130px] justify-between border px-3 py-1 h-7 font-normal",
-            statusStyles[status]
+            buttonStyle
           )}
         >
-          {currentStatus?.label}
+          {currentStatus?.label ?? normalizedStatus ?? "Unknown"}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -68,16 +74,17 @@ export function BookingStatusCell({
                 <CommandItem
                   key={statusOption.value}
                   value={statusOption.value}
-                  onSelect={(currentValue) => {
-                    onStatusChange(currentValue as BookingStatus);
+                  onSelect={() => {
+                    onStatusChange(statusOption.value as BookingStatus);
                     setOpen(false);
                   }}
+                  className="cursor-pointer"
                 >
                   {statusOption.label}
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
-                      status === statusOption.value
+                      "ml-auto h-4 w-4 text-primary",
+                      normalizedStatus === statusOption.value
                         ? "opacity-100"
                         : "opacity-0"
                     )}
