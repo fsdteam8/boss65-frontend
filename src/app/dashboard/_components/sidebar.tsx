@@ -53,7 +53,7 @@ export function DashboardSidebar() {
     {
       name: "Blog",
       href: "/dashboard/blog",
-      icon: Paperclip,
+      icon: NotebookPen,
     },
     {
       name: "Faq",
