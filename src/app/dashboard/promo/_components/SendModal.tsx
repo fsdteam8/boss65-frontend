@@ -13,7 +13,7 @@ interface SendPromoCodeModalProps {
   promoCode: string
 }
 
-export default function SendPromoCodeModal({ isOpen, onClose, promoCode }: SendPromoCodeModalProps) {
+export default function SendModal({ isOpen, onClose, promoCode }: SendPromoCodeModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden rounded-lg">
