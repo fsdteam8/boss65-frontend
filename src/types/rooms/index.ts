@@ -6,7 +6,7 @@ export type Room = {
   image: string;
   category: Category;
   maxCapacity: number;
-  status: "available" | "unavailable"; // Assuming limited status options
+  status: boolean;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
   __v: number;

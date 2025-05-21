@@ -1,61 +1,123 @@
 "use client";
 
-import type React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useBookingStore } from "@/store/booking/index";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useBookingStore } from "@/store/booking";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-interface BookingFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  specialRequirements: string;
-  numberOfPeople: number;
-  promoCode: string;
-}
+const bookingSchema = z.object({
+  firstName: z.string().min(1, "Required"),
+  lastName: z.string().min(1, "Required"),
+  email: z.string().email("Invalid email"),
+  phone: z.string().min(1, "Required"),
+  specialRequirements: z.string().optional(),
+  numberOfPeople: z.number().min(1, "At least one person"),
+  promoCode: z.string().optional(),
+});
+
+type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function ConfirmDetails() {
   const {
     categoryId,
-    roomId,
-    serviceId,
+    room,
+    service,
     selectedTimeSlot,
+    selectedDate,
     setStep,
     selectedCategoryName,
   } = useBookingStore();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<BookingFormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    specialRequirements: "",
-    numberOfPeople: 1,
-    promoCode: "",
+
+  const { mutate: paymentIntent, isPending: isPaymentIntentLoading } =
+    useMutation({
+      mutationKey: ["payment-intent"],
+      mutationFn: (bookingId: string) =>
+        fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payment/payment-intent`,
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              booking: bookingId,
+            }),
+          }
+        ).then((res) => res.json()),
+      onSuccess: (data) => {
+        if (!data.status) {
+          toast.error(data.message);
+          return;
+        }
+
+        // handle success
+
+        window.location.href = data.data.url;
+      },
+    });
+
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["booking"],
+    mutationFn: (body: any) =>
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      if (!data.status) {
+        toast.error(data.message);
+        return;
+      }
+      // call with booking id
+      paymentIntent(data.data._id);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  const form = useForm<BookingFormData>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      specialRequirements: "",
+      numberOfPeople: 1,
+      promoCode: "",
+    },
   });
 
-  const {} = useQuery({
-    queryKey: ["service"],
-    queryFn: () =>
-      fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/services/${serviceId}`
-      ).then((res) => res.json()),
-  });
-
-  // Mock data for demonstration
+  const roomId = room?._id;
   const mockData = {
     category: { id: "1", name: selectedCategoryName },
-    room: { id: "1", name: "Dungeon Room" },
-    service: { id: "1", name: "M-F 3hrs 12-6pm", price: 99.0 },
+    room: { id: "1", name: room?.title },
+    service: {
+      id: "1",
+      name: service?.name,
+      price: service?.pricePerSlot ?? 0,
+    },
   };
 
-  // Redirect if any required booking data is missing
-  if (!categoryId || !roomId || !serviceId || !selectedTimeSlot) {
+  if (!categoryId || !roomId || !service || !selectedTimeSlot) {
     return (
       <div className="text-center py-8">
         <p className="text-lg font-medium">
@@ -71,164 +133,183 @@ export default function ConfirmDetails() {
     );
   }
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleSubmit = async (data: BookingFormData) => {
+    const payload = {
+      user: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      },
+      date: selectedDate,
+      timeSlots: selectedTimeSlot,
+      service: service._id,
+      room: room._id,
+      promoCode: data.promoCode,
+      numberOfPeople: data.numberOfPeople,
+    };
 
-  const incrementPeople = () => {
-    setFormData((prev) => ({
-      ...prev,
-      numberOfPeople: prev.numberOfPeople + 1,
-    }));
-  };
-
-  const decrementPeople = () => {
-    if (formData.numberOfPeople > 1) {
-      setFormData((prev) => ({
-        ...prev,
-        numberOfPeople: prev.numberOfPeople - 1,
-      }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    mutate(payload);
   };
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="border rounded-lg p-6">
         <h2 className="text-lg font-medium mb-4">Your Information</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-medium text-orange-500 mb-1"
-              >
-                First Name
-              </label>
-              <Input
-                id="firstName"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
                 name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                placeholder="User First Name"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-orange-500">
+                      First Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="User First Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-orange-500 mb-1"
-              >
-                Last Name
-              </label>
-              <Input
-                id="lastName"
+              <FormField
+                control={form.control}
                 name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                placeholder="User Last Name"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-orange-500">Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="User Last Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-orange-500 mb-1"
-              >
-                Email
-              </label>
-              <Input
-                id="email"
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
                 name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="User Email"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-orange-500">Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="User Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-orange-500 mb-1"
-              >
-                Phone
-              </label>
-              <Input
-                id="phone"
+              <FormField
+                control={form.control}
                 name="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="User Phone Number"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-orange-500">Phone</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="tel"
+                        placeholder="User Phone Number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          </div>
 
-          <div className="mb-4">
-            <label
-              htmlFor="specialRequirements"
-              className="block text-sm font-medium text-orange-500 mb-1"
-            >
-              Special Requirements
-            </label>
-            <Textarea
-              id="specialRequirements"
+            <FormField
+              control={form.control}
               name="specialRequirements"
-              value={formData.specialRequirements}
-              onChange={handleInputChange}
-              placeholder="Details"
-              rows={3}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-500">
+                    Special Requirements
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea rows={3} placeholder="Details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div>
-            <label
-              htmlFor="numberOfPeople"
-              className="block text-sm font-medium text-orange-500 mb-1"
-            >
-              Number Of People
-            </label>
-            <div className="flex items-center">
-              <button
-                type="button"
-                onClick={decrementPeople}
-                className="border rounded-md w-8 h-8 flex items-center justify-center"
-                disabled={formData.numberOfPeople <= 1}
-              >
-                -
-              </button>
-              <Input
-                id="numberOfPeople"
+            <div>
+              <FormField
+                control={form.control}
                 name="numberOfPeople"
-                type="number"
-                value={formData.numberOfPeople}
-                onChange={handleInputChange}
-                className="w-16 mx-2 text-center"
-                min={1}
-                required
+                render={({ field }) => (
+                  <FormItem className="w-fit">
+                    <FormLabel className="text-orange-500">
+                      Number of People
+                    </FormLabel>
+                    <div className="flex items-center justify-center gap-2">
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        disabled={field.value <= 1}
+                        onClick={() => field.onChange(field.value - 1)}
+                      >
+                        -
+                      </Button>
+
+                      <Button
+                        disabled={true}
+                        variant="outline"
+                        className="disabled:opacity-100"
+                      >
+                        {field.value}
+                      </Button>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        onClick={() => field.onChange(field.value + 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <button
-                type="button"
-                onClick={incrementPeople}
-                className="border rounded-md w-8 h-8 flex items-center justify-center"
-              >
-                +
-              </button>
             </div>
-          </div>
-        </form>
+
+            <FormField
+              control={form.control}
+              name="promoCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-500">Promo Code</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Use promo" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full bg-orange-500 hover:bg-orange-600"
+              disabled={isPending || isPaymentIntentLoading}
+            >
+              {isPending
+                ? "Processing..."
+                : isPaymentIntentLoading
+                  ? "Generating your payment..."
+                  : "Book Now"}
+            </Button>
+          </form>
+        </Form>
       </div>
 
       <div className="border rounded-lg p-6">
@@ -239,13 +320,11 @@ export default function ConfirmDetails() {
         <div className="space-y-4">
           <div className="flex justify-between">
             <span className="text-gray-600">Date:</span>
-            {/* <span className="font-medium">
+            <span className="font-medium">
               {selectedTimeSlot
-                ? format(selectedTimeSlot?.start, "MM-dd-yyyy") +
-                  " " +
-                  selectedTimeSlot.end
+                ? format(selectedDate!, "MM-dd-yyyy")
                 : "Not selected"}
-            </span> */}
+            </span>
           </div>
 
           <div className="flex justify-between">
@@ -254,45 +333,43 @@ export default function ConfirmDetails() {
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-600">Rooms:</span>
+            <span className="text-gray-600">Room:</span>
             <span className="font-medium">{mockData.room.name}</span>
           </div>
 
-          <div className="pt-2">
-            <label
-              htmlFor="promoCode"
-              className="block text-sm font-medium text-orange-500 mb-1"
-            >
-              Promo Code
-            </label>
-            <Input
-              id="promoCode"
-              name="promoCode"
-              value={formData.promoCode}
-              onChange={handleInputChange}
-              placeholder="Use promo"
-            />
+          <div className="border-t pt-4 mt-6 flex justify-between items-center">
+            <span className="font-medium">Total for booking:</span>
+            <span className="text-xl font-bold">
+              ${mockData.service.price.toFixed(2)}
+            </span>
           </div>
-
-          <div className="border-t pt-4 mt-6">
-            <div className="flex justify-between items-center">
-              <span className="font-medium">Total for booking:</span>
-              <span className="text-xl font-bold">
-                ${mockData.service.price.toFixed(2)}
-              </span>
-            </div>
-          </div>
-
-          <Button
-            type="submit"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="w-full bg-orange-500 hover:bg-orange-600 mt-4"
-          >
-            {isSubmitting ? "Processing..." : "Book Now"}
-          </Button>
         </div>
       </div>
     </div>
   );
+}
+
+{
+  /*
+  
+  {
+    "user": {
+        "firstName": "Monir Hossain",
+        "lastName": "Rabby",
+        "email": "monir.bdcalling@gmail.com",
+        "phone": "01956306002"
+    },
+    "date": "2025-05-21T18:00:00.000Z",
+    "timeSlots": [
+        {
+            "start": "09:00",
+            "end": "10:00"
+        }
+    ],
+    "service": "6829bc2a8f11fa6517869230",
+    "room": "68296b5cfb46dd41e61a6024",
+    "promoCode": "",
+    "numberOfPeople": 3
+}
+  */
 }

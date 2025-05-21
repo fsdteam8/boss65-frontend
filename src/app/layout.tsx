@@ -2,8 +2,8 @@ import AppProvider from "@/provider/app-provider";
 import type { Metadata } from "next";
 import { Manrope, Poppins } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
-import "./globals.css";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],

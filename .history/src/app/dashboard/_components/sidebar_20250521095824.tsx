@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { BarChart3, BookText, FileText, Info, LogOut, NotebookPen } from "lucide-react";
+import { BarChart3, BookText, FileText, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -22,17 +22,17 @@ export function DashboardSidebar() {
     {
       name: "Content",
       href: "/dashboard/content",
-      icon: FileText,
+      icon: ,
     },
     {
       name: "Blog",
       href: "/dashboard/blog",
-      icon: NotebookPen,
+      icon: FileText,
     },
     {
       name: "Faq",
       href: "/dashboard/faq",
-      icon: Info,
+      icon: FileText,
     },
     {
       name: "Promo",

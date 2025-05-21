@@ -21,15 +21,17 @@ interface TimeSlotsApiRes {
 }
 
 export default function TimeSelection() {
-  const { serviceId, setStep } = useBookingStore();
+  const { service, setStep } = useBookingStore();
   const { selectedDate, selectDate, selectTimeSlot, selectedTimeSlot } =
     useBookingStore();
+
+  const serviceId = service?._id;
 
   const dateOnly = moment(selectedDate).format("YYYY-MM-DD");
 
   // Fetch available time slots for the selected date
   const { data, isLoading: loadingTimeSlots } = useQuery<TimeSlotsApiRes>({
-    queryKey: ["timeSlots", serviceId, selectedDate?.toISOString()],
+    queryKey: ["timeSlots", service, selectedDate?.toISOString()],
     queryFn: () =>
       fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking/check-availability`,
@@ -67,6 +69,8 @@ export default function TimeSelection() {
     return isBefore(date, startOfDay(new Date()));
   };
   const timeSLots = data?.data ?? [];
+
+  const isDisabled = !selectedTimeSlot ? true : selectedTimeSlot.length === 0;
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
@@ -116,10 +120,10 @@ export default function TimeSelection() {
                   }}
                   disabled={!slot.available}
                   className={cn(
-                    "w-full py-3 px-4 border border-yellow-400 rounded text-center hover:bg-yellow-50 transition-colors",
-                    selectedTimeSlot?.start === slot.start &&
-                      selectedTimeSlot.end === slot.end &&
-                      "bg-orange-500"
+                    "w-full py-3 px-4 border border-yellow-400 rounded text-center  transition-colors",
+                    selectedTimeSlot?.some(
+                      (s) => s.start === slot.start && s.end === slot.end
+                    ) && "bg-orange-500 text-white"
                   )}
                 >
                   {slot.start} - {slot.end}
@@ -131,6 +135,13 @@ export default function TimeSelection() {
             No available time slots for this date
           </p>
         )}
+        <Button
+          className="mt-4 w-full bg-orange-500 hover:bg-orange-500/80 disabled:opacity-50"
+          onClick={() => setStep("confirm")}
+          disabled={!!isDisabled}
+        >
+          Continue
+        </Button>
       </div>
     </div>
   );
