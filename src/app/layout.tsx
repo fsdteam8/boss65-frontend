@@ -2,6 +2,7 @@ import AppProvider from "@/provider/app-provider";
 import type { Metadata } from "next";
 import { Manrope, Poppins } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${poppins.variable} ${manrope.variable} antialiased min-h-screen flex flex-col`}
       >
         <AppProvider>{children}</AppProvider>
+        <Toaster />
 
         <NextTopLoader showSpinner={false} color="#FF5500" />
       </body>

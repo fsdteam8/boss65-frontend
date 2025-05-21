@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -18,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useBookingStore } from "@/store/booking";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const bookingSchema = z.object({
   firstName: z.string().min(1, "Required"),
@@ -42,8 +43,56 @@ export default function ConfirmDetails() {
     selectedCategoryName,
   } = useBookingStore();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate: paymentIntent, isPending: isPaymentIntentLoading } =
+    useMutation({
+      mutationKey: ["payment-intent"],
+      mutationFn: (bookingId: string) =>
+        fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payment/payment-intent`,
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              booking: bookingId,
+            }),
+          }
+        ).then((res) => res.json()),
+      onSuccess: (data) => {
+        if (!data.status) {
+          toast.error(data.message);
+          return;
+        }
 
+        // handle success
+
+        window.location.href = data.data.url;
+      },
+    });
+
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["booking"],
+    mutationFn: (body: any) =>
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      if (!data.status) {
+        toast.error(data.message);
+        return;
+      }
+      // call with booking id
+      paymentIntent(data.data._id);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -85,10 +134,22 @@ export default function ConfirmDetails() {
   }
 
   const handleSubmit = async (data: BookingFormData) => {
-    setIsSubmitting(true);
-    console.log("Submitted booking:", data);
-    // Simulate API request here...
-    setTimeout(() => setIsSubmitting(false), 1000);
+    const payload = {
+      user: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      },
+      date: selectedDate,
+      timeSlots: selectedTimeSlot,
+      service: service._id,
+      room: room._id,
+      promoCode: data.promoCode,
+      numberOfPeople: data.numberOfPeople,
+    };
+
+    mutate(payload);
   };
 
   return (
@@ -180,44 +241,47 @@ export default function ConfirmDetails() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="numberOfPeople"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-orange-500">
-                    Number of People
-                  </FormLabel>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant="outline"
-                      disabled={field.value <= 1}
-                      onClick={() => field.onChange(field.value - 1)}
-                    >
-                      -
-                    </Button>
-                    <Input
-                      type="number"
-                      value={field.value}
-                      onChange={(e) => field.onChange(+e.target.value)}
-                      className="w-16 text-center"
-                      min={1}
-                    />
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant="outline"
-                      onClick={() => field.onChange(field.value + 1)}
-                    >
-                      +
-                    </Button>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormField
+                control={form.control}
+                name="numberOfPeople"
+                render={({ field }) => (
+                  <FormItem className="w-fit">
+                    <FormLabel className="text-orange-500">
+                      Number of People
+                    </FormLabel>
+                    <div className="flex items-center justify-center gap-2">
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        disabled={field.value <= 1}
+                        onClick={() => field.onChange(field.value - 1)}
+                      >
+                        -
+                      </Button>
+
+                      <Button
+                        disabled={true}
+                        variant="outline"
+                        className="disabled:opacity-100"
+                      >
+                        {field.value}
+                      </Button>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        onClick={() => field.onChange(field.value + 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -235,10 +299,14 @@ export default function ConfirmDetails() {
 
             <Button
               type="submit"
-              disabled={isSubmitting}
               className="w-full bg-orange-500 hover:bg-orange-600"
+              disabled={isPending}
             >
-              {isSubmitting ? "Processing..." : "Book Now"}
+              {isPending
+                ? "Processing..."
+                : isPaymentIntentLoading
+                  ? "Generating your payment..."
+                  : "Book Now"}
             </Button>
           </form>
         </Form>
@@ -279,4 +347,29 @@ export default function ConfirmDetails() {
       </div>
     </div>
   );
+}
+
+{
+  /*
+  
+  {
+    "user": {
+        "firstName": "Monir Hossain",
+        "lastName": "Rabby",
+        "email": "monir.bdcalling@gmail.com",
+        "phone": "01956306002"
+    },
+    "date": "2025-05-21T18:00:00.000Z",
+    "timeSlots": [
+        {
+            "start": "09:00",
+            "end": "10:00"
+        }
+    ],
+    "service": "6829bc2a8f11fa6517869230",
+    "room": "68296b5cfb46dd41e61a6024",
+    "promoCode": "",
+    "numberOfPeople": 3
+}
+  */
 }

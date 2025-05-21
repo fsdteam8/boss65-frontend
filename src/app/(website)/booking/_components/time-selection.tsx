@@ -72,8 +72,6 @@ export default function TimeSelection() {
 
   const isDisabled = !selectedTimeSlot ? true : selectedTimeSlot.length === 0;
 
-  console.log(selectedTimeSlot);
-
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="border rounded-lg p-4">
