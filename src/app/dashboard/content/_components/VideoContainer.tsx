@@ -8,7 +8,7 @@ import { AddUploadModal } from "./add-video-modal";
 
 const VideoContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const handleSave = (data: any) => {
@@ -124,10 +124,10 @@ const VideoContainer = () => {
           {imageData.length > itemsPerPage && (
             <div className="flex justify-center">
               <Pagination
-                // currentPage={currentPage}
-                // totalResults={imageData.length}
-                // resultsPerPage={itemsPerPage}
-                // onPageChange={setCurrentPage}
+                currentPage={currentPage}
+                totalResults={imageData.length}
+                resultsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
               />
             </div>
           )}

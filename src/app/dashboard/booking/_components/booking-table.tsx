@@ -21,6 +21,7 @@ export function BookingTable({
   bookings = [],
   updateBookingStatus,
 }: BookingTableProps) {
+
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
 
@@ -45,6 +46,8 @@ export function BookingTable({
   });
 
   const bookingData = data?.data || bookings;
+
+
 
   return (
     <div className="overflow-x-auto">
