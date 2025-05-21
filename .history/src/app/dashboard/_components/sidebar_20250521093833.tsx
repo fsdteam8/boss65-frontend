@@ -30,11 +30,6 @@ export function DashboardSidebar() {
       icon: FileText,
     },
     {
-      name: "Faq",
-      href: "/dashboard/faq",
-      icon: FileText,
-    },
-    {
       name: "Promo",
       href: "/dashboard/promo",
       icon: FileText,

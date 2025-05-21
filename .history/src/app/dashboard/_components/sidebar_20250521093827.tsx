@@ -27,9 +27,6 @@ export function DashboardSidebar() {
     {
       name: "Blog",
       href: "/dashboard/blog",
-      icon: FileText,
-    },
-    {
       name: "Faq",
       href: "/dashboard/faq",
       icon: FileText,

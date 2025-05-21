@@ -25,11 +25,10 @@ export function DashboardSidebar() {
       icon: FileText,
     },
     {
+<<<<<<< HEAD
       name: "Blog",
       href: "/dashboard/blog",
-      icon: FileText,
-    },
-    {
+=======
       name: "Faq",
       href: "/dashboard/faq",
       icon: FileText,
@@ -37,6 +36,7 @@ export function DashboardSidebar() {
     {
       name: "Promo",
       href: "/dashboard/promo",
+>>>>>>> fd0ea68cb19853aa9cc79c49fc2fab04c2f63817
       icon: FileText,
     },
   ];

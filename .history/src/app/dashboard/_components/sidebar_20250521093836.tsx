@@ -33,7 +33,7 @@ export function DashboardSidebar() {
       name: "Faq",
       href: "/dashboard/faq",
       icon: FileText,
-    },
+    }
     {
       name: "Promo",
       href: "/dashboard/promo",
