@@ -64,7 +64,7 @@ const FaqPage = () => {
   const [selectedFaq, setSelectedFaq] = useState<FAQ | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
 
   // New state for delete confirmation modal
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -87,8 +87,8 @@ const FaqPage = () => {
         {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            // "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -99,7 +99,7 @@ const FaqPage = () => {
 
       return res.json();
     },
-    enabled: !!token,
+    // enabled: !!token,
   });
 
   const faqAllData = faqData?.data || [];
