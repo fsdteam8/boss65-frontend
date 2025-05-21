@@ -14,7 +14,11 @@ export default function DashboardLayout({
         <div className="flex justify-end p-4 border-b">
           <UserNav />
         </div>
+<<<<<<< HEAD
+        <main className="">{children}</main>
+=======
         <main className="p-6 bg-[#F3F4F6]">{children}</main>
+>>>>>>> bdfedd7a1f648b6c7a8e275f35453c266ed257e6
       </div>
     </div>
   );
