@@ -21,15 +21,17 @@ interface TimeSlotsApiRes {
 }
 
 export default function TimeSelection() {
-  const { serviceId, setStep } = useBookingStore();
+  const { service, setStep } = useBookingStore();
   const { selectedDate, selectDate, selectTimeSlot, selectedTimeSlot } =
     useBookingStore();
+
+  const serviceId = service?._id;
 
   const dateOnly = moment(selectedDate).format("YYYY-MM-DD");
 
   // Fetch available time slots for the selected date
   const { data, isLoading: loadingTimeSlots } = useQuery<TimeSlotsApiRes>({
-    queryKey: ["timeSlots", serviceId, selectedDate?.toISOString()],
+    queryKey: ["timeSlots", service, selectedDate?.toISOString()],
     queryFn: () =>
       fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking/check-availability`,

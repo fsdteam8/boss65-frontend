@@ -1,12 +1,7 @@
+import { Service } from "@/types/service";
 import { create } from "zustand";
 
 export type CategoryName = "Hourly" | "Packages";
-export type Service = {
-  id: string;
-  name: string;
-  time: string;
-  price: number;
-};
 
 export type TimeSlot = {
   start: string;
@@ -28,7 +23,7 @@ interface BookingState {
   categoryId: string | null; // <-- Add this line
 
   roomId: string | null;
-  serviceId: string | null;
+  service: Service | null;
   selectedDate: Date | null;
   selectedTimeSlot: TimeSlot | null;
   userInfo: UserInfo;
@@ -37,7 +32,7 @@ interface BookingState {
   setStep: (step: BookingState["currentStep"]) => void;
   selectCategory: (category: CategoryName, categoryId: string) => void;
   selectRoomId: (room: string) => void;
-  setSelectService: (service: string) => void;
+  setService: (service: Service) => void;
   selectDate: (date: Date | null) => void;
   selectTimeSlot: (timeSlot: TimeSlot) => void;
   updateUserInfo: (info: Partial<UserInfo>) => void;
@@ -52,7 +47,7 @@ export const useBookingStore = create<BookingState>((set) => ({
   categoryId: null, // <-- Initialize here
 
   roomId: null,
-  serviceId: null,
+  service: null,
   selectedDate: null,
   selectedTimeSlot: null,
   userInfo: {
@@ -72,7 +67,7 @@ export const useBookingStore = create<BookingState>((set) => ({
       currentStep: "rooms",
     }),
   selectRoomId: (room) => set({ roomId: room, currentStep: "services" }),
-  setSelectService: (id) => set({ serviceId: id, currentStep: "time" }),
+  setService: (id) => set({ service: id, currentStep: "time" }),
   selectDate: (date) => set({ selectedDate: date }),
   selectTimeSlot: (timeSlot) =>
     set({
@@ -102,7 +97,7 @@ export const useBookingStore = create<BookingState>((set) => ({
       selectedCategoryName: null,
       categoryId: null, // <-- Reset it here
       roomId: null,
-      serviceId: null,
+      service: null,
       selectedDate: null,
       selectedTimeSlot: null,
       userInfo: {

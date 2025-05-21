@@ -81,7 +81,7 @@ type ServiceCardProps = {
 };
 
 export function ServiceCard({ service }: ServiceCardProps) {
-  const { setSelectService } = useBookingStore();
+  const { setService } = useBookingStore();
 
   const serviceData = service;
 
@@ -107,7 +107,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
         <div className="border-t border-gray-200 pt-4 mt-4">
           {serviceData && (
             <Button
-              onClick={() => setSelectService(serviceData._id as string)}
+              onClick={() => setService(serviceData)}
               className="w-full bg-white border border-orange-500 text-orange-500 hover:bg-orange-50"
             >
               Select

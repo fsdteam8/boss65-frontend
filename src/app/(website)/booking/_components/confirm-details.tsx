@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useBookingStore } from "@/store/booking/index";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface BookingFormData {
@@ -23,7 +22,7 @@ export default function ConfirmDetails() {
   const {
     categoryId,
     roomId,
-    serviceId,
+    service,
     selectedTimeSlot,
     setStep,
     selectedCategoryName,
@@ -39,14 +38,6 @@ export default function ConfirmDetails() {
     promoCode: "",
   });
 
-  const {} = useQuery({
-    queryKey: ["service"],
-    queryFn: () =>
-      fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/services/${serviceId}`
-      ).then((res) => res.json()),
-  });
-
   // Mock data for demonstration
   const mockData = {
     category: { id: "1", name: selectedCategoryName },
@@ -55,7 +46,7 @@ export default function ConfirmDetails() {
   };
 
   // Redirect if any required booking data is missing
-  if (!categoryId || !roomId || !serviceId || !selectedTimeSlot) {
+  if (!categoryId || !roomId || !service || !selectedTimeSlot) {
     return (
       <div className="text-center py-8">
         <p className="text-lg font-medium">
