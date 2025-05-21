@@ -61,6 +61,7 @@ const PromoPage = () => {
   });
 
   const promoData = promoCodes?.data?.data || [];
+  console.log("promoData", promoData);
 
   const deletePromoCodeMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -98,9 +99,13 @@ const PromoPage = () => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const currentItemStart = (currentPage - 1) * itemsPerPage + 1;
   const currentItemEnd = Math.min(currentPage * itemsPerPage, totalItems);
-  const currentPromoCodes = promoData.slice(currentItemStart - 1, currentItemEnd);
+  const currentPromoCodes = promoData.slice(
+    currentItemStart - 1,
+    currentItemEnd
+  );
 
-  const handleSendCode = (code: string) => {
+  const handleSendCode = (id: string, code: string) => {
+    console.log("Promo code ID clicked:", id);
     setSelectedCode(code);
     setIsSendModalOpen(true);
   };
@@ -134,6 +139,7 @@ const PromoPage = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="px-20 py-4 text-base text-black">ID</TableHead>
               <TableHead className="px-20 py-4 text-base text-black">Code</TableHead>
               <TableHead className="px-20 py-4 text-base text-black">Discount</TableHead>
               <TableHead className="px-20 py-4 text-base text-black">Expiration</TableHead>
@@ -145,26 +151,31 @@ const PromoPage = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">
+                <TableCell colSpan={7} className="text-center py-6">
                   Loading promo codes...
                 </TableCell>
               </TableRow>
             ) : isError ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-red-500 py-6">
+                <TableCell colSpan={7} className="text-center text-red-500 py-6">
                   Failed to load promo codes. Please try again.
                 </TableCell>
               </TableRow>
             ) : currentPromoCodes.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">
+                <TableCell colSpan={7} className="text-center py-6">
                   No promo codes found.
                 </TableCell>
               </TableRow>
             ) : (
-              currentPromoCodes.map((code: any) => (
+              currentPromoCodes.map((code: any, index: number) => (
                 <TableRow key={code._id}>
-                  <TableCell className="px-20 py-6 text-sm text-black">{code.code}</TableCell>
+                  <TableCell className="px-20 py-6 text-sm text-black">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="px-20 py-6 text-sm text-black">
+                    {code.code.slice(0, 10)}...
+                  </TableCell>
                   <TableCell className="px-20 py-6 text-sm text-black">
                     {code.discountValue}% off
                   </TableCell>
@@ -187,10 +198,18 @@ const PromoPage = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex px-[63px] space-x-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleSendCode(code.code)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleSendCode(code._id, code.code)}
+                      >
                         <Mail className="h-5 w-5 text-black" />
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleDelete(code._id)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDelete(code._id)}
+                      >
                         <Trash className="h-5 w-5 text-black" />
                       </Button>
                     </div>
@@ -220,7 +239,10 @@ const PromoPage = () => {
       />
 
       {isCreateModalOpen && (
-        <CreateModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+        <CreateModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+        />
       )}
 
       {isSendModalOpen && selectedCode && (
@@ -235,3 +257,4 @@ const PromoPage = () => {
 };
 
 export default PromoPage;
+

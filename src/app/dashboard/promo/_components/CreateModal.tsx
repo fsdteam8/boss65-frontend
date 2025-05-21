@@ -66,6 +66,9 @@ export default function CreatePromoModal({
       console.log("Promo code created successfully:", data);
       onClose();
       toast.success("Promo code created successfully");
+      setInterval(() => {
+        window.location.href = "/dashboard/promo";
+      }, 2000);
     },
     onError: (error) => {
       console.error("Error creating promo code:", error);

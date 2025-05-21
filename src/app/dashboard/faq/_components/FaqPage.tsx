@@ -14,7 +14,43 @@ import {
 import { BookingPagination } from "../../booking/_components/booking-pagination";
 import AddFaqModal from "./Add-faq-modal";
 import EditFaqModal from "./Edit-modal";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+// ConfirmDeleteModal component inside this file for simplicity,
+// or you can move it to its own file.
+const ConfirmDeleteModal = ({
+  isOpen,
+  onConfirm,
+  onCancel,
+}: {
+  isOpen: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) => {
+  if (!isOpen) return null;
+  return (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+      onClick={onCancel}
+    >
+      <div
+        className="bg-white rounded-lg p-6 max-w-sm w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-lg font-semibold mb-4">Are you sure?</h2>
+        <div className="flex justify-end space-x-4">
+          <Button variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={onConfirm}>
+            Delete
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 interface FAQ {
   id: string;
@@ -30,8 +66,14 @@ const FaqPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
+  // New state for delete confirmation modal
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
+
+  const queryClient = useQueryClient();
 
   const {
     data: faqData,
@@ -61,11 +103,6 @@ const FaqPage = () => {
   });
 
   const faqAllData = faqData?.data || [];
-
-
-  // const queryClient = useQueryClient();
-  // queryClient.invalidateQueries({ queryKey: ["faqs"] });
-
   const totalItems = faqAllData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const currentItemStart = (currentPage - 1) * itemsPerPage + 1;
@@ -79,6 +116,59 @@ const FaqPage = () => {
       description: faq.answer,
     });
     setIsEditModalOpen(true);
+  };
+
+  // Mutation for deleting FAQ
+  const deleteFaqMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/faqs/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to delete FAQ");
+      }
+
+      return res.json();
+    },
+    onMutate: () => {
+      toast.loading("Deleting FAQ...", { id: "deleteToast" });
+    },
+    onSuccess: () => {
+      toast.success("FAQ deleted successfully", { id: "deleteToast" });
+      queryClient.invalidateQueries({ queryKey: ["faq"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete FAQ", { id: "deleteToast" });
+    },
+  });
+
+  // Show confirmation modal on delete button click
+  const handleDeleteClick = (id: string) => {
+    setDeleteId(id);
+    setShowDeleteModal(true);
+  };
+
+  // Confirm delete action from modal
+  const handleConfirmDelete = () => {
+    if (deleteId) {
+      deleteFaqMutation.mutate(deleteId);
+      setShowDeleteModal(false);
+      setDeleteId(null);
+    }
+  };
+
+  // Cancel delete action
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setDeleteId(null);
   };
 
   if (isLoading) {
@@ -117,7 +207,7 @@ const FaqPage = () => {
                 <TableCell className="px-20 py-3 text-base text-black">{index + 1}</TableCell>
                 <TableCell className="px-20 py-3 text-base text-black">{faq.question}</TableCell>
                 <TableCell className="px-20 py-3 text-base text-black">{faq.answer}</TableCell>
-                <TableCell className="px-20 py-3">
+                <TableCell className="px-[70px] py-3">
                   <div className="flex space-x-2">
                     <Button
                       variant="ghost"
@@ -126,7 +216,11 @@ const FaqPage = () => {
                     >
                       <SquarePen className="h-6 w-6 text-black" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteClick(faq._id)}
+                    >
                       <Trash className="h-6 w-6 text-black" />
                     </Button>
                   </div>
@@ -163,6 +257,13 @@ const FaqPage = () => {
           faq={selectedFaq}
         />
       )}
+
+      {/* Confirmation modal */}
+      <ConfirmDeleteModal
+        isOpen={showDeleteModal}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };

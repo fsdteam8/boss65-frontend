@@ -53,6 +53,9 @@ export default function AddFaqModal({ isOpen, onClose }: AddFaqModalProps) {
       setAnswer("");
       onClose();
       toast.success("FAQ created successfully");
+      setInterval(() => {
+        window.location.href = "/dashboard/faq";
+      }, 2000);
     } catch (error) {
       console.error("Error:", error);
       alert("Failed to create FAQ.");
