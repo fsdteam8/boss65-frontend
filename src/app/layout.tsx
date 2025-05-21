@@ -4,6 +4,7 @@ import { Manrope, Poppins } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Toaster } from 'sonner';
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
         <Toaster />
 
         <NextTopLoader showSpinner={false} color="#FF5500" />
+        <Toaster />
       </body>
     </html>
   );
