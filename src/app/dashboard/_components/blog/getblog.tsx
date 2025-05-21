@@ -26,7 +26,7 @@ export default function GetBlog() {
     queryKey: ["blog"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ export default function GetBlog() {
   const mutation = useMutation({
     mutationFn: async (id: string) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs/${id}`,
         {
           method: "DELETE",
           headers: {

@@ -43,7 +43,7 @@ interface EmailModalProps {
 }
 
 export default function EmailSendingModal({
-  recipientEmail = "",
+  recipientEmail,
   trigger,
 }: EmailModalProps) {
   const [open, onOpenChange] = useState(false);
@@ -117,6 +117,7 @@ export default function EmailSendingModal({
                     <FormLabel className="text-right">Email:</FormLabel>
                     <FormControl>
                       <Input
+                        readOnly
                         {...field}
                         className="bg-white"
                         placeholder="user@example.com"

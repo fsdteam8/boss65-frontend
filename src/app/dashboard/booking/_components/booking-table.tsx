@@ -80,7 +80,7 @@ export function BookingTable({
         </thead>
         <tbody>
           {bookingData?.map((booking: Booking, index: number) => (
-            <tr key={booking?._id} className="border-b">
+            <tr key={index} className="border-b">
               <td className="px-4 py-4 text-sm">
                 {booking?._id?.slice(0, 6)}...
               </td>
@@ -95,7 +95,7 @@ export function BookingTable({
               <td className="px-4 py-4 text-sm">
                 {format(new Date(booking?.date), "yyyy-MM-dd")}
                 <div className="mt-1 space-y-1">
-                  {booking?.timeSlots?.map((slot,i) => (
+                  {booking?.timeSlots?.map((slot, i) => (
                     <div key={i} className="text-xs text-gray-600">
                       {slot?.start} - {slot?.end}
                     </div>
@@ -115,6 +115,7 @@ export function BookingTable({
               </td>
               <td className="px-4 py-4 text-sm">
                 <EmailSendingModal
+                  recipientEmail={booking?.user?.email}
                   trigger={
                     <Button variant="ghost" size="icon">
                       <Mail className="h-5 w-5" />

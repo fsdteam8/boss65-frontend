@@ -48,7 +48,7 @@ export default function BlogAdd() {
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/create`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`,
         {
           method: "POST",
           headers: {

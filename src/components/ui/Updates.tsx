@@ -11,7 +11,7 @@ const Updates = () => {
     queryKey: ["blog"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
