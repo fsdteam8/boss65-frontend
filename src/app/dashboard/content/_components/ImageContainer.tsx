@@ -108,8 +108,8 @@ const ImageContainer = () => {
                   {data.size}
                 </td>
                 <td className="text-sm font-poppins text-center">
-                  <button className="text-red-500 hover:text-red-700 transition">
-                    <Trash2 size={18} />
+                  <button className="">
+                    <Trash2 size={24} />
                   </button>
                 </td>
               </tr>
