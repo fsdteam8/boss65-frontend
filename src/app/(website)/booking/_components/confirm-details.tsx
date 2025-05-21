@@ -300,7 +300,7 @@ export default function ConfirmDetails() {
             <Button
               type="submit"
               className="w-full bg-orange-500 hover:bg-orange-600"
-              disabled={isPending}
+              disabled={isPending || isPaymentIntentLoading}
             >
               {isPending
                 ? "Processing..."
