@@ -8,7 +8,7 @@ import {
   FileText,
   Info,
   LogOut,
-  Paperclip,
+  NotebookPen,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";

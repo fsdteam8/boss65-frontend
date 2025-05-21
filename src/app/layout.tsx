@@ -2,7 +2,6 @@ import AppProvider from "@/provider/app-provider";
 import type { Metadata } from "next";
 import { Manrope, Poppins } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
-import { Toaster } from "sonner";
 import "./globals.css";
 import AuthProvider from "@/provider/AuthProvider";
 import { Toaster } from "@/components/ui/sonner";
