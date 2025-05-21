@@ -35,7 +35,7 @@ export function RevenueTrends() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[200px]">
+        <div className="h-[359px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={data}

@@ -84,7 +84,7 @@ export default function BlogAdd() {
               />
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-md overflow-hidden">
+            <div  className="bg-white border border-gray-200 rounded-md overflow-hidden">
               {/* ✨ Editor with scroll */}
               <EditorContent
                 editor={editor}
@@ -159,7 +159,7 @@ export default function BlogAdd() {
           </div>
 
           {/* Thumbnail uploader */}
-          <div>
+          <div >
             <div className="bg-white border border-gray-200 rounded-md p-4 mt-[40px]">
               <h2 className="font-medium mb-4">Thumbnail</h2>
               <label htmlFor="thumbnail" className="cursor-pointer">
