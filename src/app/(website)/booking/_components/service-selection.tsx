@@ -10,7 +10,9 @@ import { Clock, Users } from "lucide-react";
 // This file provides mock data for development and testing
 
 export default function ServiceSelection() {
-  const { roomId, setStep, categoryId } = useBookingStore();
+  const { room, setStep, categoryId } = useBookingStore();
+
+  const roomId = room?._id;
 
   const { data, isLoading, isError, error } = useQuery<ServiceResponse>({
     queryKey: ["services"],

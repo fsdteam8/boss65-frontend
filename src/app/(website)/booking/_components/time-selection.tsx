@@ -70,6 +70,10 @@ export default function TimeSelection() {
   };
   const timeSLots = data?.data ?? [];
 
+  const isDisabled = !selectedTimeSlot ? true : selectedTimeSlot.length === 0;
+
+  console.log(selectedTimeSlot);
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="border rounded-lg p-4">
@@ -118,10 +122,10 @@ export default function TimeSelection() {
                   }}
                   disabled={!slot.available}
                   className={cn(
-                    "w-full py-3 px-4 border border-yellow-400 rounded text-center hover:bg-yellow-50 transition-colors",
-                    selectedTimeSlot?.start === slot.start &&
-                      selectedTimeSlot.end === slot.end &&
-                      "bg-orange-500"
+                    "w-full py-3 px-4 border border-yellow-400 rounded text-center  transition-colors",
+                    selectedTimeSlot?.some(
+                      (s) => s.start === slot.start && s.end === slot.end
+                    ) && "bg-orange-500 text-white"
                   )}
                 >
                   {slot.start} - {slot.end}
@@ -133,6 +137,13 @@ export default function TimeSelection() {
             No available time slots for this date
           </p>
         )}
+        <Button
+          className="mt-4 w-full bg-orange-500 hover:bg-orange-500/80 disabled:opacity-50"
+          onClick={() => setStep("confirm")}
+          disabled={!!isDisabled}
+        >
+          Continue
+        </Button>
       </div>
     </div>
   );

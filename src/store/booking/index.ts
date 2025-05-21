@@ -1,3 +1,4 @@
+import { Room } from "@/types/rooms";
 import { Service } from "@/types/service";
 import { create } from "zustand";
 
@@ -22,16 +23,16 @@ interface BookingState {
   selectedCategoryName: CategoryName | null;
   categoryId: string | null; // <-- Add this line
 
-  roomId: string | null;
+  room: Room | null;
   service: Service | null;
   selectedDate: Date | null;
-  selectedTimeSlot: TimeSlot | null;
+  selectedTimeSlot: TimeSlot[] | null;
   userInfo: UserInfo;
 
   // Actions
   setStep: (step: BookingState["currentStep"]) => void;
   selectCategory: (category: CategoryName, categoryId: string) => void;
-  selectRoomId: (room: string) => void;
+  setRoom: (room: Room) => void;
   setService: (service: Service) => void;
   selectDate: (date: Date | null) => void;
   selectTimeSlot: (timeSlot: TimeSlot) => void;
@@ -46,7 +47,7 @@ export const useBookingStore = create<BookingState>((set) => ({
   selectedCategoryName: null,
   categoryId: null, // <-- Initialize here
 
-  roomId: null,
+  room: null,
   service: null,
   selectedDate: null,
   selectedTimeSlot: null,
@@ -66,13 +67,25 @@ export const useBookingStore = create<BookingState>((set) => ({
       categoryId,
       currentStep: "rooms",
     }),
-  selectRoomId: (room) => set({ roomId: room, currentStep: "services" }),
+  setRoom: (room) => set({ room: room, currentStep: "services" }),
   setService: (id) => set({ service: id, currentStep: "time" }),
   selectDate: (date) => set({ selectedDate: date }),
   selectTimeSlot: (timeSlot) =>
-    set({
-      selectedTimeSlot: timeSlot,
-      currentStep: "confirm",
+    set((state) => {
+      if (!state.selectedTimeSlot) return { selectedTimeSlot: [timeSlot] };
+
+      const exists = state.selectedTimeSlot.some(
+        (slot) => slot.start === timeSlot.start && slot.end === timeSlot.end
+      );
+
+      return {
+        selectedTimeSlot: exists
+          ? state.selectedTimeSlot.filter(
+              (slot) =>
+                !(slot.start === timeSlot.start && slot.end === timeSlot.end)
+            )
+          : [...state.selectedTimeSlot, timeSlot],
+      };
     }),
   updateUserInfo: (info) =>
     set((state) => ({
@@ -96,7 +109,7 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({
       selectedCategoryName: null,
       categoryId: null, // <-- Reset it here
-      roomId: null,
+      room: null,
       service: null,
       selectedDate: null,
       selectedTimeSlot: null,
