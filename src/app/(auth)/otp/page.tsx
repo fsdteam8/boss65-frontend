@@ -1,5 +1,6 @@
 import Image from "next/image";
 import OtpForm from "./_components/otpForm";
+import { Suspense } from "react";
 
 export default function OtpFormPage() {
   return (
@@ -38,7 +39,9 @@ export default function OtpFormPage() {
           </div>
 
           {/* otp form component */}
-          <OtpForm />
+          <Suspense fallback={<div>Loading...</div>}>
+            <OtpForm />
+          </Suspense>
         </div>
       </div>
     </div>

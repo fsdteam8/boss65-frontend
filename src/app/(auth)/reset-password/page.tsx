@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ResetPasswordForm from "./_components/reset-password-form";
+import { Suspense } from "react";
 
 export default function ResetPasswordPage() {
   return (
@@ -38,7 +39,9 @@ export default function ResetPasswordPage() {
           </div>
 
           {/* reset password form component */}
-          <ResetPasswordForm />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ResetPasswordForm />
+          </Suspense>
         </div>
       </div>
     </div>

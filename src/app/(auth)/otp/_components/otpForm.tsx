@@ -9,11 +9,17 @@ import {
 } from "react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function OtpForm() {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
-  const [loading, setLoading] = useState<boolean>(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const decodedEmail = decodeURIComponent(email || "");
+  const router = useRouter();
 
   // Focus the first input on component mount
   useEffect(() => {
@@ -58,6 +64,55 @@ export default function OtpForm() {
     }
   };
 
+  // otp api integration
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["verify-otp"],
+    mutationFn: (values: { otp: string; email: string }) =>
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/verify-code`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      if (!data?.status) {
+        toast.error(data?.message || "Something went wrong");
+        return;
+      } else {
+        toast.success(data?.message || "Email sent successfully!");
+        router.push(
+          `/reset-password?email=${encodeURIComponent(decodedEmail)}`
+        );
+      }
+    },
+  });
+
+  // reset otp api integrattion 
+    const { mutate:resentOtp, isPending: resentOtpPending } = useMutation({
+    mutationKey: ["fotgot-password"],
+    mutationFn: (email: string) =>
+      fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/forget-password`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      ).then((res) => res.json()),
+    onSuccess: (data, email) => {
+      if (!data?.status) {
+        toast.error(data?.message || "Something went wrong");
+        return;
+      } else {
+        toast.success(data?.message || "Email sent successfully!");
+        router.push(`/otp?email=${encodeURIComponent(email)}`);
+      }
+    },
+  });
+
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text/plain").trim();
@@ -74,29 +129,13 @@ export default function OtpForm() {
     }
   };
 
+
+  // handle resend otp
   const handleResendOtp = async () => {
-    setLoading(true);
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      toast.success("OTP resent successfully!");
-
-      // Clear the current OTP
-      setOtp(Array(6).fill(""));
-
-      // Focus the first input
-      if (inputRefs.current[0]) {
-        inputRefs.current[0].focus();
-      }
-    } catch {
-      toast.error("Failed to resend OTP. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    resentOtp(decodedEmail);
   };
 
+  // handle verify otp
   const handleVerify = async () => {
     const otpValue = otp.join("");
 
@@ -105,8 +144,7 @@ export default function OtpForm() {
       toast.error("Please enter all 6 digits of the OTP.");
       return;
     }
-
-    setLoading(true);
+    mutate({ otp: otpValue, email: decodedEmail });
 
     console.log("OTP Verified:", otpValue);
   };
@@ -129,7 +167,7 @@ export default function OtpForm() {
               ref={(el) => {
                 inputRefs.current[index] = el;
               }}
-              className={`font-poppins w-[52px] h-[58px] bg-white text-[#999999] text-center text-lg font-medium leading-[120%] border-[1px] rounded-md focus:outline-none ${
+              className={`font-poppins w-[52px] h-[58px] bg-white text-black placeholder:text-[#999999] text-center text-lg font-medium leading-[120%] border-[1px] rounded-md focus:outline-none ${
                 digit ? "border-black" : "border-[#595959]"
               }`}
               aria-label={`OTP digit ${index + 1}`}
@@ -144,10 +182,10 @@ export default function OtpForm() {
           </span>
           <button
             onClick={handleResendOtp}
-            disabled={loading}
+            disabled={resentOtpPending}
             className="font-poppins text-xl font-normal leading-[120%] text-black tracking-[0%] hover:underline"
           >
-            RESEND OTP
+            {resentOtpPending ? "Resending..." : "RESEND OTP"}
           </button>
         </div>
 
@@ -156,9 +194,9 @@ export default function OtpForm() {
           onClick={handleVerify}
           type="submit"
           className="w-full h-[52px] bg-[#FF6900] rounded-[8px] py-[15px] px-[151px] text-lg font-semibold font-poppins leading-[120%] tracking-[0%] text-[#F4F4F4]"
-          //   disabled={loading}
+          disabled={isPending}
         >
-          Verify Now
+          {isPending ? "Verifying..." : "Verify Now"}
         </button>
       </div>
     </div>

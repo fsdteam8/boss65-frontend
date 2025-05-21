@@ -13,6 +13,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Password validation schema
 const passwordSchema = z
@@ -39,6 +42,10 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const decodedEmail = decodeURIComponent(email || "");
 
   // Initialize form with React Hook Form and Zod validation
   const form = useForm<PasswordFormValues>({
@@ -49,10 +56,34 @@ export default function ResetPasswordForm() {
     },
   });
 
+  const {mutate, isPending} = useMutation({
+    mutationKey : ["reset-password"],
+    mutationFn : (values : {newPassword : string, email: string})=>fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/reset-password`,{
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(values),
+    }).then((res)=>res.json()),
+    onSuccess: (data) => {
+      if (!data?.status) {
+        toast.error(data?.message || "Something went wrong");
+        return;
+      } else {
+        toast.success(data?.message || "Email sent successfully!");
+        router.push(`/login`);
+      }
+    },
+  })
+
   // Form submission handler
   async function onSubmit(values: PasswordFormValues) {
     console.log(values);
-    // Handle login logic here
+    if(!decodedEmail){
+      toast.error("email is required");
+      return;
+    }
+    mutate({newPassword : values.password, email : decodedEmail}) ;
   }
 
   return (
@@ -135,9 +166,9 @@ export default function ResetPasswordForm() {
           <button
             type="submit"
             className="w-full h-[52px] bg-[#FF6900] rounded-[8px] py-[15px] px-[181px] text-lg font-semibold font-poppins leading-[120%] tracking-[0%] text-[#F4F4F4]"
-            //   disabled={loading}
+              disabled={isPending}
           >
-            Continue
+            {isPending ? "Loading..." : "Continue"}
           </button>
         </form>
       </Form>
