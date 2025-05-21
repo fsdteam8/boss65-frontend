@@ -5,7 +5,6 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -19,6 +18,8 @@ import { loginFormSchema, LoginFormValues } from "@/schemas/auth";
 import Cookies from "js-cookie"; // Import js-cookie for cookie retrieval
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 // Retrieve cookies for email and "Remember Me"
 const rememberedEmail = Cookies.get("rememberMeEmail");
@@ -28,9 +29,10 @@ const isRemembered = !!rememberedEmail && !!rememberMePassword;
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pending, startTransition] = useTransition();
+  const [pending] = useTransition();
 
   const router = useRouter();
+  const loading = isLoading || pending;
 
   // Initialize the form
   const form = useForm<LoginFormValues>({
@@ -44,79 +46,93 @@ export function LoginForm() {
 
   // Handle form submission
   async function onSubmit(data: LoginFormValues) {
-    startTransition(() => {
-      console.log(data);
-      router.push("/");
+    try {
       setIsLoading(true);
-    });
-  }
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-  const loading = isLoading || pending;
+      if (res?.error) {
+        throw new Error(res.error);
+      }
+      toast.success("Login successful!");
+      setIsLoading(false);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Login failed. Please check your credentials.");
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="">
         {/* Email field */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    {...field}
-                    placeholder="Enter your email"
-                    type="email"
-                    className="border-primary border-[1px]  min-h-[45px] "
-                    disabled={loading}
-                    startIcon={Mail}
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      placeholder="Enter your email"
+                      type="email"
+                      className="w-full h-[50px] border border-black rounded-[8px] text-base font-normal font-poppins leading-[120%] pl-10  tracking-[0%] text-black placeholder:text-[#999999] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 "
+                      startIcon={Mail}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Password field */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    {...field}
-                    placeholder="Enter your Password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    className=" pr-10 border-primary border-[1px]  min-h-[45px]"
-                    startIcon={Lock}
-                    disabled={loading}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="mt-6">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      placeholder="Enter your Password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
+                      className="w-full h-[50px] border border-black rounded-[8px] text-base font-normal font-poppins leading-[120%] pl-10  tracking-[0%] text-black placeholder:text-[#999999] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                      startIcon={Lock}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-4 text-gray-400"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Remember me and Forgot password */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-4 mb-8">
           <FormField
             control={form.control}
             name="rememberMe"
@@ -126,11 +142,10 @@ export function LoginForm() {
                   id="rememberMe"
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={loading}
                 />
                 <label
                   htmlFor="rememberMe"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-sm font-poppins font-normal leading-[120%] tracking-[0%] text-black"
                 >
                   Remember me
                 </label>
@@ -138,17 +153,17 @@ export function LoginForm() {
             )}
           />
           <Link
-            href="/reset-request"
-            className="text-sm font-medium text-black"
+            href="/forgot-password"
+            className="text-sm font-normal font-poppins leading-[120%] trackin-[0%] text-black"
           >
             Forgot password?
           </Link>
         </div>
 
         {/* Submit button */}
-        <Button
+        <button
           type="submit"
-          className="w-full  min-h-[45px] bg-orange-500 hover:bg-orange-500/80"
+          className="w-full h-[52px] bg-[#FF6900] rounded-[8px] py-[15px] px-[69px] text-lg font-semibold font-poppins leading-[120%] tracking-[0%] text-[#F4F4F4]"
           disabled={loading}
         >
           {pending
@@ -156,7 +171,7 @@ export function LoginForm() {
             : isLoading
               ? "Just a second..."
               : "Sign In"}
-        </Button>
+        </button>
       </form>
     </Form>
   );

@@ -11,6 +11,10 @@ const VideoContainer = () => {
   const [currentPage] = useState(1);
   const itemsPerPage = 5;
 
+  const handleSave = (data: any) => {
+    console.log("Saved data:", data)
+  }
+
   const imageData = useMemo(
     () => [
       {
@@ -108,8 +112,8 @@ const VideoContainer = () => {
                   {data.size}
                 </td>
                 <td className="text-sm font-poppins text-center">
-                  <button className="text-red-500 hover:text-red-700 transition">
-                    <Trash2 size={18} />
+                  <button className="">
+                    <Trash2 size={24} />
                   </button>
                 </td>
               </tr>
@@ -135,7 +139,7 @@ const VideoContainer = () => {
         <AddUploadModal
           open={isOpen}
           onOpenChange={setIsOpen}
-          onSave={(data) => console.log(data)}
+          onSave={handleSave}
         />
       )}
     </div>

@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { LoginForm } from "./_components/login-form";
+import ResetPasswordForm from "./_components/reset-password-form";
+import { Suspense } from "react";
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 ">
       {/* Left side - Image */}
@@ -30,15 +31,17 @@ export default function LoginPage() {
           {/* form text */}
           <div className="text-center pb-6">
             <h1 className="text-black font-poppins font-semibold text-[32px] leading-[120%] tracking-[0%] pb-2">
-              Welcome <span>back</span>
+              Reset password
             </h1>
             <p className="text-base font-poppins font-normal leading-[150%] tracking-[0%] text-black">
-              Please enter your credentials to continue
+              Enter new password
             </p>
           </div>
 
-          {/* Login form component */}
-          <LoginForm />
+          {/* reset password form component */}
+          <Suspense fallback={<div>Loading...</div>}>
+            <ResetPasswordForm />
+          </Suspense>
         </div>
       </div>
     </div>
