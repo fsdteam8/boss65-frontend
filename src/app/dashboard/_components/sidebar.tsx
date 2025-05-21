@@ -1,12 +1,38 @@
 "use client";
 
+import LogoutModal from "@/components/shared/modals/LogoutModal";
 import { cn } from "@/lib/utils";
-import { BarChart3, BookText, FileText, Info, LogOut,  Paperclip } from "lucide-react";
+import {
+  BarChart3,
+  BookText,
+  FileText,
+  Info,
+  LogOut,
+  NotebookPen,
+} from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handLogout = () => {
+    try {
+      toast.success("Logout successful!");
+      setTimeout(async () => {
+        await signOut({
+          callbackUrl: "/login",
+        });
+      }, 1000);
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("Logout failed. Please try again.");
+    }
+  };
 
   const routes = [
     {
@@ -27,7 +53,7 @@ export function DashboardSidebar() {
     {
       name: "Blog",
       href: "/dashboard/blog",
-      icon: Paperclip,
+      icon: NotebookPen,
     },
     {
       name: "Faq",
@@ -73,14 +99,24 @@ export function DashboardSidebar() {
           ))}
         </nav>
         <div className="p-4 border-t border-zinc-800/10">
-          <Link
-            href="/logout"
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-zinc-400 transition-all hover:text-orange-500"
           >
             <LogOut className="h-4 w-4" />
             Log Out
-          </Link>
+          </button>
         </div>
+
+        {/* logout modal  */}
+        {isOpen && (
+          <LogoutModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            onConfirm={handLogout}
+          />
+        )}
       </div>
     </div>
   );

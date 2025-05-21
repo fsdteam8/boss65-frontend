@@ -3,35 +3,36 @@ import { LoginForm } from "./_components/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="grid grid-cols-1 md:grid-cols-2 ">
       {/* Left side - Image */}
-      <div className="hidden lg:w-3/5 md:w-1/2 bg-gray-900 lg:block relative">
+      <div className="hidden md:block md:col-span-1">
         <Image
-          src="https://res.cloudinary.com/drdztqgcx/image/upload/v1745573218/Rectangle_4833_guur5l.png"
-          alt="Team meeting"
-          fill
-          className="object-cover"
+          src="/images/auth-sidebar.jpg"
+          alt="auth sidebar"
+          width={720}
+          height={1024}
+          className="w-full h-[1024px] object-cover"
         />
       </div>
 
-      {/* Right side - Login form */}
-      <div className="flex w-full flex-col items-center justify-center px-4 py-12 lg:w-1/2 relative">
+      {/* Right side - form */}
+      <div className="md:col-span-1 h-full flex flex-col items-center justify-center">
         <Image
-          src="/Logo.png"
-          width={93}
-          height={130}
+          src="/images/auth_logo.png"
+          width={80}
+          height={80}
           alt="Logo"
-          className="absolute top-10 "
+          className="w-[80px] h-[80px] rounded-full"
         />
-        <div className="mx-auto w-full max-w-md space-y-12">
+        <div className="mx-auto w-full max-w-md mt-[60px]">
           {/* Logo */}
 
-          {/* Welcome text */}
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900">
+          {/* form text */}
+          <div className="text-center pb-6">
+            <h1 className="text-black font-poppins font-semibold text-[32px] leading-[120%] tracking-[0%] pb-2">
               Welcome <span>back</span>
             </h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="text-base font-poppins font-normal leading-[150%] tracking-[0%] text-black">
               Please enter your credentials to continue
             </p>
           </div>

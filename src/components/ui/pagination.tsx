@@ -49,7 +49,7 @@ export function Pagination({
 
   return (
     <div className="flex items-center justify-between w-full px-[26px] py-[13px] ">
-      <div className="font-poppins text-base font-normal text-[#374151] traclomg-[0%] leading-[15px]">
+      <div className="font-poppins text-base font-light text-[#374151] tracking-[0%] leading-[15px]">
         Showing <span className="font-medium">{startResult}</span> to <span className="font-medium">{endResult}</span>{" "}
         of <span className="font-medium">{totalResults}</span> results
       </div>
@@ -65,7 +65,7 @@ export function Pagination({
             )}
             aria-label="Previous page"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft />
           </button>
 
           {pageNumbers.map((page) => (
@@ -73,8 +73,8 @@ export function Pagination({
               key={page}
               onClick={() => onPageChange(page)}
               className={cn(
-                "w-[46px] h-[42px] text-base text-[#374151] font-medium leading-[120%] tracking-[0%] border-r border-[#D1D5DB]",
-                safeCurrentPage === page ? "bg-[#FADADD] text-[#891D33]" : "hover:bg-gray-100",
+                "w-[46px] h-[49px] text-base font-poppins text-[#374151] font-medium leading-[120%] tracking-[0%] border-r border-[#D1D5DB]",
+                safeCurrentPage === page ? "bg-[#FF69001A]/10 text-[#FF6900]" : "hover:bg-gray-100",
               )}
               aria-label={`Page ${page}`}
               aria-current={safeCurrentPage === page ? "page" : undefined}
@@ -92,7 +92,7 @@ export function Pagination({
             )}
             aria-label="Next page"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight />
           </button>
         </div>
       )}
