@@ -18,23 +18,81 @@ import {
   AlignJustify,
   List,
 } from "lucide-react";
-// import Image from "next/image";
+
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+function dataURLtoBlob(dataUrl: string) {
+  const arr = dataUrl.split(",");
+  const mime = arr[0].match(/:(.*?);/)?.[1] || "";
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
 
 export default function BlogAdd() {
   const [title, setTitle] = useState("");
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
 
   const editor = useEditor({
     extensions: [StarterKit, Underline, Image],
     content: "",
   });
 
+  const mutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/create`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to submit blog");
+      }
+
+      return res.json();
+    },
+    onSuccess: (success) => {
+      toast.success(success.message ||"Blog published successfully");
+      setTitle("");
+      editor?.commands.setContent("");
+      setThumbnail(null);
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to publish blog");
+    },
+  });
+
   const handlePublish = () => {
-    console.log({
-      title,
-      content: editor?.getHTML(),
-      thumbnail,
-    });
+    if (!title || !editor?.getHTML()) {
+      toast.error("Title and content are required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", editor.getHTML());
+
+    if (thumbnail) {
+      const blob = dataURLtoBlob(thumbnail);
+      const file = new File([blob], "thumbnail.jpg", { type: blob.type });
+      formData.append("thumbnail", file);
+    }
+    console.log(formData)
+
+    mutation.mutate(formData);
   };
 
   const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,13 +143,11 @@ export default function BlogAdd() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-md overflow-hidden">
-              {/* ✨ Editor with scroll */}
               <EditorContent
                 editor={editor}
                 className="min-h-[341px] max-h-[500px] overflow-y-auto p-3 focus:outline-none border-none"
               />
 
-              {/* Toolbar */}
               <div className="border-t border-gray-200 p-4 flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center">
                   <span className="text-sm mr-2">Font</span>
@@ -105,24 +161,37 @@ export default function BlogAdd() {
                 <div className="flex items-center space-x-1">
                   <button
                     onClick={() => editor?.chain().focus().toggleBold().run()}
-                    className={`p-1 rounded ${editor?.isActive("bold") ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                    className={`p-1 rounded ${
+                      editor?.isActive("bold")
+                        ? "bg-gray-200"
+                        : "hover:bg-gray-100"
+                    }`}
                   >
                     <Bold size={16} />
                   </button>
                   <button
                     onClick={() => editor?.chain().focus().toggleItalic().run()}
-                    className={`p-1 rounded ${editor?.isActive("italic") ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                    className={`p-1 rounded ${
+                      editor?.isActive("italic")
+                        ? "bg-gray-200"
+                        : "hover:bg-gray-100"
+                    }`}
                   >
                     <Italic size={16} />
                   </button>
                   <button
-                    onClick={() => editor?.chain().focus().toggleUnderline().run()}
-                    className={`p-1 rounded ${editor?.isActive("underline") ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                    onClick={() =>
+                      editor?.chain().focus().toggleUnderline().run()
+                    }
+                    className={`p-1 rounded ${
+                      editor?.isActive("underline")
+                        ? "bg-gray-200"
+                        : "hover:bg-gray-100"
+                    }`}
                   >
                     <UnderlineIcon size={16} />
                   </button>
 
-                  {/* Upload Image into editor */}
                   <label htmlFor="editor-image-upload">
                     <div className="p-1 rounded hover:bg-gray-100 cursor-pointer">
                       <ImageIcon size={16} />
@@ -158,18 +227,21 @@ export default function BlogAdd() {
             </div>
           </div>
 
-          {/* Thumbnail uploader */}
           <div>
             <div className="bg-white border border-gray-200 rounded-md p-4 mt-[40px]">
               <h2 className="font-medium mb-4">Thumbnail</h2>
               <label htmlFor="thumbnail" className="cursor-pointer">
                 <div
-                  className={`border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center h-[350px] ${thumbnail ? "p-0" : "p-4"}`}
+                  className={`border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center h-[350px] ${
+                    thumbnail ? "p-0" : "p-4"
+                  }`}
                 >
                   {thumbnail ? (
                     <NextImage
-                      src={thumbnail || "/placeholder.svg"}
+                      src={thumbnail}
                       alt="Thumbnail preview"
+                      width={300}
+                      height={300}
                       className="w-full h-full object-cover rounded"
                     />
                   ) : (
@@ -194,8 +266,9 @@ export default function BlogAdd() {
           <button
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md"
             onClick={handlePublish}
+            disabled={mutation.isPending}
           >
-            Publish blog
+            {mutation.isPending ? "Publishing..." : "Publish blog"}
           </button>
         </div>
       </div>

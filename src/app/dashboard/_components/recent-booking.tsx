@@ -25,7 +25,7 @@ const bookings = [
 
 export function RecentBookings() {
   return (
-    <Card className="">
+    <Card className="h-full ">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-[20px] font-medium text-[#FF6900] ">
           Recent Bookings
@@ -43,7 +43,7 @@ export function RecentBookings() {
             <div key={booking.id} className="flex items-center justify-between border border-[#0000001A] px-[12px] py-[8px] rounded-xl">
               <div>
                 <div className="font-medium text-[14px] text-[#000000] mb-[6px]">{booking.room}</div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-[12px] font-medium">
                   {booking.time}
                 </div>
               </div>

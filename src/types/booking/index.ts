@@ -1,14 +1,34 @@
-export type BookingStatus = "confirmed" | "canceled" | "refunded";
+export type BookingStatus = "pending" | "confirmed" | "cancelled";
+
+export interface TimeSlot {
+  _id: string;
+  start: string;
+  end: string;
+}
+
+export interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  numberOfPeople: number;
+}
 
 export interface Booking {
-  id: string;
-  name: string;
-  category: string;
+  _id: string;
+  user: User;
   room: string;
-  numberOfPeople: number;
-  services: string;
+  promoCode?: string;
   date: string;
-  time: string;
-  amount: string;
+  timeSlots: TimeSlot[];
+  service: string;
+  total: number;
   status: BookingStatus;
+  stripeSessionId: string | null;
+  refundId: string | null;
+  refundedAt: string | null;
+  expiresAt: string;
+  paymentStatus: "pending" | "paid" | "refunded";
+  createdAt: string;
+  updatedAt: string;
 }

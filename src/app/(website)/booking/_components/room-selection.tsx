@@ -77,7 +77,7 @@ type RoomCardProps = {
 };
 
 export function RoomCard({ room }: RoomCardProps) {
-  const { selectRoomId } = useBookingStore();
+  const { setRoom } = useBookingStore();
 
   return (
     <div className="relative overflow-hidden rounded-lg h-64">
@@ -94,13 +94,15 @@ export function RoomCard({ room }: RoomCardProps) {
         <h3 className="text-white text-2xl font-bold">{room?.title}</h3>
       </div>
       <div className="absolute bottom-6 inset-x-6">
-        <Button
-          onClick={() => selectRoomId(room?._id ?? "")}
-          variant="outline"
-          className="w-full border border-white/70 bg-transparent text-white hover:bg-white/20 hover:text-white transition-colors"
-        >
-          Select
-        </Button>
+        {room && (
+          <Button
+            onClick={() => setRoom(room)}
+            variant="outline"
+            className="w-full border border-white/70 bg-transparent text-white hover:bg-white/20 hover:text-white transition-colors"
+          >
+            Select
+          </Button>
+        )}
       </div>
     </div>
   );
