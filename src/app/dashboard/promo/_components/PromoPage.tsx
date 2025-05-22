@@ -18,6 +18,7 @@ import SendModal from "./SendModal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import { useSession } from "next-auth/react";
 
 const PromoPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -28,9 +29,12 @@ const PromoPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
-
+  // const token =
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
+// const token = localStorage.getItem("token");
+const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  console.log("token", token);
   const queryClient = useQueryClient();
 
   const {
