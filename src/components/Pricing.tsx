@@ -58,10 +58,10 @@ export default function Pricing() {
                 <TabsTrigger
                   value="hourly"
                   className={cn(
-                    "font-poppins text-xl font-bold shadow-none",
+                    "font-poppins text-xl !shadow-none !outline-none !rounded-none w-full flex items-center justify-start",
                     activeTab === "hourly"
-                      ? "text-[#D95900] border-b-[2px]  border-[#D95900]"
-                      : "text-black"
+                      ? "w-[100px] !text-[#D95900] border-b-[2px] font-semibold border-[#D95900]"
+                      : "text-black font-normal"
                   )}
                 >
                   Hourly
@@ -69,10 +69,10 @@ export default function Pricing() {
                 <TabsTrigger
                   value="packages"
                   className={cn(
-                    "font-poppins text-xl  font-medium",
+                    "font-poppins text-xl !shadow-none !outline-none !rounded-none w-full flex items-center justify-start",
                     activeTab === "packages"
-                      ? "text-[#D95900] border-b-[2px]  border-[#D95900]"
-                      : "text-black"
+                      ? "w-[220px] !text-[#D95900] border-b-[2px] font-semibold border-[#D95900]"
+                      : "text-black font-normal"
                   )}
                 >
                   Packages Available
@@ -125,53 +125,42 @@ export default function Pricing() {
 
               {/* Packages content */}
               <TabsContent value="packages" className="space-y-6 mt-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between w-full max-w-md p-4 bg-white rounded-lg shadow-sm">
-                    <div className="flex flex-col">
-                      <h3 className="text-xl font-bold text-gray-900">
-                        Early Bird
-                      </h3>
-                      <div className="flex items-center mt-2 space-x-2">
-                        <div className="flex items-center justify-center px-2 py-1 text-xs text-white bg-orange-500 rounded-full">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3 h-3 mr-1"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
-                          </svg>
-                          &ldquo;1h&ldquo;
-                        </div>
-                        <div className="flex items-center justify-center px-2 py-1 text-xs text-white bg-orange-500 rounded-full">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3 h-3 mr-1"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                          </svg>
-                          &ldquo;1/5&ldquo;{" "}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-center px-3 py-2 text-sm font-bold text-gray-900 bg-yellow-400 rounded-full">
-                      &ldquo;$55.90&ldquo;
-                    </div>
+                <div className="">
+                  <div className="">
+                    <h3 className="text-center font-poppins text-lg md:text-xl leading-[120%] tracking-[0%] text-black font-medium italic pb-4 md:pb-5">Early Bird Packages</h3>
+                    <h4 className="font-poppins text-lg md:text-xl leading-[120%] tracking-[0%] text-black">
+                      <span className="font-semibold">Daypass: $17.5</span>{" "}
+                      /pax
+                    </h4>
+                    <p className="text-lg md:text-xl font-normal font-poppins leading-[120%] pt-2 md:pt-3 tracking-[0%]">
+                      Weekdays (9am - 12pm)
+                    </p>
+                    <h4 className="font-poppins text-lg md:text-xl leading-[120%] tracking-[0%] text-black pt-4 md:pt-6">
+                      <span className="font-semibold">Noonpass: $28 </span>{" "}
+                      (for 3hrs) /pax
+                    </h4>
+                    <p className="text-lg md:text-xl font-normal font-poppins leading-[120%] pt-2 md:pt-3 tracking-[0%]">
+                      Weekdays (9am - 12pm)
+                    </p>
                   </div>
+                  <div className="">
+                    <h3 className="text-center font-poppins text-lg md:text-xl leading-[120%] tracking-[0%] text-black font-medium italic py-4 md:py-5">Midnight Packages</h3>
+                    <h4 className="font-poppins text-lg md:text-xl leading-[120%] tracking-[0%] text-black">
+                      <span className="font-semibold">Peak: $58 </span>{" "}
+                      /pax
+                    </h4>
+                    <p className="text-lg md:text-xl font-normal font-poppins leading-[120%] pt-2 md:pt-3 tracking-[0%]">
+                     Saturday to Sunday (12am — 9am)
+                    </p>
+                    <h4 className="font-poppins text-lg md:text-xl leading-[120%] tracking-[0%] text-black pt-4 md:pt-6">
+                      <span className="font-semibold">Non Peak: $39.90 </span> /pax
+                    </h4>
+                    <p className="text-lg md:text-xl font-normal font-poppins leading-[120%] pt-2 md:pt-3 tracking-[0%]">
+                      Monday to Friday (12am — 9am)
+                    </p>
+                  </div>
+
+                  
                 </div>
               </TabsContent>
             </Tabs>
@@ -194,7 +183,7 @@ export default function Pricing() {
 
         {/* Reserve Now button */}
         <div className="flex justify-center mt-8 md:mt-[45px] lg:mt-[70px]">
-          <Link href="/reserve">
+          <Link href="/booking">
             <button className="inline-flex items-center justify-center bg-[#FF6900] hover:bg-[#ff5500] text-white text-base font-medium py-3 md:py-4 px-6 md:px-8 rounded-[8px] transition-colors">
               Reserve Now <ArrowRight className="ml-2 h-5 w-5" />
             </button>

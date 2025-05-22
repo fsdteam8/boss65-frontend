@@ -5,11 +5,16 @@ import { Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useMemo } from "react";
 import { AddUploadModal } from "./add-video-modal";
+import { useSession } from "next-auth/react";
 
 const VideoContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+   const session = useSession();
+      const token = (session?.data?.user as { accessToken: string })?.accessToken;
+      console.log("token", token);
 
   const handleSave = (data: any) => {
     console.log("Saved data:", data)
