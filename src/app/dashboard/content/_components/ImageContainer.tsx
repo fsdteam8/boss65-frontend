@@ -1,15 +1,14 @@
 "use client";
-
-import { Pagination } from "@/components/ui/pagination";
 import { Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useMemo } from "react";
 import { AddImageModal } from "./add-image-modal";
+import { Pagination } from "@/components/ui/pagination";
 
 const ImageContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [currentPage,setCurrentPage ] = useState(1);
+  const itemsPerPage = 3;
 
   const imageData = useMemo(
     () => [
