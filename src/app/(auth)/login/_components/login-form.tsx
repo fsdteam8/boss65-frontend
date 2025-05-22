@@ -62,7 +62,7 @@ export function LoginForm() {
       router.push("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
-      toast.error("Login failed. Please check your credentials.");
+      toast.error((error as Error).message);;
       setIsLoading(false);
     }
   }

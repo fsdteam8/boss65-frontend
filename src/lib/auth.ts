@@ -40,11 +40,14 @@ export const authOptions: NextAuthOptions = {
           );
 
           const response = await res.json();
-
+console.log("response", response);
           if (!res.ok || !response?.status) {
             throw new Error(response?.message || "Login failed");
           }
-
+        if  (response.data.user.role ===  "USER") {
+          console.log("xxx")
+            throw new Error("Only admin can access this page");
+          }
           const { user, accessToken } = response.data;
 
           return {
@@ -56,7 +59,8 @@ export const authOptions: NextAuthOptions = {
           };
         } catch (error) {
           console.error("Authentication error:", error);
-          throw new Error("Authentication failed. Please try again.");
+          const errorMessage = error instanceof Error ? error.message : "Authentication failed. Please try again.";
+          throw new Error(errorMessage);
         }
       },
     }),
