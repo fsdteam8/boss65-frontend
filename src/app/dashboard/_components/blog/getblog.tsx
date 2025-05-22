@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 interface Blog {
   _id?: string;
   title?: string;
@@ -19,9 +20,8 @@ interface Blog {
 }
 export default function GetBlog() {
   const queryClient = useQueryClient();
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
-
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
   const { data } = useQuery({
     queryKey: ["blog"],
     queryFn: async () => {

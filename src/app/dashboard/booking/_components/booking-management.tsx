@@ -68,10 +68,8 @@ export function BookingManagement() {
       <BookingHeader />
       <div className="bg-white rounded-md shadow">
         <BookingTable
-          bookings={currentBookings}
-          updateBookingStatus={updateBookingStatus}
         />
-        <BookingPagination
+        {/* <BookingPagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
@@ -79,7 +77,7 @@ export function BookingManagement() {
           itemsPerPage={itemsPerPage}
           currentItemStart={indexOfFirstItem + 1}
           currentItemEnd={Math.min(indexOfLastItem, bookings.length)}
-        />
+        /> */}
       </div>
     </div>
   );

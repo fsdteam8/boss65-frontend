@@ -3,19 +3,20 @@ import React from "react";
 import UpdateCart from "./UpdateCart";
 import { useQuery } from "@tanstack/react-query";
 
-const Updates = () => {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
+interface UpdatesProps {
+  data: number;
+}
 
+const Updates = ({ data: show }: UpdatesProps) => {
   const { data } = useQuery({
-    queryKey: ["blog"],
+    queryKey: ["blogs"],
     queryFn: async () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         }
       );
 
@@ -34,10 +35,9 @@ const Updates = () => {
           Updates
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
-          {blogs &&
-            blogs?.map((update: any) => {
-              return <UpdateCart key={update.id} update={update} />;
-            })}
+          {blogs.slice(0,show)?.map((update: any) => {
+            return <UpdateCart key={update.id} update={update} />;
+          })}
         </div>
       </div>
     </div>

@@ -21,6 +21,8 @@ import {
 
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function dataURLtoBlob(dataUrl: string) {
   const arr = dataUrl.split(",");
@@ -37,9 +39,9 @@ function dataURLtoBlob(dataUrl: string) {
 export default function BlogAdd() {
   const [title, setTitle] = useState("");
   const [thumbnail, setThumbnail] = useState<string | null>(null);
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
-
+    const router = useRouter();
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
   const editor = useEditor({
     extensions: [StarterKit, Underline, Image],
     content: "",
@@ -65,10 +67,11 @@ export default function BlogAdd() {
       return res.json();
     },
     onSuccess: (success) => {
-      toast.success(success.message ||"Blog published successfully");
+      toast.success(success.message || "Blog published successfully");
       setTitle("");
       editor?.commands.setContent("");
       setThumbnail(null);
+      router.push("/dashboard/blog");
     },
     onError: (err: any) => {
       toast.error(err.message || "Failed to publish blog");
@@ -90,7 +93,7 @@ export default function BlogAdd() {
       const file = new File([blob], "thumbnail.jpg", { type: blob.type });
       formData.append("thumbnail", file);
     }
-    console.log(formData)
+    console.log(formData);
 
     mutation.mutate(formData);
   };

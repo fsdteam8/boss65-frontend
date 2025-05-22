@@ -6,19 +6,20 @@ import Image from "next/image";
 import React, { useState, useMemo } from "react";
 import { AddUploadModal } from "./add-video-modal";
 import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 
 const VideoContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-   const session = useSession();
-      const token = (session?.data?.user as { accessToken: string })?.accessToken;
-      console.log("token", token);
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  console.log("token", token);
 
   const handleSave = (data: any) => {
-    console.log("Saved data:", data)
-  }
+    console.log("Saved data:", data);
+  };
 
   const imageData = useMemo(
     () => [
@@ -62,12 +63,38 @@ const VideoContainer = () => {
     []
   );
 
+  const { data } = useQuery({
+    queryKey: ["contentVideo"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=video`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return res.json();
+    },
+  });
+  const contentImage = data?.data || [];
+
+  
+  
+
+
+
   // Pagination logic
   // const totalPages = Math.ceil(imageData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return imageData.slice(startIndex, startIndex + itemsPerPage);
-  }, [currentPage, itemsPerPage, imageData]);
+    return contentImage.slice(startIndex, startIndex + itemsPerPage);
+  }, [currentPage, itemsPerPage, contentImage]);
 
   return (
     <div className="h-screen px-10 pb-[87px]">
@@ -91,7 +118,7 @@ const VideoContainer = () => {
                 Section
               </th>
               <th className="text-base font-poppins font-normal text-black text-center py-5 px-2">
-                Size
+                type
               </th>
               <th className="text-base font-poppins font-normal text-black text-center py-5 px-2">
                 Action
@@ -99,22 +126,18 @@ const VideoContainer = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((data) => (
-              <tr key={data.id} className="bg-white border-b border-black/20">
+            {paginatedData.map((data: any) => (
+              <tr key={data._id} className="bg-white border-b border-black/20">
                 <td className="py-4 px-2 text-center">
-                  <Image
-                    src={data.image}
-                    alt="section image"
-                    width={80}
-                    height={60}
-                    className="mx-auto rounded"
-                  />
+                  <video width="80" height="60" controls>
+                    <source src={data.url} type="video/mp4" />
+                  </video>
                 </td>
                 <td className="text-sm font-poppins text-center">
                   {data.section}
                 </td>
                 <td className="text-sm font-poppins text-center">
-                  {data.size}
+                  {data.type}
                 </td>
                 <td className="text-sm font-poppins text-center">
                   <button className="">

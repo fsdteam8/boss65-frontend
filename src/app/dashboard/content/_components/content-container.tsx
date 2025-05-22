@@ -5,6 +5,7 @@ import VideoContainer from "./VideoContainer";
 
 const ContentContainer = () => {
   const [activeTab, setActiveTab] = useState("image");
+
   return (
     <div>
       <div className="w-full flex items-center justify-between pt-[40px] pb-[80px] px-[40px]">
