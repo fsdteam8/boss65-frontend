@@ -41,7 +41,6 @@ export default function RootLayout({
           <Toaster position="top-right"/>
         </AuthProvider>
         <NextTopLoader showSpinner={false} color="#FF5500" />
-        <Toaster />
       </body>
     </html>
   );

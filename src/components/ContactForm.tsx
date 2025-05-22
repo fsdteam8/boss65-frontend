@@ -4,12 +4,14 @@ import type React from "react";
 
 import { useState } from "react";
 import { MapPin, Mail, PhoneCall } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     message: "",
   });
 
@@ -23,10 +25,34 @@ export default function ContactForm() {
     }));
   };
 
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["contact-us"],
+    mutationFn: (values: {
+      name: string;
+      email: string;
+      phoneNumber: string;
+      message: string;
+    }) =>
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/contact`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      if (!data?.status) {
+        toast.error(data?.message || "Something went wrong");
+        return;
+      } else {
+        toast?.success(data?.message || "Message received successfully");
+      }
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data submitted:", formData);
-    // You can add additional logic here like form validation or API calls
+    mutate(formData);
   };
 
   return (
@@ -102,9 +128,9 @@ export default function ContactForm() {
             <div>
               <input
                 type="tel"
-                name="phone"
+                name="phoneNumber"
                 placeholder="Phone Number"
-                value={formData.phone}
+                value={formData.phoneNumber}
                 onChange={handleChange}
                 className="h-[46px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"
               />
@@ -124,11 +150,12 @@ export default function ContactForm() {
 
             <div className="mt-[20px] md:mt-[25px] lg:mt-[30px]">
               <button
-              type="submit"
-              className="w-full bg-[#FF6900] text-base font-poppins leading-[120%] tracking-[0%] text-white font-medium py-4 px-4 rounded-md transition-colors"
-            >
-              Send Message
-            </button>
+                type="submit"
+                disabled={isPending}
+                className="w-full bg-[#FF6900] text-base font-poppins leading-[120%] tracking-[0%] text-white font-medium py-4 px-4 rounded-md transition-colors"
+              >
+                {isPending ? "Sending..." : "Send Message"}
+              </button>
             </div>
           </form>
         </div>
