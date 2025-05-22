@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 interface AddFaqModalProps {
   isOpen: boolean;
@@ -22,12 +23,12 @@ interface AddFaqModalProps {
 export default function AddFaqModal({ isOpen, onClose }: AddFaqModalProps) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  console.log("token", token);
 
   const handleSubmit = async () => {
     const faqData = { question, answer };
-
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
 
     try {
       const response = await fetch(

@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface EditFaqModalProps {
   isOpen: boolean;
@@ -24,12 +25,15 @@ interface EditFaqModalProps {
   };
 }
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I"; // Replace this with dynamic token source
-
-export default function EditFaqModal({ isOpen, onClose, faq }: EditFaqModalProps) {
-  // const queryClient = useQueryClient();
-  // queryClient.invalidateQueries({ queryKey: ["faqs"] });
-
+// const token = localStorage.getItem("token");
+export default function EditFaqModal({
+  isOpen,
+  onClose,
+  faq,
+}: EditFaqModalProps) {
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  console.log("token", token);
   const { data: faqSingle } = useQuery({
     queryKey: ["faq-single", faq.id],
     queryFn: async () => {
@@ -88,7 +92,9 @@ export default function EditFaqModal({ isOpen, onClose, faq }: EditFaqModalProps
       // queryClient.invalidateQueries({ queryKey: ["faqs"] });
 
       onClose();
-      // window.location.href("/dashboard/faq");
+      setTimeout(() => {
+        window.location.href = "/dashboard/faq";
+      }, 1000);
     } catch (error) {
       console.error("Error updating FAQ:", error);
       alert("Failed to update FAQ. Please try again.");
@@ -105,7 +111,12 @@ export default function EditFaqModal({ isOpen, onClose, faq }: EditFaqModalProps
             <DialogTitle className="text-xl font-bold text-[#FF6B00]">
               Edit FAQ
             </DialogTitle>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-6 w-6">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-6 w-6"
+            >
               <X className="h-4 w-4 text-[#FF6B00]" />
             </Button>
           </div>

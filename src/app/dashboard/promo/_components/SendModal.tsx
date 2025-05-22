@@ -25,8 +25,11 @@ export default function SendModal({ isOpen, onClose, promoCode }: SendPromoCodeM
   const [subject, setSubject] = useState("Your Exclusive Promo Code!");
   const [body, setBody] = useState(`Use this code "${promoCode}" to enjoy your discount.`);
 
-  const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
+  // const token =
+  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
+
+
+  const token = localStorage.getItem("token");
 
   const handleSend = async () => {
     if (!email || !subject || !body) {
