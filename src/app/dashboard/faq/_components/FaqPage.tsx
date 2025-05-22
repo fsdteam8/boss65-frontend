@@ -16,6 +16,7 @@ import AddFaqModal from "./Add-faq-modal";
 import EditFaqModal from "./Edit-modal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 // ConfirmDeleteModal component inside this file for simplicity,
 // or you can move it to its own file.
@@ -63,6 +64,10 @@ const FaqPage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedFaq, setSelectedFaq] = useState<FAQ | null>(null);
 
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  console.log("token", token);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -70,9 +75,7 @@ const FaqPage = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
-
+  
   const queryClient = useQueryClient();
 
   const {
@@ -86,10 +89,7 @@ const FaqPage = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/faqs`,
         {
           method: "GET",
-          headers: {
-            // "Content-Type": "application/json",
-            // Authorization: `Bearer ${token}`,
-          },
+          
         }
       );
 
@@ -99,7 +99,7 @@ const FaqPage = () => {
 
       return res.json();
     },
-    // enabled: !!token,
+   
   });
 
   const faqAllData = faqData?.data || [];
@@ -118,7 +118,7 @@ const FaqPage = () => {
     setIsEditModalOpen(true);
   };
 
-  // Mutation for deleting FAQ
+  
   const deleteFaqMutation = useMutation({
     mutationFn: async (id: string) => {
       const res = await fetch(
@@ -150,7 +150,7 @@ const FaqPage = () => {
     },
   });
 
-  // Show confirmation modal on delete button click
+  
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);
     setShowDeleteModal(true);
@@ -182,7 +182,7 @@ const FaqPage = () => {
   return (
     <div className="bg-[#F3F4F6] min-h-screen">
       <div className="flex justify-between items-center p-6 mb-[70px]">
-        <h1 className="text-2xl font-semibold px-3">Content Management</h1>
+        <h1 className="text-2xl font-semibold px-3">FAQ Management</h1>
         <Button
           onClick={() => setIsAddModalOpen(true)}
           className="bg-[#FF6B00] hover:bg-[#e05f00] text-white"

@@ -3,8 +3,8 @@
 import LogoutModal from "@/components/shared/modals/LogoutModal";
 import { cn } from "@/lib/utils";
 import {
-  BarChart3,
-  BookText,
+  LayoutDashboard,
+  Calendar,
   FileText,
   Info,
   LogOut,
@@ -38,12 +38,12 @@ export function DashboardSidebar() {
     {
       name: "Dashboard",
       href: "/dashboard",
-      icon: BarChart3,
+      icon: LayoutDashboard ,
     },
     {
       name: "Booking",
       href: "/dashboard/booking",
-      icon: BookText,
+      icon: Calendar ,
     },
     {
       name: "Content",
@@ -68,7 +68,7 @@ export function DashboardSidebar() {
   ];
 
   return (
-    <div className="w-64 border-r border-zinc-800/10 bg-white text-white">
+    <div className="w-72 border-r max-h-screen sticky top-0 border-zinc-800/10 bg-white text-white">
       <div className="flex flex-col h-full">
         <div className="p-6 flex justify-center">
           <div className="flex flex-col items-center">
@@ -87,10 +87,10 @@ export function DashboardSidebar() {
               key={route.href}
               href={route.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:text-orange-500",
+                "flex text-base font-medium leading-[120%] items-center gap-3 rounded-lg px-3 py-4 mb-5 transition-all hover:text-orange-500",
                 pathname === route.href
                   ? "bg-orange-500/10 text-orange-500"
-                  : "text-zinc-400"
+                  : "text-[#000000]"
               )}
             >
               <route.icon className="h-4 w-4" />
@@ -102,7 +102,7 @@ export function DashboardSidebar() {
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-zinc-400 transition-all hover:text-orange-500"
+            className="flex items-center gap-3 rounded-lg px-3 py-4 text-base font-medium leading-[120%] text-[#000000] transition-all hover:text-orange-500"
           >
             <LogOut className="h-4 w-4" />
             Log Out

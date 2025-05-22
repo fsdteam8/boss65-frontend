@@ -18,6 +18,7 @@ import SendModal from "./SendModal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import { useSession } from "next-auth/react";
 
 const PromoPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -28,9 +29,8 @@ const PromoPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
-
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
   const queryClient = useQueryClient();
 
   const {
@@ -61,7 +61,6 @@ const PromoPage = () => {
   });
 
   const promoData = promoCodes?.data?.data || [];
-  console.log("promoData", promoData);
 
   const deletePromoCodeMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -99,13 +98,9 @@ const PromoPage = () => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const currentItemStart = (currentPage - 1) * itemsPerPage + 1;
   const currentItemEnd = Math.min(currentPage * itemsPerPage, totalItems);
-  const currentPromoCodes = promoData.slice(
-    currentItemStart - 1,
-    currentItemEnd
-  );
+  const currentPromoCodes = promoData.slice(currentItemStart - 1, currentItemEnd);
 
   const handleSendCode = (id: string, code: string) => {
-    console.log("Promo code ID clicked:", id);
     setSelectedCode(code);
     setIsSendModalOpen(true);
   };
@@ -124,93 +119,88 @@ const PromoPage = () => {
   };
 
   return (
-    <div className="bg-[#F3F4F6] min-h-screen">
-      <div className="flex justify-between items-center p-6 mb-[60px]">
-        <h1 className="text-2xl font-semibold">Promo Codes</h1>
+    <div className="bg-[#F3F4F6] min-h-screen py-8">
+      <div className="flex justify-between items-center px-6 mb-8">
+        <h1 className="text-2xl font-semibold text-gray-800">Promo Codes</h1>
         <Button
           onClick={() => setIsCreateModalOpen(true)}
           className="bg-[#FF6B00] hover:bg-[#e05f00] text-white"
         >
-          Create Promo Code <span className="ml-1">+</span>
+          Create Promo Code +
         </Button>
       </div>
 
-      <div className="w-[96%] mx-auto bg-white rounded-lg">
+      <div className="w-[96%] mx-auto bg-white rounded-lg shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="px-20 py-4 text-base text-black">ID</TableHead>
-              <TableHead className="px-20 py-4 text-base text-black">Code</TableHead>
-              <TableHead className="px-20 py-4 text-base text-black">Discount</TableHead>
-              <TableHead className="px-20 py-4 text-base text-black">Expiration</TableHead>
-              <TableHead className="px-20 py-4 text-base text-black">Usage</TableHead>
-              <TableHead className="px-20 py-4 text-base text-black">Status</TableHead>
-              <TableHead className="px-20 py-4 text-base text-black">Action</TableHead>
+            <TableRow className="text-left">
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700">ID</TableHead>
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700">Code</TableHead>
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700">Discount</TableHead>
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700">Expiration</TableHead>
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700">Usage</TableHead>
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700">Status</TableHead>
+              <TableHead className="py-3 px-4 text-sm font-semibold text-gray-700 text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-6">
-                  Loading promo codes...
-                </TableCell>
+                <TableCell colSpan={7} className="text-center py-6">Loading promo codes...</TableCell>
               </TableRow>
             ) : isError ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center text-red-500 py-6">
-                  Failed to load promo codes. Please try again.
+                  Failed to load promo codes.
                 </TableCell>
               </TableRow>
             ) : currentPromoCodes.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-6">
-                  No promo codes found.
-                </TableCell>
+                <TableCell colSpan={7} className="text-center py-6">No promo codes found.</TableCell>
               </TableRow>
             ) : (
               currentPromoCodes.map((code: any, index: number) => (
-                <TableRow key={code._id}>
-                  <TableCell className="px-20 py-6 text-sm text-black">
-                    {index + 1}
+                <TableRow key={code._id} className="hover:bg-gray-50">
+                  <TableCell className="py-4 px-4 text-base text-black">{index + 1}</TableCell>
+                  <TableCell className="py-4 px-4 text-base text-black">
+                    {code.code.slice(0, 20)}...
                   </TableCell>
-                  <TableCell className="px-20 py-6 text-sm text-black">
-                    {code.code.slice(0, 10)}...
-                  </TableCell>
-                  <TableCell className="px-20 py-6 text-sm text-black">
+                  <TableCell className="py-4 px-4 text-base text-black">
                     {code.discountValue}% off
                   </TableCell>
-                  <TableCell className="px-20 py-6 text-sm text-black">
+                  <TableCell className="py-4 px-4 text-base text-black">
                     {new Date(code.expiryDate).toLocaleDateString("en-US")}
                   </TableCell>
-                  <TableCell className="px-20 py-6 text-sm text-black">
+                  <TableCell className="py-4 px-4 text-base text-black">
                     {code.usedCount}/{code.usageLimit}
                   </TableCell>
-                  <TableCell className="px-[75px]">
+                  <TableCell className="py-4 px-4">
                     <Badge
                       className={
                         code.active
-                          ? "bg-[#E6EFE6] text-[#016102] hover:bg-[#d5e6d5]"
-                          : "bg-[#FFEBEB] text-[#FF0000] hover:bg-[#ffd9d9]"
+                          ? "bg-green-100 text-green-800 hover:bg-green-200"
+                          : "bg-red-100 text-red-600 hover:bg-red-200"
                       }
                     >
                       {code.active ? "Active" : "Expired"}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex px-[63px] space-x-2">
+                  <TableCell className="py-4 px-4">
+                    <div className="flex justify-center space-x-2">
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => handleSendCode(code._id, code.code)}
                       >
-                        <Mail className="h-5 w-5 text-black" />
+                        <Mail className="h-5 w-5 text-gray-700" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(code._id)}
                       >
-                        <Trash className="h-5 w-5 text-black" />
+                        <Trash className="h-5 w-5 text-gray-700" />
                       </Button>
                     </div>
                   </TableCell>
@@ -220,15 +210,17 @@ const PromoPage = () => {
           </TableBody>
         </Table>
 
-        <BookingPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          currentItemStart={currentItemStart}
-          currentItemEnd={currentItemEnd}
-        />
+        <div className="px-4">
+          <BookingPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            currentItemStart={currentItemStart}
+            currentItemEnd={currentItemEnd}
+          />
+        </div>
       </div>
 
       {/* Modals */}
@@ -237,24 +229,14 @@ const PromoPage = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
       />
-
       {isCreateModalOpen && (
-        <CreateModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-        />
+        <CreateModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
       )}
-
       {isSendModalOpen && selectedCode && (
-        <SendModal
-          isOpen={isSendModalOpen}
-          onClose={() => setIsSendModalOpen(false)}
-          promoCode={selectedCode}
-        />
+        <SendModal isOpen={isSendModalOpen} onClose={() => setIsSendModalOpen(false)} promoCode={selectedCode} />
       )}
     </div>
   );
 };
 
 export default PromoPage;
-

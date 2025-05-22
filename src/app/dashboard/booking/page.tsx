@@ -3,7 +3,7 @@ import { BookingManagement } from "./_components/booking-management";
 const Page = () => {
   return (
     <div>
-      <BookingManagement />
+      <BookingManagement /> 
     </div>
   );
 };

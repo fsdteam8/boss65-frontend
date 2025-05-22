@@ -16,16 +16,20 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 interface CreatePromoCodeModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const createPromoCode = async (data: any) => {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4MGYxMmI4OTQ1OGY4MGRiNzRjNzUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0NzgwMTcyMCwiZXhwIjoxNzQ4NDA2NTIwfQ.XM3apv4H6GvIyKZ8W66nIMBWe5osk62Jn3FzpXxzZ4I";
-
+const createPromoCode = async ({
+  data,
+  token,
+}: {
+  data: any;
+  token: string;
+}) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/promo-codes`,
     {
@@ -59,19 +63,23 @@ export default function CreatePromoModal({
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const calendarRef = useRef<HTMLDivElement>(null);
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken?: string })?.accessToken;
 
   const mutation = useMutation({
-    mutationFn: createPromoCode,
+    mutationFn: ({ data, token }: { data: any; token: string }) =>
+      createPromoCode({ data, token }),
     onSuccess: (data) => {
       console.log("Promo code created successfully:", data);
       onClose();
       toast.success("Promo code created successfully");
-      setInterval(() => {
+      setTimeout(() => {
         window.location.href = "/dashboard/promo";
       }, 2000);
     },
     onError: (error) => {
       console.error("Error creating promo code:", error);
+      toast.error("Failed to create promo code");
     },
   });
 
@@ -87,6 +95,11 @@ export default function CreatePromoModal({
       return;
     }
 
+    if (!token) {
+      toast.error("You are not authorized. Please log in.");
+      return;
+    }
+
     const data = {
       code: promoCode,
       discountType,
@@ -95,7 +108,7 @@ export default function CreatePromoModal({
       usageLimit: Number(usageLimit),
     };
 
-    mutation.mutate(data);
+    mutation.mutate({ data, token });
   };
 
   // Close calendar on outside click
@@ -120,9 +133,8 @@ export default function CreatePromoModal({
     };
   }, [calendarOpen]);
 
-  // Format date for input display
   const formattedDate = expirationDate
-    ? expirationDate.toLocaleDateString("en-CA") // YYYY-MM-DD format for display
+    ? expirationDate.toLocaleDateString("en-CA")
     : "";
 
   return (

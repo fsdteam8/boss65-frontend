@@ -12,7 +12,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     queryKey: ["blog"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/${params.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs/${params.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

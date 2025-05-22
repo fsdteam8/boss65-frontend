@@ -60,7 +60,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ id }) => {
     enabled: isEditMode,
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,8 +83,8 @@ const EditBlog: React.FC<EditBlogProps> = ({ id }) => {
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
       const url = isEditMode
-        ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/${id}`
-        : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/create`;
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs/${id}`
+        : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs/create`;
 
       const res = await fetch(url, {
         method: isEditMode ? "PUT" : "POST",
