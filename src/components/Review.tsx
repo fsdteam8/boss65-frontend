@@ -13,65 +13,31 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
+import { useQuery } from "@tanstack/react-query"
 
-interface Testimonial {
-  id: number
-  name: string
-  quote: string
-  image: string
-  rating: number
-}
+type GoogleReviewResponse = {
+  status: boolean;
+  message: string;
+  data: GoogleReview[];
+};
+
+type GoogleReview = {
+  author_name: string;
+  author_url: string;
+  language: string;
+  original_language: string;
+  profile_photo_url: string;
+  rating: number;
+  relative_time_description: string;
+  text: string;
+  time: number;
+  translated: boolean;
+};
+
 
 export default function ReviewCarousel() { 
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
-
-
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: "Devon Lane",
-      quote:
-        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
-      image:
-        "/img/user1.png",
-      rating: 5,
-    },
-    {
-      id: 2,
-      name: "Devon Lane",
-      quote:
-        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
-      image:
-        "/img/user2.png",
-      rating: 5,
-    },
-    {
-      id: 3,
-      name: "Alex Johnson",
-      quote:
-        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
-      image: "/img/user1.png",
-      rating: 4,
-    },
-    {
-      id: 4,
-      name: "Sarah Williams",
-      quote:
-        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
-      image: "/img/user2.png",
-      rating: 4,
-    },
-    {
-      id: 5,
-      name: "Michael Chen",
-      quote:
-        "We love Landingfolio! Our designers were using it for their projects, so we already knew what kind of design they want.",
-      image: "/img/user2.png",
-      rating: 5,
-    },
-  ]
-
   useEffect(() => {
     if (!api) return
 
@@ -85,6 +51,16 @@ export default function ReviewCarousel() {
       api.off("select", onSelect)
     }
   }, [api])
+
+
+  const {data, isLoading, error, isError} = useQuery<GoogleReviewResponse>({
+    queryKey: ['review-all-data'],
+    queryFn: ()=>fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/review`).then(res=>res.json())
+  })
+
+  if(isLoading) return <p>Loading...</p>
+  if(isError) return <p>Error: {error?.message}</p>
+  
 
   return (
     <div className="container mx-auto pt-[40px] md:pt-[70px] lg:pt-[104px] pb-[40px] md:pb-[60px] lg:pb-[80px]">
@@ -107,18 +83,18 @@ export default function ReviewCarousel() {
         ]}
       >
         <CarouselContent className="">
-          {testimonials.map((testimonial) => (
-            <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/2 px-0">
+          {data?.data?.map((testimonial, index) => (
+            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/2 px-0">
               <Card className="border-none shadow-none">
                 <CardContent className=" pr-0">
                   <div className="flex flex-col md:flex-row gap-[15px] md:gap-[25px] lg:gap-[43px] ">
-                    <div className="relative overflow-hidden rounded-lg flex-shrink-0 ">
+                    <div className="relative overflow-hidden flex-shrink-0 ">
                       <Image
-                        src={testimonial.image || "/placeholder.svg"}
-                        alt={testimonial.name}
+                        src={testimonial.profile_photo_url || "/placeholder.svg"}
+                        alt={testimonial.author_name}
                         width={258}
                         height={258}
-                        className="w-full md:w-[258px] h-[258px] object-cover"
+                        className="w-full md:w-[258px] h-[258px] object-cover rounded-[16px]"
                       />
                     </div>
                     <div className="flex flex-col justify-center">
@@ -132,8 +108,8 @@ export default function ReviewCarousel() {
                           />
                         ))}
                       </div>
-                      <p className="text-[17px] md:text-lg lg:text-xl font-medium font-poppins leading-[30px] tracking-[0%] text-[#090914]">&quot;{testimonial.quote}&quot;</p>
-                      <p className="text-base md:text-lg leading-[120%] tracking-[0%] text-[#595959] font-medium pt-4 md:pt-5 lg:pt-[25px]">{testimonial.name}</p>
+                      <p className="text-[17px] md:text-lg lg:text-xl font-medium font-poppins leading-[30px] tracking-[0%] text-[#090914]">&quot;{testimonial.text.slice(0, 100)}&quot;</p>
+                      <p className="text-base md:text-lg leading-[120%] tracking-[0%] text-[#595959] font-medium pt-4 md:pt-5 lg:pt-[25px]">{testimonial.author_name}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -142,9 +118,9 @@ export default function ReviewCarousel() {
           ))}
         </CarouselContent>
         <div className="flex justify-center mt-8 md:mt-12 lg:mt-[80px]">
-          <CarouselPrevious className="relative static mr-2 translate-y-0" />
+          <CarouselPrevious className="static mr-2 translate-y-0" />
           <div className="flex items-center justify-center gap-2">
-            {testimonials.map((_, index) => (
+            {data?.data?.map((_, index) => (
               <button
                 key={index}
                 className={`h-2 w-2 rounded-full transition-all ${
@@ -155,7 +131,7 @@ export default function ReviewCarousel() {
               />
             ))}
           </div>
-          <CarouselNext className="relative static ml-2 translate-y-0" />
+          <CarouselNext className="static ml-2 translate-y-0" />
         </div>
       </Carousel>
     </div>
