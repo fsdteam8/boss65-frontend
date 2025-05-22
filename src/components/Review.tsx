@@ -94,7 +94,7 @@ export default function ReviewCarousel() {
                         alt={testimonial.author_name}
                         width={258}
                         height={258}
-                        className="w-full md:w-[258px] h-[258px] object-cover rounded-[16px]"
+                        className="w-full md:w-[150px] h-[150px] object-cover rounded-[16px]"
                       />
                     </div>
                     <div className="flex flex-col justify-center">
