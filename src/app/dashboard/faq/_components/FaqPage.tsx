@@ -67,7 +67,6 @@ const FaqPage = () => {
 
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
-  console.log("token", token);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

@@ -11,7 +11,7 @@ interface UpdateCartProps {
 }
 
 const UpdateCart = ({ update }: { update: UpdateCartProps }) => {
-  console.log(update)
+  console.log(update);
   return (
     <div className={`${update._id >= 5 && "mt-4 md:mt-5 lg:mt-6"}`}>
       <Image
@@ -26,7 +26,9 @@ const UpdateCart = ({ update }: { update: UpdateCartProps }) => {
           {update.title}
         </h4>
         <p
-          dangerouslySetInnerHTML={{ __html: update?.description || "" }}
+          dangerouslySetInnerHTML={{
+            __html: update?.description.slice(0, 100) + "..." || "",
+          }}
           className="prose font-poppins text-base font-medium text-[#5A5A5A] tracking-[0%] leading-[120%] pt-2"
         ></p>
         <div className="pt-3 md:pt-4">
