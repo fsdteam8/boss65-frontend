@@ -91,14 +91,14 @@ export function AddUploadModal({
     }
   };
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file?.type.startsWith("video/")) {
-      handleVideoChange(file);
-    } else {
-      alert("Please upload a valid video file");
-    }
-  };
+  // const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file?.type.startsWith("video/")) {
+  //     handleVideoChange(file);
+  //   } else {
+  //     alert("Please upload a valid video file");
+  //   }
+  // };
 
   const handleVideoChange = (file: File) => {
     setIsUploading(true);
@@ -225,7 +225,7 @@ export function AddUploadModal({
             <FormField
               control={form.control}
               name="video"
-              render={({ field }) => (
+              render={({  }) => (
                 <FormItem className="space-y-[10px]">
                   <FormLabel className="text-base font-poppins font-medium text-[#FF6900]">
                     Upload Video

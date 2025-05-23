@@ -9,6 +9,7 @@ import Updates from "@/components/ui/Updates";
 import React from "react";
 
 const page = () => {
+  const data = 10
   return (
     <div>
       <HeroSection heading={<PrivateEscapeH1 />} />
@@ -16,7 +17,7 @@ const page = () => {
       <HowItWorks />
       <Pricing />
       <Faq />
-      <Updates />
+      <Updates data={data} />
       <ReviewCarousel />
     </div>
   );

@@ -9,14 +9,14 @@ import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import React from "react";
 
-interface BookingTableProps {
-  bookings?: Booking[];
-  updateBookingStatus: (
-    id: string,
-    index: number,
-    status: BookingStatus
-  ) => void;
-}
+// interface BookingTableProps {
+//   bookings?: Booking[];
+//   updateBookingStatus: (
+//     id: string,
+//     index: number,
+//     status: BookingStatus
+//   ) => void;
+// }
 // Define dynamic styles for booking status
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",

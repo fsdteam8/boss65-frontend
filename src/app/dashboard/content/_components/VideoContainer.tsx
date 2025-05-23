@@ -2,16 +2,18 @@
 
 import { Pagination } from "@/components/ui/pagination";
 import { Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image";
 import React, { useState, useMemo } from "react";
 import { AddUploadModal } from "./add-video-modal";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const VideoContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const queryClient = useQueryClient();
 
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
@@ -84,10 +86,34 @@ const VideoContainer = () => {
   });
   const contentImage = data?.data || [];
 
-  
-  
+  const mutation = useMutation({
+    mutationFn: async (id: FormData) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/delete/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          // body: formData,
+        }
+      );
 
+      if (!res.ok) {
+        throw new Error("Failed to submit blog");
+      }
 
+      return res.json();
+    },
+    onSuccess: (success) => {
+      toast.success(success.message || "Content deleted successfully");
+      // router.push("/dashboard/blog");
+      queryClient.invalidateQueries({ queryKey: ["contentVideo"] });
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to delete content");
+    },
+  });
 
   // Pagination logic
   // const totalPages = Math.ceil(imageData.length / itemsPerPage);
@@ -140,7 +166,7 @@ const VideoContainer = () => {
                   {data.type}
                 </td>
                 <td className="text-sm font-poppins text-center">
-                  <button className="">
+                  <button onClick={()=>mutation.mutate(data._id)} className="">
                     <Trash2 size={24} />
                   </button>
                 </td>

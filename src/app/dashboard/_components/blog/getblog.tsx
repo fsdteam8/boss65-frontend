@@ -12,17 +12,25 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
+
 interface Blog {
   _id?: string;
   title?: string;
   thumbnail?: string;
   createdAt?: string;
 }
+
 export default function GetBlog() {
   const queryClient = useQueryClient();
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
-  const { data } = useQuery({
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const { data, isLoading, error } = useQuery({
     queryKey: ["blog"],
     queryFn: async () => {
       const res = await fetch(
@@ -55,21 +63,39 @@ export default function GetBlog() {
       );
 
       if (!res.ok) {
-        throw new Error("Failed to submit blog");
+        throw new Error("Failed to delete blog");
       }
 
       return res.json();
     },
     onSuccess: (success) => {
-      toast.success(success.message || "Blog published successfully");
+      toast.success(success.message || "Blog deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["blog"] });
     },
     onError: (err: any) => {
-      toast.error(err.message || "Failed to publish blog");
+      toast.error(err.message || "Failed to delete blog");
     },
   });
 
   const blogs = data?.data || [];
+
+  // Calculate total pages
+  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+
+  // Get current page blogs slice
+  const currentBlogs = blogs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Pagination navigation function
+  const goToPage = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  if (isLoading) return <p className="p-4">Loading blogs...</p>;
+  if (error) return <p className="p-4 text-red-600">Failed to load blogs.</p>;
 
   return (
     <div>
@@ -93,7 +119,9 @@ export default function GetBlog() {
               Action
             </div>
           </div>
-          {blogs.map((blog: Blog, index: number) => (
+
+          {/* Render blogs for current page */}
+          {currentBlogs.map((blog: Blog, index: number) => (
             <div
               key={blog._id || index}
               className="grid grid-cols-12 py-4 px-6 border-b border-gray-100 items-center"
@@ -141,36 +169,66 @@ export default function GetBlog() {
               </div>
             </div>
           ))}
-          <div className="flex items-center justify-between py-4 px-6">
-            <div className="text-sm text-gray-600">
-              Showing <span className="font-medium">{blogs.length}</span> to{" "}
-              <span className="font-medium">{blogs.length}</span> of{" "}
-              <span className="font-medium">{blogs.length}</span> results
+          <div className="flex justify-between items-center px-5 py-3">
+            {/* Pagination details */}
+            <div className="text-center text-gray-600 my-4">
+              {blogs.length === 0 ? (
+                "No blogs available."
+              ) : (
+                <>
+                  Showing{" "}
+                  <span className="font-semibold">{currentBlogs.length}</span>{" "}
+                  of <span className="font-semibold">{blogs.length}</span> blogs
+                  — Page <span className="font-semibold">{currentPage}</span> of{" "}
+                  <span className="font-semibold">{totalPages}</span>
+                </>
+              )}
             </div>
-            <div className="flex items-center space-x-1">
-              <button className="p-2 rounded hover:bg-gray-100">
-                <ChevronLeft className="h-4 w-4" />
+            {/* Pagination controls */}
+            <div className="flex justify-center items-center space-x-4 mt-6">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`p-2 rounded border ${
+                  currentPage === 1
+                    ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="h-5 w-5" />
               </button>
-              <Link
-                href="#"
-                className="px-3 py-1 rounded hover:bg-gray-100 bg-white"
+
+              {/* Page numbers */}
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => goToPage(pageNum)}
+                    className={`px-3 py-1 rounded border ${
+                      currentPage === pageNum
+                        ? "bg-[#FF6900] text-white border-[#FF6900]"
+                        : "border-gray-300 hover:bg-gray-100"
+                    }`}
+                    aria-current={currentPage === pageNum ? "page" : undefined}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`p-2 rounded border ${
+                  currentPage === totalPages
+                    ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+                aria-label="Next page"
               >
-                1
-              </Link>
-              <Link
-                href="#"
-                className="px-3 py-1 rounded bg-gray-100 text-gray-700"
-              >
-                2
-              </Link>
-              <Link
-                href="#"
-                className="px-3 py-1 rounded hover:bg-gray-100 bg-white"
-              >
-                3
-              </Link>
-              <button className="p-2 rounded hover:bg-gray-100">
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </button>
             </div>
           </div>
