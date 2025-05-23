@@ -32,14 +32,15 @@ const ConfirmDeleteModal = ({
   if (!isOpen) return null;
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 w-full"
       onClick={onCancel}
     >
       <div
-        className="bg-white rounded-lg p-6 max-w-sm w-full"
+        className="bg-white rounded-lg p-6 max-w-xl w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-semibold mb-4">Are you sure?</h2>
+        <p className="text-base text-gray-600 mb-7">This action cannot be undone. Do you want to delete this promo code?</p>
         <div className="flex justify-end space-x-4">
           <Button variant="outline" onClick={onCancel}>
             Cancel
@@ -66,6 +67,7 @@ const FaqPage = () => {
 
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  console.log("token", token);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

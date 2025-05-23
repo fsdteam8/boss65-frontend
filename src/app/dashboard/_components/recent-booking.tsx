@@ -1,68 +1,74 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
+// import Link from "next/link";
 
-const bookings = [
-  {
-    id: 1,
-    room: "Japanese Room",
-    time: "Today, 4:00 PM",
-    status: "confirmed",
-  },
-  {
-    id: 2,
-    room: "Mystery Room",
-    time: "Today, 4:00 PM",
-    status: "cancelled",
-  },
-  {
-    id: 3,
-    room: "Space Room",
-    time: "Today, 4:00 PM",
-    status: "confirmed",
-  },
-];
+interface Booking {
+  id: string;
+  firstName: string;
+  date: string;
+  amount: number;
+  user: { firstName: string };
+  status: "confirmed" | "pending" | "cancelled";
+}
 
-export function RecentBookings() {
+interface RecentBookingsProps {
+  bookings: Booking[];
+}
+
+export function RecentBookings({ bookings = [] }: RecentBookingsProps) {
   return (
-    <Card className="h-full ">
+    <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-[20px] font-medium text-[#FF6900] ">
+        <CardTitle className="text-[20px] font-medium text-[#FF6900]">
           Recent Bookings
         </CardTitle>
-        <Link
+        {/* <Link
           href="/dashboard/bookings"
           className="text-xs text-blue-500 hover:underline"
         >
           View All
-        </Link>
+        </Link> */}
       </CardHeader>
       <CardContent>
-        <div className="space-y-4 ">
-          {bookings.map((booking) => (
-            <div key={booking.id} className="flex items-center justify-between border border-[#0000001A] px-[12px] py-[8px] rounded-xl">
-              <div>
-                <div className="font-medium text-[14px] text-[#000000] mb-[6px]">{booking.room}</div>
-                <div className="text-[12px] font-medium">
-                  {booking.time}
-                </div>
-              </div>
-              <Badge
-                variant={
-                  booking.status === "confirmed" ? "default" : "destructive"
-                }
-                className={
-                  booking.status === "confirmed"
-                    ? "bg-[#DCFCE7] text-[#166534] hover:bg-[#DCFCE7] "
-                    : "bg-[#FEE2E2] text-[#991B1B] hover:bg-[#FEE2E2]"
-                }
+        {bookings.length > 0 ? (
+          <div className="space-y-4">
+            {bookings.map((booking) => (
+              <div
+                key={booking.id}
+                className="flex items-center justify-between border border-[#0000001A] px-[12px] py-[8px] rounded-xl mt-7"
               >
-                {booking.status === "confirmed" ? "Confirmed" : "Cancelled"}
-              </Badge>
-            </div>
-          ))}
-        </div>
+                <div>
+                  <div className="font-medium text-[14px] text-[#000000] mb-[6px]">
+                    {booking?.user?.firstName}
+                  </div>
+                  <div className="text-[12px] font-medium">
+                    {new Date(booking.date).toLocaleDateString()}
+                  </div>
+                </div>
+                <Badge
+                  variant={
+                    booking.status === "confirmed" ? "default" : "destructive"
+                  }
+                  className={
+                    booking.status === "confirmed"
+                      ? "bg-[#DCFCE7] text-[#166534] hover:bg-[#DCFCE7]"
+                      : booking.status === "cancelled"
+                      ? "bg-[#FEE2E2] text-[#991B1B] hover:bg-[#FEE2E2]"
+                      : "bg-[#FEF9C3] text-[#92400E] hover:bg-[#FEF9C3]"
+                  }
+                >
+                  {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-[200px]">
+            <p className="text-muted-foreground text-sm">No recent bookings</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
 }
+

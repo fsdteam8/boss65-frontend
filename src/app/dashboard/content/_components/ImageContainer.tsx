@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { PencilIcon, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -18,50 +19,6 @@ const ImageContainer = () => {
   const queryClient = useQueryClient();
   const itemsPerPage = 5;
 
-  // const imageData = useMemo(
-  //   () => [
-  //     {
-  //       id: 1,
-  //       image: "/images/content_image.jpg",
-  //       section: "Gallery",
-  //       size: "6.8 mb",
-  //     },
-  //     {
-  //       id: 2,
-  //       image: "/images/content_image.jpg",
-  //       section: "Gallery",
-  //       size: "6.8 mb",
-  //     },
-  //     {
-  //       id: 3,
-  //       image: "/images/content_image.jpg",
-  //       section: "Gallery",
-  //       size: "6.8 mb",
-  //     },
-  //     {
-  //       id: 4,
-  //       image: "/images/content_image.jpg",
-  //       section: "Gallery",
-  //       size: "6.8 mb",
-  //     },
-  //     {
-  //       id: 5,
-  //       image: "/images/content_image.jpg",
-  //       section: "Gallery",
-  //       size: "6.8 mb",
-  //     },
-  //     {
-  //       id: 6,
-  //       image: "/images/content_image.jpg",
-  //       section: "Gallery ff",
-  //       size: "6.8 mb",
-  //     },
-  //   ],
-  //   []
-  // );
-
-  // Pagination logic
-  // const totalPages = Math.ceil(imageData.length / itemsPerPage);
 
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
