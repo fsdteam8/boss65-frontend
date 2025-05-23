@@ -1,85 +1,39 @@
-"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
-const data = [
-  { name: "Jan", revenue: 4000 },
-  { name: "Feb", revenue: 3000 },
-  { name: "Mar", revenue: 5000 },
-  { name: "Apr", revenue: 7000 },
-  { name: "May", revenue: 6000 },
-  { name: "Jun", revenue: 8000 },
-  { name: "Jul", revenue: 10000 },
-  { name: "Aug", revenue: 9000 },
-  { name: "Sep", revenue: 11000 },
-  { name: "Oct", revenue: 12000 },
-  { name: "Nov", revenue: 14000 },
-  { name: "Dec", revenue: 16000 },
-];
+"use client"
 
-export function RevenueTrends() {
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+
+interface RevenueTrendsProps {
+  data: Array<{
+    label: string
+    value: number
+  }>
+}
+
+export function RevenueTrends({ data = [] }: RevenueTrendsProps) {
+  console.log("data", data)
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-medium text-orange-500">
-          Revenue Trends
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[359px]">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow h-full">
+      <h3 className="text-lg font-medium mb-4">Revenue Trends</h3>
+
+      {data && data.length > 0 ? (
+        <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{
-                top: 5,
-                right: 10,
-                left: 10,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f5f5f5"
-              />
-              <XAxis dataKey="name" tickLine={false} axisLine={false} />
-              <YAxis tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#FF6B00"
-                strokeWidth={3}
-                dot={false}
-                activeDot={{ r: 8 }}
-              />
-              <defs>
-                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#FF6B00" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#FF6B00" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#FF6B00"
-                strokeWidth={3}
-                fillOpacity={1}
-                fill="url(#colorRevenue)"
-              />
-            </LineChart>
+            <BarChart data={data}>
+              <XAxis dataKey="label" stroke="#888888" fontSize={12} />
+              <YAxis stroke="#888888" fontSize={12} tickFormatter={(value) => `$${value}k`} />
+              <Tooltip formatter={(value) => [`$${value}k`, "Revenue"]} labelFormatter={(label) => label} />
+              <Bar dataKey="value" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
-  );
+      ) : (
+        <div className="flex items-center justify-center h-[300px]">
+          <p className="text-muted-foreground">No revenue data available</p>
+        </div>
+      )}
+    </div>
+  )
 }
