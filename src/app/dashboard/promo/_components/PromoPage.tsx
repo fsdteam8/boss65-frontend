@@ -120,7 +120,7 @@ const PromoPage = () => {
 
   return (
     <div className="bg-[#F3F4F6] min-h-screen py-8">
-      <div className="flex justify-between items-center px-6 mb-8">
+      <div className="flex justify-between items-center px-6 mb-[80px]">
         <h1 className="text-2xl font-semibold text-gray-800">Promo Codes</h1>
         <Button
           onClick={() => setIsCreateModalOpen(true)}
