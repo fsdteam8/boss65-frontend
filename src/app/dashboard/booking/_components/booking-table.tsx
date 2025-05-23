@@ -3,7 +3,7 @@
 import type { Booking, BookingStatus } from "@/types/booking";
 import { Button } from "@/components/ui/button";
 import EmailSendingModal from "@/components/ui/email-sending-modal";
-import { Mail } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
@@ -84,7 +84,11 @@ export function BookingTable() {
   };
 
   if (isLoading) {
-    return <p className="text-center p-5">Please wait...</p>;
+    return <div className="min-h-[300px] w-full flex justify-center items-center flex-col">
+      <Loader2 className="animate-spin" />
+      <p className="text-muted-foreground">Please wait...</p>
+
+    </div>
   }
 
   const bookingData = data?.data || [];
