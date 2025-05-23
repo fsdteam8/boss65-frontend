@@ -7,29 +7,30 @@ import { Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
-import React from "react";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+// import { toast } from "@/components/ui/use-toast"
 
-// interface BookingTableProps {
-//   bookings?: Booking[];
-//   updateBookingStatus: (
-//     id: string,
-//     index: number,
-//     status: BookingStatus
-//   ) => void;
-// }
-// Define dynamic styles for booking status
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
   cancelled: "bg-red-100 text-red-700 border-red-300",
-  // refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
-  pending: "bg-gray-100 text-gray-700 border-gray-300",
+  refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
+  // pending: "bg-gray-100 text-gray-700 border-gray-300",
 };
 
 export function BookingTable() {
   const session = useSession();
   const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["booking"],
     queryFn: async () => {
       const res = await fetch(
@@ -49,8 +50,41 @@ export function BookingTable() {
     },
   });
 
+  const updateBookingStatus = async (
+    bookingId: string,
+    newStatus: BookingStatus
+  ) => {
+    setUpdatingId(bookingId);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking/${bookingId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to update booking status");
+      }
+
+      toast.success("Booking status updated successfully!");
+
+      refetch();
+    } catch (error) {
+      toast.error("Failed to update booking status");
+      console.error(error);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   if (isLoading) {
-    return <p className="text-center p-5">Please wite...</p>;
+    return <p className="text-center p-5">Please wait...</p>;
   }
 
   const bookingData = data?.data || [];
@@ -93,6 +127,7 @@ export function BookingTable() {
             const badgeClass =
               statusStyles[status] ??
               "bg-gray-100 text-gray-700 border-gray-300";
+            const isUpdating = updatingId === booking._id;
 
             return (
               <tr key={index} className="border-b">
@@ -121,11 +156,41 @@ export function BookingTable() {
                   ${booking?.total?.toFixed(2)}
                 </td>
                 <td className="px-4 py-4 text-sm">
-                  <span
-                    className={`inline-block px-3 py-1 text-xs font-medium border rounded-full capitalize ${badgeClass}`}
-                  >
-                    {status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      defaultValue={status}
+                      disabled={isUpdating}
+                      onValueChange={(value) =>
+                        updateBookingStatus(booking._id, value as BookingStatus)
+                      }
+                    >
+                      <SelectTrigger
+                        className={`w-[130px] h-8 capitalize ${badgeClass} border font-medium`}
+                      >
+                        <SelectValue placeholder="Change status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem
+                          value="confirmed"
+                          className="text-green-700 hover:bg-green-100 hover:text-green-800 focus:bg-green-100 focus:text-green-800 data-[highlighted]:bg-green-100 data-[highlighted]:text-green-800"
+                        >
+                          Confirmed
+                        </SelectItem>
+                        <SelectItem
+                          value="refunded"
+                          className="text-yellow-700 hover:bg-yellow-100 hover:text-yellow-800 focus:bg-yellow-100 focus:text-yellow-800 data-[highlighted]:bg-yellow-100 data-[highlighted]:text-yellow-800"
+                        >
+                          Refunded
+                        </SelectItem>
+                        <SelectItem
+                          value="cancelled"
+                          className="text-red-700 hover:bg-red-100 hover:text-red-800 focus:bg-red-100 focus:text-red-800 data-[highlighted]:bg-red-100 data-[highlighted]:text-red-800"
+                        >
+                          Cancelled
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </td>
                 <td className="px-4 py-4 text-sm">
                   <EmailSendingModal
