@@ -6,7 +6,6 @@ import "./globals.css";
 import AuthProvider from "@/provider/AuthProvider";
 import { Toaster } from "@/components/ui/sonner";
 
-
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -24,6 +23,9 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Social Chamber 24/7",
   description: "Private Rooms for Unforgettable Experiences",
+  icons: {
+    icon: "/images/auth_logo.png", // Path relative to public/
+  },
 };
 
 export default function RootLayout({
@@ -38,7 +40,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <AppProvider>{children}</AppProvider>
-          <Toaster position="top-right"/>
+          <Toaster position="top-right" />
         </AuthProvider>
         <NextTopLoader showSpinner={false} color="#FF5500" />
       </body>

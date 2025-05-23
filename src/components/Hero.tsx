@@ -1,24 +1,36 @@
 "use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 interface Props {
   heading: ReactNode;
 }
+
 export default function HeroSection({ heading }: Props) {
+  const pathname = usePathname();
+
+  // Map each pathname to a section value
+  const sectionMap: Record<string, string> = {
+    "/": "banner",
+    "/space": "space-hero",
+    "/our-unique-experience": "experience-hero",
+    "/updates": "updates-hero",
+    "/contact": "contact-hero",
+  };
+
+  // Fallback to 'banner' if pathname not matched
+  const section = sectionMap[pathname] || "banner";
+
   const { data } = useQuery({
-    queryKey: ["contentImage"],
+    queryKey: ["contentImage", section],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=image&section=banner`,
-        {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        }
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=image&section=${section}`
       );
 
       if (!res.ok) {
@@ -28,31 +40,28 @@ export default function HeroSection({ heading }: Props) {
       return res.json();
     },
   });
-  const contentImage = data?.data[0] || [];
-  console.log(contentImage);
+
+  const contentImage = data?.data[0];
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center px-4 md:px-8 lg:px-12 py-12 overflow-hidden pt-24">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src={contentImage?.url}
-          alt="Themed room background"
-          fill
-          priority
-          className="object-cover brightness-50"
-        />
-        {/* Overlay for better text readability */}
+        {contentImage?.url && (
+          <Image
+            src={contentImage.url}
+            alt="Themed room background"
+            fill
+            priority
+            className="object-cover brightness-50"
+          />
+        )}
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto text-center pt-16">
         {heading}
-
-        {/* <p className="text-white text-lg md:text-xl max-w-3xl mx-auto mb-10 opacity-90">
-          Enjoy a cozy, immersive movie experience with friends, family, or your special someone in our themed rooms.
-        </p>  */}
 
         <Link
           href="/booking"

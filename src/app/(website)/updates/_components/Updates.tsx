@@ -1,5 +1,6 @@
 "use client";
 
+import SocialChamberRoom from "@/components/SocialChamberRoom";
 import UpdateCart from "@/components/ui/UpdateCart";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
@@ -48,6 +49,7 @@ const UpdatesComponent = () => {
           ))}
         </div>
       )}
+      <SocialChamberRoom />
     </div>
   );
 };

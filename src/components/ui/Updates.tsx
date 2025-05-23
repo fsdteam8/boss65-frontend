@@ -12,12 +12,7 @@ const Updates = ({ data: show }: UpdatesProps) => {
     queryKey: ["blogs"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`,
-        {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        }
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`     
       );
 
       if (!res.ok) {
@@ -36,7 +31,7 @@ const Updates = ({ data: show }: UpdatesProps) => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
           {blogs.slice(0,show)?.map((update: any) => {
-            return <UpdateCart key={update.id} update={update} />;
+            return <UpdateCart key={update._id} update={update} />;
           })}
         </div>
       </div>
