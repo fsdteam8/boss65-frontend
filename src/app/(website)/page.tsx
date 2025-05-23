@@ -9,17 +9,17 @@ import SocialSide from "@/components/SocialSide";
 import Updates from "@/components/ui/Updates";
 
 export default function Home() {
+  const data = 10
   return (
     <div>
       <HeroSection heading={<PrivateRoomH1 />} />
       <ShowRoom />
       <HowItWorks />
       <PrivateRoomPromo />
-      <SocialSide/>
-      <Updates />
+      <SocialSide />
+      <Updates data={data} />
       <AsSeen />
       <ReviewCarousel />
     </div>
   );
 }
-

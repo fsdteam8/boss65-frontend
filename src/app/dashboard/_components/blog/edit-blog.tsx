@@ -21,6 +21,8 @@ import {
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function dataURLtoBlob(dataUrl: string) {
   const arr = dataUrl.split(",");
@@ -41,14 +43,13 @@ interface EditBlogProps {
 const EditBlog: React.FC<EditBlogProps> = ({ id }) => {
   const [title, setTitle] = useState("");
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const router = useRouter();
   const [existingThumbnail, setExistingThumbnail] = useState<string | null>(
     null
   );
   const isEditMode = Boolean(id);
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
-
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken: string })?.accessToken;
   const editor = useEditor({
     extensions: [StarterKit, Underline, Image],
     content: "",
@@ -78,7 +79,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ id }) => {
       editor?.commands.setContent(blogData.data.description || "");
       setExistingThumbnail(blogData.data.thumbnail || null);
     }
-  }, [blogData, editor,isEditMode]);
+  }, [blogData, editor, isEditMode]);
 
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -106,6 +107,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ id }) => {
         setThumbnail(null);
         editor?.commands.setContent("");
       }
+      router.push('/dashboard/blog')
     },
     onError: (err: any) => {
       toast.error(err.message || "Failed to submit blog");

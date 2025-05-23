@@ -5,18 +5,15 @@ import UpdatesSlider from "../_components/UpdatesSlider";
 import { useQuery } from "@tanstack/react-query";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
-
   const { data } = useQuery({
     queryKey: ["blog"],
     queryFn: async () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs/${params.id}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         }
       );
 
@@ -51,8 +48,10 @@ const Page = ({ params }: { params: { id: string } }) => {
             {data?.data?.title}
           </h4>
 
-          <p dangerouslySetInnerHTML={{ __html: data?.data?.description || "" }}  className="prose font-manrope text-base font-normal leading-[150%] tracking-[0%] text-black pt-[24px] md:pt-[32px] lg:pt-[43px]">
-          </p>
+          <p
+            dangerouslySetInnerHTML={{ __html: data?.data?.description || "" }}
+            className="prose font-manrope text-base font-normal leading-[150%] tracking-[0%] text-black pt-[24px] md:pt-[32px] lg:pt-[43px]"
+          ></p>
         </div>
       </div>
       {/* update slider  */}
