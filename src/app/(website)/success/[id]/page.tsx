@@ -1,13 +1,14 @@
-import React from 'react'
-import BookingConfirmation from './_components/booking-confirmation'
+"use client";
+import React from "react";
+import BookingConfirmation from "./_components/booking-confirmation";
+import { usePathname } from "next/navigation";
 
-const Page = ({params}: {params: {id: string}}) => {
-  const bookingId = params.id
+export default function Page() {
+  const pathname = usePathname();
+  const id = pathname.replace("/success/", "");
   return (
     <div>
-      <BookingConfirmation bookingId={bookingId} />
+      <BookingConfirmation bookingId={id} />
     </div>
-  )
+  );
 }
-
-export default Page

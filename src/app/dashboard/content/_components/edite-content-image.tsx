@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,9 +36,7 @@ import {
 
 const formSchema = z.object({
   section: z.string().min(1, { message: "Please select a section" }),
-  image: z.any().refine((file) => file !== null, {
-    message: "Please upload an image",
-  }),
+  image: z.any().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -56,29 +54,26 @@ export function EditeImageModal({
 }: ImageUploadModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  const { data } = useSession();
-  const token = (data?.user as { accessToken: string })?.accessToken;
-console.log(id)
+  const { data: session } = useSession();
+  const token = (session?.user as { accessToken: string })?.accessToken;
+
   const { data: getData } = useQuery({
-    queryKey: ["singelContentImage"],
+    queryKey: ["ContentImageOne", id],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=image`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
+      if (!res.ok) throw new Error("Failed to fetch asset");
       return res.json();
     },
+    enabled: !!id && !!token,
   });
-console.log(getData)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -87,6 +82,13 @@ console.log(getData)
     },
     mode: "onChange",
   });
+
+  useEffect(() => {
+    if (getData?.data) {
+      form.setValue("section", getData.data.section);
+      setPreview(getData.data.url);
+    }
+  }, [getData, form]);
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -98,46 +100,65 @@ console.log(getData)
     }
   };
 
-  const uploadImage = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("type", "image");
-    formData.append("section", form.getValues("section"));
+  const updateAsset = async (data: FormValues) => {
+    // let imageUrl = getData.data.url;
+      
+    // If new image uploaded, upload first
+    if (data.image instanceof File) {
+      const formData = new FormData();
+      formData.append("file", data.image);
+      formData.append("type", "image");
+      formData.append("section", data.section);
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/upload`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Image upload failed");
+      const uploadRes = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+      if (!uploadRes.ok) throw new Error("Image upload failed");
+      // const uploadData = await uploadRes.json();
+      // imageUrl = uploadData?.url || uploadData?.path;
     }
 
-    const data = await res.json();
-    return data?.path || data?.url || data?.data?.url || "";
+    // const updateRes = await fetch(
+    //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets/${id}`,
+    //   {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     body: JSON.stringify({
+    //       section: data.section,
+    //       url: imageUrl,
+    //     }),
+    //   }
+    // );
+
+    // if (!updateRes.ok) throw new Error("Failed to update image asset");
+    // return await updateRes.json();
   };
 
   const mutation = useMutation({
-    mutationFn: async (file: File) => await uploadImage(file),
+    mutationFn: updateAsset,
     onSuccess: () => {
-      toast.success("Image uploaded and saved");
+      toast.success("Image asset updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["ContentImageOne", id] });
       resetForm();
-      queryClient.invalidateQueries({ queryKey: ["singelContentImage"] });
       editonOpenChange(false);
     },
     onError: (err: any) => {
-      toast.error(err.message || "Upload failed");
+      toast.error(err.message || "Update failed");
     },
   });
 
   const onSubmit = (data: FormValues) => {
-    mutation.mutate(data.image);
+    mutation.mutate(data);
   };
 
   const resetForm = () => {
@@ -151,7 +172,7 @@ console.log(getData)
         <DialogHeader>
           <div className="flex items-center justify-between pb-[15px]">
             <DialogTitle className="text-2xl font-semibold text-[#FF6600]">
-              Add Images
+              Edit Image
             </DialogTitle>
             <DialogClose className="text-[#FF6600] hover:text-[#FF6600]/80">
               <X className="h-6 w-6" />
@@ -165,7 +186,6 @@ console.log(getData)
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid gap-6 py-4"
           >
-            {/* Section Select */}
             <FormField
               control={form.control}
               name="section"
@@ -174,10 +194,7 @@ console.log(getData)
                   <FormLabel className="text-base text-[#FF6900]">
                     Section
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select" />
@@ -186,7 +203,14 @@ console.log(getData)
                     <SelectContent>
                       <SelectItem value="gallery">Gallery</SelectItem>
                       <SelectItem value="hero">Hero</SelectItem>
-                      <SelectItem value="banner">Banner</SelectItem>
+                      {/* <SelectItem value="banner">Banner</SelectItem> */}
+                      <SelectItem value="sub-hero">Sub Hero</SelectItem>
+                      <SelectItem value="space-hero">Space Hero</SelectItem>
+                      <SelectItem value="experience-hero">
+                        Experience Hero
+                      </SelectItem>
+                      <SelectItem value="updates-hero">Updates Hero</SelectItem>
+                      <SelectItem value="contact-hero">Contact Hero</SelectItem>
                       <SelectItem value="footer">Footer</SelectItem>
                     </SelectContent>
                   </Select>
@@ -195,7 +219,6 @@ console.log(getData)
               )}
             />
 
-            {/* Image Upload */}
             <FormField
               control={form.control}
               name="image"

@@ -1,13 +1,13 @@
 "use client";
 
-import type { Booking, BookingStatus } from "@/types/booking";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { format } from "date-fns";
+import { toast } from "sonner";
+import { Loader2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EmailSendingModal from "@/components/ui/email-sending-modal";
-import { Loader2, Mail } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -15,19 +15,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
-// import { toast } from "@/components/ui/use-toast"
+import { SimplePagination } from "@/components/ui/simple-pagination";
+import type { Booking, BookingStatus } from "@/types/booking";
 
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
   cancelled: "bg-red-100 text-red-700 border-red-300",
   refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
-  // pending: "bg-gray-100 text-gray-700 border-gray-300",
 };
 
 export function BookingTable() {
-  const session = useSession();
-  const token = (session?.data?.user as { accessToken: string })?.accessToken;
+  const { data: session } = useSession();
+  const token = (session?.user as { accessToken: string })?.accessToken;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
@@ -41,11 +43,7 @@ export function BookingTable() {
           },
         }
       );
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch bookings");
-      }
-
+      if (!res.ok) throw new Error("Failed to fetch bookings");
       return res.json();
     },
   });
@@ -67,31 +65,32 @@ export function BookingTable() {
           body: JSON.stringify({ status: newStatus }),
         }
       );
-
-      if (!res.ok) {
-        throw new Error("Failed to update booking status");
-      }
-
-      toast.success("Booking status updated successfully!");
-
+      if (!res.ok) throw new Error();
+      toast.success("Booking status updated!");
       refetch();
-    } catch (error) {
+    } catch {
       toast.error("Failed to update booking status");
-      console.error(error);
     } finally {
       setUpdatingId(null);
     }
   };
 
   if (isLoading) {
-    return <div className="min-h-[300px] w-full flex justify-center items-center flex-col">
-      <Loader2 className="animate-spin" />
-      <p className="text-muted-foreground">Please wait...</p>
-
-    </div>
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <span className="ml-2">Loading ...</span>
+      </div>
+    );
   }
 
-  const bookingData = data?.data || [];
+  const bookingData: Booking[] = data?.data || [];
+  const totalItems = bookingData.length;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentBookings = bookingData.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <div className="overflow-x-auto">
@@ -126,79 +125,62 @@ export function BookingTable() {
           </tr>
         </thead>
         <tbody>
-          {bookingData?.map((booking: Booking, index: number) => {
-            const status = booking?.status;
+          {currentBookings.map((booking) => {
+            const status = booking.status;
             const badgeClass =
               statusStyles[status] ??
               "bg-gray-100 text-gray-700 border-gray-300";
             const isUpdating = updatingId === booking._id;
 
             return (
-              <tr key={index} className="border-b">
+              <tr key={booking._id} className="border-b">
                 <td className="px-4 py-4 text-sm">
-                  {booking?._id?.slice(0, 6)}...
+                  {booking._id?.slice(0, 6)}...
                 </td>
                 <td className="px-4 py-4 text-sm">
-                  {booking?.user?.firstName} {booking?.user?.lastName}
+                  {booking.user?.firstName} {booking.user?.lastName}
                 </td>
-                <td className="px-4 py-4 text-sm">{booking?.room}</td>
+                <td className="px-4 py-4 text-sm">{booking.room}</td>
                 <td className="px-4 py-4 text-sm text-center">
-                  {booking?.user?.numberOfPeople}
+                  {booking.user?.numberOfPeople}
                 </td>
-                <td className="px-4 py-4 text-sm">{booking?.service}</td>
+                <td className="px-4 py-4 text-sm">{booking.service}</td>
                 <td className="px-4 py-4 text-sm">
-                  {format(new Date(booking?.date), "yyyy-MM-dd")}
+                  {format(new Date(booking.date), "yyyy-MM-dd")}
                   <div className="mt-1 space-y-1">
-                    {booking?.timeSlots?.map((slot, i) => (
+                    {booking.timeSlots?.map((slot, i) => (
                       <div key={i} className="text-xs text-gray-600">
-                        {slot?.start} - {slot?.end}
+                        {slot.start} - {slot.end}
                       </div>
                     ))}
                   </div>
                 </td>
                 <td className="px-4 py-4 text-sm">
-                  ${booking?.total?.toFixed(2)}
+                  ${booking.total?.toFixed(2)}
                 </td>
                 <td className="px-4 py-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Select
-                      defaultValue={status}
-                      disabled={isUpdating}
-                      onValueChange={(value) =>
-                        updateBookingStatus(booking._id, value as BookingStatus)
-                      }
+                  <Select
+                    defaultValue={status}
+                    disabled={isUpdating}
+                    onValueChange={(value) =>
+                      updateBookingStatus(booking._id, value as BookingStatus)
+                    }
+                  >
+                    <SelectTrigger
+                      className={`w-[130px] h-8 capitalize ${badgeClass} border font-medium`}
                     >
-                      <SelectTrigger
-                        className={`w-[130px] h-8 capitalize ${badgeClass} border font-medium`}
-                      >
-                        <SelectValue placeholder="Change status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem
-                          value="confirmed"
-                          className="text-green-700 hover:bg-green-100 hover:text-green-800 focus:bg-green-100 focus:text-green-800 data-[highlighted]:bg-green-100 data-[highlighted]:text-green-800"
-                        >
-                          Confirmed
-                        </SelectItem>
-                        <SelectItem
-                          value="refunded"
-                          className="text-yellow-700 hover:bg-yellow-100 hover:text-yellow-800 focus:bg-yellow-100 focus:text-yellow-800 data-[highlighted]:bg-yellow-100 data-[highlighted]:text-yellow-800"
-                        >
-                          Refunded
-                        </SelectItem>
-                        <SelectItem
-                          value="cancelled"
-                          className="text-red-700 hover:bg-red-100 hover:text-red-800 focus:bg-red-100 focus:text-red-800 data-[highlighted]:bg-red-100 data-[highlighted]:text-red-800"
-                        >
-                          Cancelled
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                      <SelectValue placeholder="Change status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="confirmed">Confirmed</SelectItem>
+                      <SelectItem value="refunded">Refunded</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </td>
                 <td className="px-4 py-4 text-sm">
                   <EmailSendingModal
-                    recipientEmail={booking?.user?.email}
+                    recipientEmail={booking.user?.email}
                     trigger={
                       <Button variant="ghost" size="icon">
                         <Mail className="h-5 w-5" />
@@ -212,6 +194,13 @@ export function BookingTable() {
           })}
         </tbody>
       </table>
+
+      <SimplePagination
+        currentPage={currentPage}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }
