@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import {
@@ -44,21 +44,41 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface ImageUploadModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSave: (data: { section: string; imagePath: string }) => void;
+  editOpen: boolean;
+  editonOpenChange: (open: boolean) => void;
+  id: string;
 }
 
-export function AddImageModal({
-  open,
-  onOpenChange,
-  onSave,
+export function EditeImageModal({
+  editOpen,
+  editonOpenChange,
+  id,
 }: ImageUploadModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const { data } = useSession();
   const token = (data?.user as { accessToken: string })?.accessToken;
+console.log(id)
+  const { data: getData } = useQuery({
+    queryKey: ["singelContentImage"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=image`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return res.json();
+    },
+  });
+console.log(getData)
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,12 +125,11 @@ export function AddImageModal({
 
   const mutation = useMutation({
     mutationFn: async (file: File) => await uploadImage(file),
-    onSuccess: (imagePath) => {
-      onSave({ section: form.getValues("section"), imagePath });
+    onSuccess: () => {
       toast.success("Image uploaded and saved");
       resetForm();
-      queryClient.invalidateQueries({ queryKey: ["contentImage"] });
-      onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["singelContentImage"] });
+      editonOpenChange(false);
     },
     onError: (err: any) => {
       toast.error(err.message || "Upload failed");
@@ -127,7 +146,7 @@ export function AddImageModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={editOpen} onOpenChange={editonOpenChange}>
       <DialogContent className="w-full md:w-[600px]">
         <DialogHeader>
           <div className="flex items-center justify-between pb-[15px]">
@@ -249,7 +268,7 @@ export function AddImageModal({
                 type="button"
                 onClick={() => {
                   resetForm();
-                  onOpenChange(false);
+                  editonOpenChange(false);
                 }}
                 className="bg-[#D9D9D9] rounded py-3 px-6 text-black"
               >
