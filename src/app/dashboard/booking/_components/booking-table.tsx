@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DateRangePicker } from "@/components/ui/date-range-picker";
+// import { DateRangePicker } from "@/components/ui/date-range-picker";
 
 import type { BookingStatus } from "@/types/booking";
 import type { BookingApiResponse } from "@/types/bookingDataType/bookingDataType";
@@ -29,17 +29,17 @@ const statusStyles: Record<BookingStatus, string> = {
 
 export function BookingTable() {
   const [status, setStatus] = useState<string | undefined>();
-  const [startDate, setStartDate] = useState<string>("2025-05-24");
-  const [endDate, setEndDate] = useState<string>("2025-05-30");
+  // const [startDate, setStartDate] = useState<string>("2025-05-24");
+  // const [endDate, setEndDate] = useState<string>("2025-05-30");
 
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const { data: session } = useSession();
   const token = (session?.user as { accessToken: string })?.accessToken;
 
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
-    queryKey: ["booking", status, startDate, endDate],
+    queryKey: ["booking", status],
     queryFn: async () => {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}&startDate=${startDate}&endDate=${endDate}`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -102,7 +102,7 @@ export function BookingTable() {
           </Select>
 
 
-          <DateRangePicker
+          {/* <DateRangePicker
             onUpdate={({ range }) => {
               if (range.from) setStartDate(range.from.toISOString().split("T")[0]);
               if (range.to) setEndDate(range.to.toISOString().split("T")[0]);
@@ -112,7 +112,9 @@ export function BookingTable() {
             align="start"
             locale="en-GB"
             showCompare={false}
-          />
+          /> */}
+
+
         </div>
       </div>
 
