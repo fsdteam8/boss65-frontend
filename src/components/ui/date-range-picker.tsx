@@ -6,7 +6,7 @@ import React, { type FC, useState, useEffect, useRef } from "react";
 import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Calendar } from "./calendar";
-import { DateInput } from "./date-input";
+// import { DateInput } from "./date-input";
 import { Label } from "./label";
 import {
   Select,
@@ -21,6 +21,7 @@ import {
   ChevronDownIcon,
 //   CheckIcon,
 } from "@radix-ui/react-icons";
+import { DateInput } from "./date-input";
 // import { cn } from "@/lib/utils";
 
 export interface DateRangePickerProps {
@@ -286,6 +287,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
           }
         : undefined
     );
+
   };
 
   useEffect(() => {
