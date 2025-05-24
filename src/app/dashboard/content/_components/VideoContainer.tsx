@@ -124,7 +124,7 @@ const VideoContainer = () => {
             {paginatedData.map((video: any) => (
               <tr key={video._id} className="bg-white border-b border-black/20">
                 <td className="py-4 px-2 text-center">
-                  <video width="80" height="60" controls>
+                  <video width="80" height="60" controls className="w-[40px] h-[60px] mx-auto">
                     <source src={video.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>

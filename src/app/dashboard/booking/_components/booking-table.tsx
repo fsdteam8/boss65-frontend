@@ -162,7 +162,7 @@ export function BookingTable() {
                   <Select
                     defaultValue={status}
                     disabled={isUpdating}
-                    onValueChange={(value) =>
+                    onValueChange={(value: any) =>
                       updateBookingStatus(booking._id, value as BookingStatus)
                     }
                   >
