@@ -24,9 +24,9 @@ export function DashboardCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold mb-[10px]">{totalBookings}</div>
-          <p className="text-xs text-muted-foreground text-[#008837]">
+          {/* <p className="text-xs text-muted-foreground text-[#008837]">
             +5.2% from last month
-          </p>
+          </p> */}
         </CardContent>
       </Card>
 
@@ -37,9 +37,9 @@ export function DashboardCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold mb-[10px]">${totalRevenue}</div>
-          <p className="text-xs text-muted-foreground text-[#008837]">
+          {/* <p className="text-xs text-muted-foreground text-[#008837]">
             +10.5% from last month
-          </p>
+          </p> */}
         </CardContent>
       </Card>
 
@@ -50,9 +50,9 @@ export function DashboardCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold mb-[10px]">{totalCustomers?.toFixed(2)}</div>
-          <p className="text-xs text-muted-foreground text-[#008837]">
+          {/* <p className="text-xs text-muted-foreground text-[#008837]">
             +19% from last month
-          </p>
+          </p> */}
         </CardContent>
       </Card>
 
@@ -63,9 +63,9 @@ export function DashboardCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold mb-[10px]">{averageBookingDuration}h</div>
-          <p className="text-xs text-muted-foreground text-[#008837]">
+          {/* <p className="text-xs text-muted-foreground text-[#008837]">
             +0.1h from last week
-          </p>
+          </p> */}
         </CardContent>
       </Card>
     </div>

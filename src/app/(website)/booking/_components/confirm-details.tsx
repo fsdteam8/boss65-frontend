@@ -132,6 +132,7 @@ export default function ConfirmDetails() {
       </div>
     );
   }
+  
 
   const handleSubmit = async (data: BookingFormData) => {
     const payload = {
@@ -141,7 +142,7 @@ export default function ConfirmDetails() {
         email: data.email,
         phone: data.phone,
       },
-      date: selectedDate,
+      date: format(selectedDate!, "MM-dd-yyyy"),
       timeSlots: selectedTimeSlot,
       service: service._id,
       room: room._id,
@@ -151,7 +152,7 @@ export default function ConfirmDetails() {
 
     mutate(payload);
   };
-
+  console.log();
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="border rounded-lg p-6">
