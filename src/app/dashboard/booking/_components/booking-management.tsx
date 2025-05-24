@@ -1,7 +1,7 @@
 "use client";
 
 // import { useState } from "react";
-import { BookingHeader } from "./booking-header";
+// import { BookingHeader } from "./booking-header";
 // import { BookingPagination } from "./booking-pagination";
 import { BookingTable } from "./booking-table";
 
@@ -65,8 +65,8 @@ export function BookingManagement() {
 
   return (
     <div className="p-6 space-y-6">
-      <BookingHeader />
-      <div className="bg-white rounded-md shadow">
+      {/* <BookingHeader /> */}
+      <div className="">
         <BookingTable
         />
         {/* <BookingPagination
