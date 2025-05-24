@@ -37,11 +37,12 @@ export default function Navbar() {
       <div className="flex items-center justify-between container mx-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <div className="relative h-14 w-14 md:h-14 md:w-16">
+          <div className="relative h-14 w-14 md:h-24 md:w-24">
             <Image
               src="/img/logo.png"
               alt="Social Chamber"
-              fill
+              width={200}
+              height={200}
               className="object-contain"
             />
           </div>
