@@ -59,7 +59,7 @@ export function BookingTable() {
     enabled: !!token,
   });
 
-  console.log(data?.data?.pagination);
+  // console.log(data?.data?.pagination);
 
   const updateBookingStatus = async (
     bookingId: string,
@@ -146,13 +146,13 @@ export function BookingTable() {
                 Name
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
-                Room ID
+                Rooms
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500 text-center">
                 People
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
-                Service ID
+                Service 
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
                 Date & Time

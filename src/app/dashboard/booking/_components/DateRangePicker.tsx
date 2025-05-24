@@ -171,6 +171,8 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
     return `startDate=${startDate}&endDate=${endDate}`
   }
 
+  console.log(dateRange)
+
   const handleUpdate = (): void => {
     setDateRange(tempDateRange)
     setOpen(false)
@@ -229,7 +231,7 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
         <Button
           variant="outline"
           className={cn(
-            "w-[300px] justify-start text-left font-normal bg-white",
+            "w-[300px] justify-start text-left font-normal bg-white ",
             !dateRange.from && "text-muted-foreground",
             className,
           )}
@@ -238,8 +240,8 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
           {formatDateRange()}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <div className="p-4 space-y-4">
+      <PopoverContent className="w-auto p-0 " align="start">
+        <div className="p-4 space-y-4 ">
           {/* Compare Toggle */}
           <div className="flex items-center space-x-2">
             <Switch id="compare" checked={compare} onCheckedChange={setCompare} />
@@ -252,7 +254,7 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
           </div>
 
           {/* Calendar Navigation */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between ">
             <Button variant="ghost" size="sm" onClick={prevMonth}>
               <ChevronLeft className="h-4 w-4" />
             </Button>

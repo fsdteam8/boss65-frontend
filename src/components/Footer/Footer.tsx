@@ -77,7 +77,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="text-center font-poppins text-sm max-w-[1296px] mx-auto text-[#CBD5E1] pt-[25px] md:pt-[35px] lg:pt-[43px] border-t border-[#FFCE71]">
-          © Copyright 2025, All Rights Reserved by #####
+          © Copyright 2025, All Rights Reserved by Social Chamber
         </div>
       </div>
     </footer>
