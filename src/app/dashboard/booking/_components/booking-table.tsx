@@ -20,6 +20,7 @@ import {
 import type { BookingStatus } from "@/types/booking";
 import type { BookingApiResponse } from "@/types/bookingDataType/bookingDataType";
 import DateRangePickerUpdate from "./DateRangePicker";
+import { Pagination } from "@/components/ui/pagination";
 
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
@@ -36,6 +37,7 @@ interface SelectedData {
 
 export function BookingTable() {
   const [status, setStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const { data: session } = useSession();
@@ -44,12 +46,10 @@ export function BookingTable() {
   const [selectedData, setSelectedData] = useState<SelectedData | null>(null);
   console.log(selectedData?.queryParams);
 
-
-
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
-    queryKey: ["booking", status, selectedData],
+    queryKey: ["booking", currentPage, status, selectedData],
     queryFn: async () => {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}&${selectedData?.queryParams}`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}&${selectedData?.queryParams}&page=${currentPage}`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -58,6 +58,8 @@ export function BookingTable() {
     },
     enabled: !!token,
   });
+
+  console.log(data?.data?.pagination);
 
   const updateBookingStatus = async (
     bookingId: string,
@@ -236,6 +238,18 @@ export function BookingTable() {
             })}
           </tbody>
         </table>
+        <div className="bg-white rounded-b-[8px]">
+          {data && data?.data && data?.data?.pagination && data?.data?.pagination?.totalPages > 1 && (
+            <div className="flex justify-center">
+              <Pagination
+                currentPage={currentPage}
+                totalResults={data?.data?.pagination?.totalData}
+                resultsPerPage={10}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
