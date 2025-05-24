@@ -5,6 +5,7 @@ import HowItWorks from "@/components/HowItWork";
 import MovieRoomSection from "@/components/MovieRoomSection";
 import Pricing from "@/components/Pricing";
 import ReviewCarousel from "@/components/Review";
+import SocialChamberRoom from "@/components/SocialChamberRoom";
 import Updates from "@/components/ui/Updates";
 import React from "react";
 
@@ -16,6 +17,7 @@ const page = () => {
       <MovieRoomSection />
       <HowItWorks />
       <Pricing />
+      <SocialChamberRoom/>
       <Faq />
       <Updates data={data} />
       <ReviewCarousel />

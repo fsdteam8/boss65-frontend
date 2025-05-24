@@ -1,18 +1,23 @@
+"use client";
 
-
-"use client"
-
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 interface RevenueTrendsProps {
   data: Array<{
-    label: string
-    value: number
-  }>
+    label: string;
+    value: number;
+  }>;
 }
 
 export function RevenueTrends({ data = [] }: RevenueTrendsProps) {
-  console.log("data", data)
+  console.log("data", data);
 
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow h-full">
@@ -23,8 +28,15 @@ export function RevenueTrends({ data = [] }: RevenueTrendsProps) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <XAxis dataKey="label" stroke="#888888" fontSize={12} />
-              <YAxis stroke="#888888" fontSize={12} tickFormatter={(value) => `$${value}k`} />
-              <Tooltip formatter={(value) => [`$${value}k`, "Revenue"]} labelFormatter={(label) => label} />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickFormatter={(value) => `$${value}k`}
+              />
+              <Tooltip
+                formatter={(value) => [`$${value}`, "Revenue"]}
+                labelFormatter={(label) => label}
+              />
               <Bar dataKey="value" fill="#4f46e5" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -35,5 +47,5 @@ export function RevenueTrends({ data = [] }: RevenueTrendsProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

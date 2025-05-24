@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['www.drupal.org'],
+    domains: ['www.drupal.org','encrypted-tbn0.gstatic.com'],
     remotePatterns: [
       {
         protocol: "https",

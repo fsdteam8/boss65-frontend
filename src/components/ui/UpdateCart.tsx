@@ -11,16 +11,15 @@ interface UpdateCartProps {
 }
 
 const UpdateCart = ({ update }: { update: UpdateCartProps }) => {
-  console.log(update);
   return (
     <div className={`${update._id >= 5 && "mt-4 md:mt-5 lg:mt-6"}`}>
-      <Image
+     {update.thumbnail && <Image
         src={update.thumbnail}
         alt={update.title}
         width={354}
         height={300}
         className="w-full h-[300px] object-cover rounded-t-[8px]"
-      />
+      />}
       <div className="pt-[16px] md:pt-[21px] lg:pt-[26px] px-[10px]">
         <h4 className="font-poppins text-base font-semibold text-[#2A2A2A] leading-[120%] tracking-[0%]">
           {update.title}

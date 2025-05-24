@@ -167,6 +167,13 @@ export function AddImageModal({
                     <SelectContent>
                       <SelectItem value="gallery">Gallery</SelectItem>
                       <SelectItem value="hero">Hero</SelectItem>
+                      <SelectItem value="sub-hero">Sub Hero</SelectItem>
+                      <SelectItem value="space-hero">Space Hero</SelectItem>
+                      <SelectItem value="experience-hero">
+                        Experience Hero
+                      </SelectItem>
+                      <SelectItem value="updates-hero">Updates Hero</SelectItem>
+                      <SelectItem value="contact-hero">Contact Hero</SelectItem>
                       <SelectItem value="banner">Banner</SelectItem>
                       <SelectItem value="footer">Footer</SelectItem>
                     </SelectContent>

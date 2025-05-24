@@ -19,7 +19,8 @@ export default function Home() {
       <SocialSide />
       <Updates data={data} />
       <AsSeen />
-      <ReviewCarousel />
+      <ReviewCarousel /> 
+  
     </div>
   );
 }
