@@ -11,6 +11,7 @@ import {
   NotebookPen,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -38,12 +39,12 @@ export function DashboardSidebar() {
     {
       name: "Dashboard",
       href: "/dashboard",
-      icon: LayoutDashboard ,
+      icon: LayoutDashboard,
     },
     {
       name: "Booking",
       href: "/dashboard/booking",
-      icon: Calendar ,
+      icon: Calendar,
     },
     {
       name: "Content",
@@ -70,16 +71,14 @@ export function DashboardSidebar() {
   return (
     <div className="w-72 border-r max-h-screen sticky top-0 border-zinc-800/10 bg-white text-white">
       <div className="flex flex-col h-full">
-        <div className="p-6 flex justify-center">
-          <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center">
-              <div className="text-xs font-bold">
-                <div className="uppercase text-center">Room</div>
-                <div className="uppercase text-center">Chambers</div>
-                <div className="text-[10px] text-center">★★★★★</div>
-              </div>
-            </div>
-          </div>
+        <div className="w-full flex items-center justify-center py-5">
+          <Image
+            src="/img/logo.png"
+            alt="Social Chamber"
+            width={80}
+            height={80}
+            className="w-[80px] h-[80px] object-cover"
+          />
         </div>
         <nav className="flex-1 px-2 py-4">
           {routes.map((route) => (
