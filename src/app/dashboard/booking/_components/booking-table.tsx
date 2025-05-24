@@ -16,10 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import { DateRangePicker } from "@/components/ui/date-range-picker";
 
 import type { BookingStatus } from "@/types/booking";
 import type { BookingApiResponse } from "@/types/bookingDataType/bookingDataType";
+import DateRangePickerUpdate from "./DateRangePicker";
 
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
@@ -27,19 +27,29 @@ const statusStyles: Record<BookingStatus, string> = {
   refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
 };
 
+interface SelectedData {
+  dateRange: { from: Date | null; to: Date | null };
+  queryParams: string;
+  compare: boolean;
+  daysDifference: number;
+}
+
 export function BookingTable() {
-  const [status, setStatus] = useState<string | undefined>();
-  // const [startDate, setStartDate] = useState<string>("2025-05-24");
-  // const [endDate, setEndDate] = useState<string>("2025-05-30");
+  const [status, setStatus] = useState("");
 
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const { data: session } = useSession();
   const token = (session?.user as { accessToken: string })?.accessToken;
 
+  const [selectedData, setSelectedData] = useState<SelectedData | null>(null);
+  console.log(selectedData?.queryParams);
+
+
+
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
-    queryKey: ["booking", status],
+    queryKey: ["booking", status, selectedData],
     queryFn: async () => {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}&${selectedData?.queryParams}`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -85,12 +95,24 @@ export function BookingTable() {
     );
   }
 
+  // data picker
+
+  const handleDateRangeChange = (data: {
+    dateRange: { from: Date | null; to: Date | null };
+    queryParams: string;
+    compare: boolean;
+    daysDifference: number;
+  }) => {
+    setSelectedData(data);
+    console.log("Received in parent component:", data);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-[60px]">
         <h1 className="text-2xl font-bold">Booking Management</h1>
         <div className="flex items-center gap-10">
-          <Select onValueChange={(value) => setStatus(value)}>
+          <Select value={status} onValueChange={(value) => setStatus(value)}>
             <SelectTrigger className="w-[180px] bg-white placeholder:text-black text-black/90 font-bold focus:ring-0 border border-black/20">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -101,20 +123,13 @@ export function BookingTable() {
             </SelectContent>
           </Select>
 
-
-          {/* <DateRangePicker
-            onUpdate={({ range }) => {
-              if (range.from) setStartDate(range.from.toISOString().split("T")[0]);
-              if (range.to) setEndDate(range.to.toISOString().split("T")[0]);
+          <DateRangePickerUpdate
+            onDateRangeChange={handleDateRangeChange}
+            defaultDateRange={{
+              from: new Date(2025, 4, 27), // May 27, 2025
+              to: new Date(2025, 5, 12), // June 12, 2025
             }}
-            initialDateFrom={startDate}
-            initialDateTo={endDate}
-            align="start"
-            locale="en-GB"
-            showCompare={false}
-          /> */}
-
-
+          />
         </div>
       </div>
 
@@ -122,15 +137,33 @@ export function BookingTable() {
         <table className="w-full text-left">
           <thead>
             <tr className="border-b bg-gray-50">
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">ID</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Name</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Room ID</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500 text-center">People</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Service ID</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Date & Time</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Amount</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Status</th>
-              <th className="px-4 py-3 text-sm font-medium text-gray-500">Action</th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                ID
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Name
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Room ID
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500 text-center">
+                People
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Service ID
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Date & Time
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Amount
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Status
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -143,7 +176,9 @@ export function BookingTable() {
 
               return (
                 <tr key={booking._id} className="border-b">
-                  <td className="px-4 py-4 text-sm">{booking._id?.slice(0, 6)}...</td>
+                  <td className="px-4 py-4 text-sm">
+                    {booking._id?.slice(0, 6)}...
+                  </td>
                   <td className="px-4 py-4 text-sm">
                     {booking.user?.firstName} {booking.user?.lastName}
                   </td>
@@ -162,7 +197,9 @@ export function BookingTable() {
                       ))}
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-sm">${booking.total?.toFixed(2)}</td>
+                  <td className="px-4 py-4 text-sm">
+                    ${booking.total?.toFixed(2)}
+                  </td>
                   <td className="px-4 py-4 text-sm">
                     <Select
                       defaultValue={booking.status}
@@ -171,7 +208,9 @@ export function BookingTable() {
                         updateBookingStatus(booking._id, value as BookingStatus)
                       }
                     >
-                      <SelectTrigger className={`w-[130px] h-8 capitalize ${badgeClass} border font-medium`}>
+                      <SelectTrigger
+                        className={`w-[130px] h-8 capitalize ${badgeClass} border font-medium`}
+                      >
                         <SelectValue placeholder="Change status" />
                       </SelectTrigger>
                       <SelectContent>

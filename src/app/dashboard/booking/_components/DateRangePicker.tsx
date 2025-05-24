@@ -7,7 +7,6 @@ import { format, addMonths, subMonths, isSameDay, isWithinInterval, isBefore } f
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 
@@ -30,6 +29,17 @@ interface CustomCalendarProps {
   month: Date
   selectedRange: DateRange
   onDateSelect: (date: Date) => void
+  className?: string
+}
+
+interface DateRangePickerProps {
+  onDateRangeChange?: (data: {
+    dateRange: DateRange
+    queryParams: string
+    compare: boolean
+    daysDifference: number
+  }) => void
+  defaultDateRange?: DateRange
   className?: string
 }
 
@@ -127,12 +137,13 @@ const CustomCalendar = ({ month, selectedRange, onDateSelect, className }: Custo
   )
 }
 
-export default function DateRangePickerUpdate() {
-  const [status, setStatus] = useState<string>("")
-  const [dateRange, setDateRange] = useState<DateRange>({
-    from: new Date(2025, 3, 10), // April 10, 2025
-    to: new Date(2025, 3, 20), // April 20, 2025
-  })
+export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRange, className }: DateRangePickerProps) {
+  const [dateRange, setDateRange] = useState<DateRange>(
+    defaultDateRange || {
+      from: new Date(2025, 3, 10), // April 10, 2025
+      to: new Date(2025, 3, 20), // April 20, 2025
+    },
+  )
   const [tempDateRange, setTempDateRange] = useState<DateRange>(dateRange)
   const [compare, setCompare] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
@@ -157,7 +168,7 @@ export default function DateRangePickerUpdate() {
     const startDate = format(tempDateRange.from, "yyyy-MM-dd")
     const endDate = format(tempDateRange.to, "yyyy-MM-dd")
 
-    return `?startDate=${startDate}&endDate=${endDate}`
+    return `startDate=${startDate}&endDate=${endDate}`
   }
 
   const handleUpdate = (): void => {
@@ -165,23 +176,25 @@ export default function DateRangePickerUpdate() {
     setOpen(false)
 
     const queryParams = generateQueryParams()
+    const daysDifference =
+      tempDateRange.from && tempDateRange.to
+        ? Math.ceil((tempDateRange.to.getTime() - tempDateRange.from.getTime()) / (1000 * 60 * 60 * 24)) + 1
+        : 0
 
-    // Log data to console
-    console.log({
-      status,
-      dateRange: {
-        from: tempDateRange.from ? format(tempDateRange.from, "MMM dd, yyyy") : null,
-        to: tempDateRange.to ? format(tempDateRange.to, "MMM dd, yyyy") : null,
-      },
-      compare,
-      rawDates: tempDateRange,
-      daysDifference:
-        tempDateRange.from && tempDateRange.to
-          ? Math.ceil((tempDateRange.to.getTime() - tempDateRange.from.getTime()) / (1000 * 60 * 60 * 24)) + 1
-          : 0,
+    const data = {
+      dateRange: tempDateRange,
       queryParams,
-      fullUrl: `${window.location.origin}${window.location.pathname}${queryParams}`,
-    })
+      compare,
+      daysDifference,
+    }
+
+    // Log data to console in the format you requested
+    console.log(queryParams)
+
+    // Call the parent component's callback function
+    if (onDateRangeChange) {
+      onDateRangeChange(data)
+    }
   }
 
   const handleCancel = (): void => {
@@ -210,142 +223,75 @@ export default function DateRangePickerUpdate() {
   const nextMonth = (): void => setCurrentMonth(addMonths(currentMonth, 1))
   const prevMonth = (): void => setCurrentMonth(subMonths(currentMonth, 1))
 
-  const getCurrentQueryParams = (): string => {
-    if (!dateRange.from || !dateRange.to) return "No date range selected"
-
-    const startDate = format(dateRange.from, "yyyy-MM-dd")
-    const endDate = format(dateRange.to, "yyyy-MM-dd")
-
-    return `?startDate=${startDate}&endDate=${endDate}`
-  }
-
   return (
-    <div className="p-6 space-y-4 bg-gray-50 min-h-screen">
-      <div className="flex gap-4 items-center">
-        {/* Status Dropdown */}
-        <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="w-[200px] bg-white">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="confirmed">Confirmed</SelectItem>
-          </SelectContent>
-        </Select>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            "w-[300px] justify-start text-left font-normal bg-white",
+            !dateRange.from && "text-muted-foreground",
+            className,
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {formatDateRange()}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <div className="p-4 space-y-4">
+          {/* Compare Toggle */}
+          <div className="flex items-center space-x-2">
+            <Switch id="compare" checked={compare} onCheckedChange={setCompare} />
+            <Label htmlFor="compare">Compare</Label>
 
-        {/* Date Range Picker */}
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn(
-                "w-[300px] justify-start text-left font-normal bg-white",
-                !dateRange.from && "text-muted-foreground",
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {formatDateRange()}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <div className="p-4 space-y-4">
-              {/* Compare Toggle */}
-              <div className="flex items-center space-x-2">
-                <Switch id="compare" checked={compare} onCheckedChange={setCompare} />
-                <Label htmlFor="compare">Compare</Label>
-
-                {/* Date Input Fields */}
-                <div className="flex items-center space-x-1 ml-4 text-sm">
-                  <span>{formatTempDateRange()}</span>
-                </div>
-              </div>
-
-              {/* Calendar Navigation */}
-              <div className="flex items-center justify-between">
-                <Button variant="ghost" size="sm" onClick={prevMonth}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <div className="flex space-x-8">
-                  <span className="font-medium">{format(currentMonth, "MMMM yyyy")}</span>
-                  <span className="font-medium">{format(addMonths(currentMonth, 1), "MMMM yyyy")}</span>
-                </div>
-                <Button variant="ghost" size="sm" onClick={nextMonth}>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* Dual Calendar */}
-              <div className="flex space-x-4">
-                <CustomCalendar
-                  month={currentMonth}
-                  selectedRange={tempDateRange}
-                  onDateSelect={handleDateSelect}
-                  className="border rounded-md"
-                />
-                <CustomCalendar
-                  month={addMonths(currentMonth, 1)}
-                  selectedRange={tempDateRange}
-                  onDateSelect={handleDateSelect}
-                  className="border rounded-md"
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex justify-end space-x-2 pt-4">
-                <Button variant="outline" onClick={handleCancel}>
-                  Cancel
-                </Button>
-                <Button onClick={handleUpdate} className="bg-black text-white hover:bg-gray-800">
-                  Update
-                </Button>
-              </div>
+            {/* Date Input Fields */}
+            <div className="flex items-center space-x-1 ml-4 text-sm">
+              <span>{formatTempDateRange()}</span>
             </div>
-          </PopoverContent>
-        </Popover>
-      </div>
+          </div>
 
-      {/* Display Current Selection */}
-      <div className="bg-white p-4 rounded-lg shadow-sm">
-        <h3 className="font-medium mb-2">Current Selection:</h3>
-        <p>
-          <strong>Status:</strong> {status || "Not selected"}
-        </p>
-        <p>
-          <strong>Date Range:</strong> {formatDateRange()}
-        </p>
-        <p>
-          <strong>Compare:</strong> {compare ? "Enabled" : "Disabled"}
-        </p>
-        {dateRange.from && dateRange.to && (
-          <p>
-            <strong>Duration:</strong>{" "}
-            {Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24)) + 1} days
-          </p>
-        )}
-        <p className="text-sm text-gray-600 mt-2">Click Update to see the data logged in the console</p>
-      </div>
+          {/* Calendar Navigation */}
+          <div className="flex items-center justify-between">
+            <Button variant="ghost" size="sm" onClick={prevMonth}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div className="flex space-x-8">
+              <span className="font-medium">{format(currentMonth, "MMMM yyyy")}</span>
+              <span className="font-medium">{format(addMonths(currentMonth, 1), "MMMM yyyy")}</span>
+            </div>
+            <Button variant="ghost" size="sm" onClick={nextMonth}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
 
-      {/* Query Parameters Display */}
-      <div className="bg-white p-4 rounded-lg shadow-sm">
-        <h3 className="font-medium mb-2">URL Query Parameters:</h3>
-        <div className="bg-gray-100 p-3 rounded-md font-mono text-sm">{getCurrentQueryParams()}</div>
-        <p className="text-sm text-gray-600 mt-2">
-          This is the format that will be logged to console when you click Update
-        </p>
-      </div>
+          {/* Dual Calendar */}
+          <div className="flex space-x-4">
+            <CustomCalendar
+              month={currentMonth}
+              selectedRange={tempDateRange}
+              onDateSelect={handleDateSelect}
+              className="border rounded-md"
+            />
+            <CustomCalendar
+              month={addMonths(currentMonth, 1)}
+              selectedRange={tempDateRange}
+              onDateSelect={handleDateSelect}
+              className="border rounded-md"
+            />
+          </div>
 
-      {/* Examples */}
-      <div className="bg-white p-4 rounded-lg shadow-sm">
-        <h3 className="font-medium mb-2">Examples you can try:</h3>
-        <ul className="text-sm text-gray-600 space-y-1">
-          <li>• Select April 10-20 (same month range)</li>
-          <li>• Select April 25 - May 10 (cross-month range)</li>
-          <li>• Click any date to start, then click another to complete the range</li>
-          <li>• The range will automatically adjust if you select dates in reverse order</li>
-        </ul>
-      </div>
-    </div>
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button variant="outline" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdate} className="bg-black text-white hover:bg-gray-800">
+              Update
+            </Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
