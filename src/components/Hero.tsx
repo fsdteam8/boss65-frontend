@@ -16,7 +16,7 @@ export default function HeroSection({ heading }: Props) {
 
   // Map each pathname to a section value
   const sectionMap: Record<string, string> = {
-    "/": "banner",
+    "/": "hero",
     "/space": "space-hero",
     "/our-unique-experience": "experience-hero",
     "/updates": "updates-hero",
