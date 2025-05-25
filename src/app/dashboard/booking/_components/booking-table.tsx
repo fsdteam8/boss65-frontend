@@ -38,7 +38,10 @@ interface SelectedData {
 export function BookingTable() {
   const [status, setStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [defaultDateRange, setDefaultDateRange] = useState({
+    from: new Date(),
+    to: new Date(),
+  });
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const { data: session } = useSession();
   const token = (session?.user as { accessToken: string })?.accessToken;
@@ -99,6 +102,19 @@ export function BookingTable() {
 
   // data picker
 
+  // const handleDateRangeChange = (data: {
+  //   dateRange: { from: Date | null; to: Date | null };
+  //   queryParams: string;
+  //   compare: boolean;
+  //   daysDifference: number;
+  // }) => {
+  //   setSelectedData(data);
+  //   console.log("Received in parent component:", data);
+  // };
+
+
+
+
   const handleDateRangeChange = (data: {
     dateRange: { from: Date | null; to: Date | null };
     queryParams: string;
@@ -106,9 +122,18 @@ export function BookingTable() {
     daysDifference: number;
   }) => {
     setSelectedData(data);
+
+    // ✅ Update default date range based on the received range
+    if (data.dateRange.from && data.dateRange.to) {
+      setDefaultDateRange({
+        from: data.dateRange.from,
+        to: data.dateRange.to,
+      });
+    }
+
     console.log("Received in parent component:", data);
   };
-
+  
   return (
     <div>
       <div className="flex items-center justify-between mb-[60px]">
@@ -127,11 +152,16 @@ export function BookingTable() {
 
           <DateRangePickerUpdate
             onDateRangeChange={handleDateRangeChange}
-            defaultDateRange={{
-              from: new Date(2025, 4, 27), // May 27, 2025
-              to: new Date(2025, 5, 12), // June 12, 2025
-            }}
+            // defaultDateRange={{
+            //   from: new Date(2025, 4, 27), // May 27, 2025
+            //   to: new Date(2025, 5, 12), // June 12, 2025
+            // }}
+
+            defaultDateRange={defaultDateRange}
+
           />
+
+          
         </div>
       </div>
 
