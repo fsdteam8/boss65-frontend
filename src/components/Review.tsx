@@ -95,7 +95,7 @@ export default function ReviewCarousel() {
               <Card className="border-none shadow-none">
                 <CardContent className=" pr-0">
                   <div className="flex flex-col md:flex-row gap-[15px] md:gap-[25px] lg:gap-[43px] ">
-                    <div className="relative overflow-hidden flex-shrink-0 ">
+                    <div className="relative overflow-hidden flex-shrink-0 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[150px] md:h-[150px]   rounded-full">
                       <Image
                         src={
                           testimonial.profile_photo_url || "/placeholder.svg"
@@ -103,7 +103,7 @@ export default function ReviewCarousel() {
                         alt={testimonial.author_name}
                         width={258}
                         height={258}
-                        className="w-full md:w-[150px] h-[150px] object-cover"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="flex flex-col justify-center">
