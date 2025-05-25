@@ -26,6 +26,7 @@ const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
   cancelled: "bg-red-100 text-red-700 border-red-300",
   refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
+  pending: "bg-amber-100 text-amber-800 border-amber-300",
 };
 
 interface SelectedData {
@@ -123,6 +124,7 @@ export function BookingTable() {
   }) => {
     setSelectedData(data);
 
+
     // ✅ Update default date range based on the received range
     if (data.dateRange.from && data.dateRange.to) {
       setDefaultDateRange({
@@ -132,6 +134,7 @@ export function BookingTable() {
     }
 
     console.log("Received in parent component:", data);
+
   };
   
   return (
@@ -145,6 +148,7 @@ export function BookingTable() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="confirmed">Confirmed</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
@@ -178,11 +182,14 @@ export function BookingTable() {
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
                 Rooms
               </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Category
+              </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500 text-center">
                 People
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
-                Service 
+                Service
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
                 Date & Time
@@ -215,6 +222,9 @@ export function BookingTable() {
                     {booking.user?.firstName} {booking.user?.lastName}
                   </td>
                   <td className="px-4 py-4 text-sm">{booking.room?.title}</td>
+                  <td className="px-4 py-4 text-sm">
+                    {booking?.service?.category?.name}
+                  </td>
                   <td className="px-4 py-4 text-sm text-center">
                     {booking.user?.numberOfPeople}
                   </td>
@@ -247,6 +257,7 @@ export function BookingTable() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="confirmed">Confirmed</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
                         <SelectItem value="refunded">Refunded</SelectItem>
                         <SelectItem value="cancelled">Cancelled</SelectItem>
                       </SelectContent>
@@ -269,16 +280,19 @@ export function BookingTable() {
           </tbody>
         </table>
         <div className="bg-white rounded-b-[8px]">
-          {data && data?.data && data?.data?.pagination && data?.data?.pagination?.totalPages > 1 && (
-            <div className="flex justify-center">
-              <Pagination
-                currentPage={currentPage}
-                totalResults={data?.data?.pagination?.totalData}
-                resultsPerPage={10}
-                onPageChange={setCurrentPage}
-              />
-            </div>
-          )}
+          {data &&
+            data?.data &&
+            data?.data?.pagination &&
+            data?.data?.pagination?.totalPages > 1 && (
+              <div className="flex justify-center">
+                <Pagination
+                  currentPage={currentPage}
+                  totalResults={data?.data?.pagination?.totalData}
+                  resultsPerPage={10}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
+            )}
         </div>
       </div>
     </div>

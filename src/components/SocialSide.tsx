@@ -23,7 +23,7 @@ export default function SocialSide() {
     queryKey: ["contentVideo"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=video`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/assets?type=video&section=hero`
       );
 
       if (!res.ok) throw new Error("Network response was not ok");

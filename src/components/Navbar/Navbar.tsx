@@ -49,7 +49,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden lg:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -70,14 +70,14 @@ export default function Navbar() {
         {/* Reserve Button */}
         <Link
           href="/booking"
-          className="font-poppins hidden md:flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-3 px-6 rounded-[8px] transition-colors"
+          className="font-poppins hidden lg:flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-3 px-6 rounded-[8px] transition-colors"
         >
           Reserve Now
         </Link>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-white"
+          className="lg:hidden text-white"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -87,7 +87,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-[#0a0a14]/95 backdrop-blur-sm pt-20 px-4">
+        <div className="lg:hidden fixed inset-0 z-50 bg-[#0a0a14]/95 backdrop-blur-sm pt-20 px-4">
           <nav className="flex flex-col space-y-6">
             {navLinks.map((link) => (
               <Link

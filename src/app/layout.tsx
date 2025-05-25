@@ -36,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${poppins.variable} ${manrope.variable} antialiased min-h-screen flex flex-col`}
       >
         <AuthProvider>

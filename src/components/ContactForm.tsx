@@ -12,7 +12,8 @@ export default function ContactForm() {
     name: "",
     email: "",
     phoneNumber: "",
-    message: "",
+    subject: "",
+    body: "",
   });
 
   const handleChange = (
@@ -31,9 +32,10 @@ export default function ContactForm() {
       name: string;
       email: string;
       phoneNumber: string;
-      message: string;
+      body: string;
+      subject:string;
     }) =>
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/contact`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/email/send`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -137,10 +139,21 @@ export default function ContactForm() {
             </div>
 
             <div>
+              <input
+                type="sub"
+                name="subject"
+                placeholder="Subject"
+                value={formData.subject}
+                onChange={handleChange}
+                className="h-[46px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"
+              />
+            </div>
+
+            <div>
               <textarea
-                name="message"
+                name="body"
                 placeholder="Your Text......"
-                value={formData.message}
+                value={formData.body}
                 onChange={handleChange}
                 rows={5}
                 className="h-[233px] w-full p-[15px] border border-black/10 text-[#2A2A2A] font-normal text-sm font-poppins leading-[120%] rounded-[8px] placeholder:text-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF6900]"

@@ -53,13 +53,16 @@ export interface Booking {
       end: string;
     };
     _id: string;
-    category: string;
+    category: {
+      name: string;
+    };
     name: string;
     availableDays: string[];
     slotDurationHours: number;
     pricePerSlot: number;
     maxPeopleAllowed?: number;
     description?: string;
+
     __v: number;
   };
   total: number;
