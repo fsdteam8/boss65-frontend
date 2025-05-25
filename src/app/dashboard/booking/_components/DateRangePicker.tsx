@@ -7,8 +7,8 @@ import { format, addMonths, subMonths, isSameDay, isWithinInterval, isBefore } f
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+// import { Switch } from "@/components/ui/switch"
+// import { Label } from "@/components/ui/label"
 
 interface DateRange {
   from: Date | null
@@ -137,7 +137,11 @@ const CustomCalendar = ({ month, selectedRange, onDateSelect, className }: Custo
   )
 }
 
-export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRange, className }: DateRangePickerProps) {
+export default function DateRangePickerUpdate({
+  onDateRangeChange,
+  defaultDateRange,
+  className,
+}: DateRangePickerProps) {
   const [dateRange, setDateRange] = useState<DateRange>(
     defaultDateRange || {
       from: new Date(2025, 3, 10), // April 10, 2025
@@ -145,7 +149,7 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
     },
   )
   const [tempDateRange, setTempDateRange] = useState<DateRange>(dateRange)
-  const [compare, setCompare] = useState<boolean>(false)
+  const [compare] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 3)) // April 2025
 
@@ -205,22 +209,25 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
   }
 
   const formatDateRange = (): string => {
-    if (!dateRange.from) return "Select date range"
-    if (!dateRange.to) return format(dateRange.from, "MMM dd, yyyy")
-    if (isSameDay(dateRange.from, dateRange.to)) {
-      return format(dateRange.from, "MMM dd, yyyy")
+    // Use tempDateRange when popover is open, otherwise use confirmed dateRange
+    const rangeToFormat = open ? tempDateRange : dateRange
+
+    if (!rangeToFormat.from) return "Select date range"
+    if (!rangeToFormat.to) return format(rangeToFormat.from, "MMM dd, yyyy")
+    if (isSameDay(rangeToFormat.from, rangeToFormat.to)) {
+      return format(rangeToFormat.from, "MMM dd, yyyy")
     }
-    return `${format(dateRange.from, "MMM dd, yyyy")} - ${format(dateRange.to, "MMM dd, yyyy")}`
+    return `${format(rangeToFormat.from, "MMM dd, yyyy")} - ${format(rangeToFormat.to, "MMM dd, yyyy")}`
   }
 
-  const formatTempDateRange = (): string => {
-    if (!tempDateRange.from) return "5/24/2025 - 5/24/2025"
-    if (!tempDateRange.to) {
-      const fromFormatted = format(tempDateRange.from, "M/dd/yyyy")
-      return `${fromFormatted} - ${fromFormatted}`
-    }
-    return `${format(tempDateRange.from, "M/dd/yyyy")} - ${format(tempDateRange.to, "M/dd/yyyy")}`
-  }
+  // const formatTempDateRange = (): string => {
+  //   if (!tempDateRange.from) return "5/24/2025 - 5/24/2025"
+  //   if (!tempDateRange.to) {
+  //     const fromFormatted = format(tempDateRange.from, "M/dd/yyyy")
+  //     return `${fromFormatted} - ${fromFormatted}`
+  //   }
+  //   return `${format(tempDateRange.from, "M/dd/yyyy")} - ${format(tempDateRange.to, "M/dd/yyyy")}`
+  // }
 
   const nextMonth = (): void => setCurrentMonth(addMonths(currentMonth, 1))
   const prevMonth = (): void => setCurrentMonth(subMonths(currentMonth, 1))
@@ -240,18 +247,18 @@ export default function DateRangePickerUpdate({ onDateRangeChange, defaultDateRa
           {formatDateRange()}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 " align="start">
+      <PopoverContent className="w-auto p-0 mr-12" align="start">
         <div className="p-4 space-y-4 ">
           {/* Compare Toggle */}
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Switch id="compare" checked={compare} onCheckedChange={setCompare} />
             <Label htmlFor="compare">Compare</Label>
 
-            {/* Date Input Fields */}
+           
             <div className="flex items-center space-x-1 ml-4 text-sm">
               <span>{formatTempDateRange()}</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Calendar Navigation */}
           <div className="flex items-center justify-between ">
