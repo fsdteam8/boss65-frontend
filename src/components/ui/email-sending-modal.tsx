@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useSession } from "next-auth/react";
 
 // Define the form schema
 const formSchema = z.object({
@@ -56,8 +57,8 @@ export default function EmailSendingModal({
       body: "",
     },
   });
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODJkNTQ5MTM4NzIyMmVkOGRhNTQzMWQiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDc4MDE0NTIsImV4cCI6MTc0ODQwNjI1Mn0.tWBXmO_utopfRLG7dIhhpgIsTErqA7fr_Oe_H2-6UEI";
+    const { data } = useSession();
+  const token = (data?.user as { accessToken: string })?.accessToken;
 
   const mutation = useMutation({
     mutationFn: async (data: EmailFormValues) => {

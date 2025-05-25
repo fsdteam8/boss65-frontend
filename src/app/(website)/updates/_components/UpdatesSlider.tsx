@@ -8,10 +8,11 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { updatesAllData } from "@/components/data/updates-all-data";
+// import { updatesAllData } from "@/components/data/updates-all-data";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 const breakpoints = {
   0: {
@@ -33,6 +34,21 @@ const breakpoints = {
 };
 
 const UpdatesSlider = () => {
+  const { data} = useQuery({
+    queryKey: ["allblog"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/cms/blogs`
+      );
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return res.json();
+    },
+  });
+
   return (
     <div className="container mx-auto pb-[40px] md:pb-[70px] lg:pb-[100px]">
       <Swiper
@@ -45,10 +61,10 @@ const UpdatesSlider = () => {
         loop={true}
         className="rounded-lg"
       >
-        {updatesAllData?.map((update) => (
-          <SwiperSlide key={update.id} className="w-full pb-16">
+        {data?.data?.map((update: any) => (
+          <SwiperSlide key={update._id} className="w-full pb-16">
             <Image
-              src={update.img}
+              src={update.thumbnail}
               alt={update.title || "Update Image"}
               width={354}
               height={300}
@@ -62,7 +78,7 @@ const UpdatesSlider = () => {
                 {update.desc}
               </p>
               <div className="pt-3 md:pt-4">
-                <Link href={`/updates/${update.id}`} passHref>
+                <Link href={`/updates/${update._id}`} passHref>
                   <button
                     className="font-poppins w-full flex items-center justify-between text-lg font-medium text-[#FF6900]"
                     aria-label={`Read more about ${update.title}`}

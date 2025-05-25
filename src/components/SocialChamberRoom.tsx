@@ -159,8 +159,8 @@ export default function SocialChamberRoom() {
   const items = data?.data || [];
 
   return (
-    <div className="w-full max-w-none mx-auto px-28 py-10 text-center overflow-x-hidden">
-      <h2 className="text-2xl md:text-4xl font-bold text-orange-600 mb-4">The Social Chamber Room</h2>
+    <div className="w-full container max-w-none mx-auto px-28 py-10 text-center overflow-x-hidden">
+      <h2 className="text-2xl md:text-4xl font-bold text-orange-600 mb-10">The Social Chamber Room</h2>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
@@ -178,7 +178,7 @@ export default function SocialChamberRoom() {
           <button onClick={() => refetch()} className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-full transition">Reload Gallery</button>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-3 justify-center">
+        <div className="container grid grid-cols-4 gap-3 ">
           {items.map((item: any, index: number) => (
             item.type === "video" ? (
               <VideoPlayer key={item._id || index} data={item} />

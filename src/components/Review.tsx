@@ -66,7 +66,7 @@ export default function ReviewCarousel() {
     <div className="container mx-auto pt-[40px] md:pt-[70px] lg:pt-[104px] pb-[40px] md:pb-[60px] lg:pb-[80px]">
       <div className="text-center pb-[40px] md:pb-[70px] lg:pb-[99px]">
         <p className="font-poppins text-[#FCB900] text-lg font-semibold leading-[30px] tracking-[-0.22x] pb-[15px] md:pb-[20px] lg:pb-[25px]">
-          3940+ Happy Landingfolio Users
+          {/* 3940+ Happy Landingfolio Users */}
         </p>
         <h2 className="text-4xl md:text-5xl lg:text-[56px] text-[#FF6900] font-semibold font-poppins leading-[67px] tracking-[-2.16px]">
           Don&apos;t just take our words
@@ -103,7 +103,7 @@ export default function ReviewCarousel() {
                         alt={testimonial.author_name}
                         width={258}
                         height={258}
-                        className="w-full md:w-[150px] h-[150px] object-cover rounded-[16px]"
+                        className="w-full md:w-[150px] h-[150px] object-cover"
                       />
                     </div>
                     <div className="flex flex-col justify-center">
