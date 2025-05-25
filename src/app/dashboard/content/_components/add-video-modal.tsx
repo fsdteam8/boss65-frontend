@@ -149,6 +149,7 @@ export function AddUploadModal({
       return res.json();
     },
     onSuccess: (success) => {
+       onOpenChange(false);
       toast.success(success.message || "Content published successfully");
     },
     onError: (err: any) => {
@@ -164,7 +165,7 @@ export function AddUploadModal({
     formData.append("section", data.section);
     mutation.mutate(formData);
     resetForm();
-    onOpenChange(false);
+   
   };
 
   const resetForm = () => {
@@ -225,7 +226,7 @@ export function AddUploadModal({
             <FormField
               control={form.control}
               name="video"
-              render={({  }) => (
+              render={({}) => (
                 <FormItem className="space-y-[10px]">
                   <FormLabel className="text-base font-poppins font-medium text-[#FF6900]">
                     Upload Video

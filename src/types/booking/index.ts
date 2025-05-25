@@ -1,4 +1,4 @@
-export type BookingStatus = "refunded" | "confirmed" | "cancelled";
+export type BookingStatus = "refunded" | "confirmed" | "cancelled" | "pending";
 
 export interface TimeSlot {
   _id: string;

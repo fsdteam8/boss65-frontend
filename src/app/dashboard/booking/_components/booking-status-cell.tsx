@@ -33,6 +33,7 @@ export function BookingStatusCell({
 
   const statuses = [
     { value: "confirmed", label: "Confirmed" },
+    { value: "pending", label: "Pending" },
     { value: "canceled", label: "Canceled" },
     { value: "refunded", label: "Refunded" },
   ] as const;
@@ -40,6 +41,7 @@ export function BookingStatusCell({
   const statusStyles: Record<string, string> = {
     confirmed: "bg-green-100 text-green-700 border-green-300",
     canceled: "bg-red-100 text-red-700 border-red-300",
+    pending: "bg-amber-100 text-amber-800 border-amber-300",
     refunded: "bg-yellow-100 text-yellow-700 border-yellow-300",
   };
 

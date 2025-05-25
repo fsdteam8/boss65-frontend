@@ -69,7 +69,7 @@ export default function TimeSelection() {
     return isBefore(date, startOfDay(new Date()));
   };
   const timeSLots = data?.data ?? [];
-
+  console.log(timeSLots);
   const isDisabled = !selectedTimeSlot ? true : selectedTimeSlot.length === 0;
 
   return (
@@ -105,30 +105,30 @@ export default function TimeSelection() {
           </div>
         ) : timeSLots && timeSLots.length > 0 ? (
           <div className="space-y-2">
-            {timeSLots
-              ?.filter((i) => i.available)
-              .map((slot: TimeSlot, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    if (slot.available) {
-                      selectTimeSlot({
-                        start: slot.start,
-                        end: slot.end,
-                      });
-                    }
-                  }}
-                  disabled={!slot.available}
-                  className={cn(
-                    "w-full py-3 px-4 border border-yellow-400 rounded text-center  transition-colors",
-                    selectedTimeSlot?.some(
-                      (s) => s.start === slot.start && s.end === slot.end
-                    ) && "bg-orange-500 text-white"
-                  )}
-                >
-                  {slot.start} - {slot.end}
-                </button>
-              ))}
+            {timeSLots?.map((slot: TimeSlot, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  if (slot.available) {
+                    selectTimeSlot({
+                      start: slot.start,
+                      end: slot.end,
+                    });
+                  }
+                }}
+                disabled={!slot.available}
+                className={cn(
+                  "w-full py-3 px-4 border border-yellow-400 rounded text-center  transition-colors",
+                  `${!slot.available && "bg-orange-100 cursor-not-allowed"}`,
+                  selectedTimeSlot?.some(
+                    (s) => s.start === slot.start && s.end === slot.end
+                  ) && "bg-orange-500 text-white"
+                )}
+              >
+                {slot.start} - {slot.end}{" "}
+                {!slot.available && "(Already Booked !)"}
+              </button>
+            ))}
           </div>
         ) : (
           <p className="text-center py-8 text-gray-500">
