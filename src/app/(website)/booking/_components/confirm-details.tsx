@@ -66,6 +66,7 @@ export default function ConfirmDetails() {
         }
 
         // handle success
+        console.log("Payment Intent Success:", data.data);
 
         window.location.href = data.data.url;
       },
