@@ -30,6 +30,7 @@ export default function BookingConfirmation({ bookingId }: Props) {
   });
 
   const successData = data?.data || [];
+  console.log(successData);
 
   return (
     <div className="my-32">
