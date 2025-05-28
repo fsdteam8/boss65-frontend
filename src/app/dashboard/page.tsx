@@ -46,7 +46,7 @@ export default function DashboardPage() {
     enabled: !!token, // only fetch when token is available
   });
 
-  // console.log("data", data?.data);
+  console.log("data", data?.data);
 
   const handleDateRangeChange = (newDateRange: { startDate: string; endDate: string }) => {
     setDateRange(newDateRange);
