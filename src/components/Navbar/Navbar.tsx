@@ -77,7 +77,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="lg:hidden text-white"
+          className={`lg:hidden   ${pathname === '/booking' ? 'text-black' : 'text-white'}`}
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -104,8 +104,8 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href="/reserve"
-              className="font-poppins flex items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-4 px-8 rounded-[8px] transition-colors mt-4"
+              href="/booking"
+              className="font-poppins flex   items-center justify-center bg-[#FCB900] hover:bg-[#FF6900] text-black hover:text-white font-medium leading-[120%] py-4 px-8 rounded-[8px] transition-colors mt-4"
               onClick={toggleMenu}
             >
               Reserve Now

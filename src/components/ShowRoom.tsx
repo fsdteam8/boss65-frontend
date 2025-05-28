@@ -40,33 +40,6 @@ export default function ShowRoom() {
               />
             </div>
           ))}
-          {/* <div className="rounded-[8px] overflow-hidden">
-            <Image
-              src="/img/img2.png"
-              alt="People watching TV together"
-              width={354}
-              height={270}
-              className="w-full h-auto object-cover aspect-[4/3]"
-            />
-          </div>
-          <div className="rounded-[8px] overflow-hidden">
-            <Image
-              src="/img/img3.png"
-              alt="People by a window"
-              width={354}
-              height={270}
-              className="w-full h-auto object-cover aspect-[4/3]"
-            />
-          </div>
-          <div className="rounded-[8px] overflow-hidden">
-            <Image
-              src="/img/img4.png"
-              alt="People at a table"
-              width={354}
-              height={270}
-              className="w-full h-auto object-cover aspect-[4/3]"
-            />
-          </div> */}
         </div>
       </div>
     </section>

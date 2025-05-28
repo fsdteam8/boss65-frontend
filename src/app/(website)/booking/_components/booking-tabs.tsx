@@ -28,7 +28,7 @@ export function BookingTabs() {
       onValueChange={(value: any) => setStep(value as any)}
       className="w-full  mx-auto"
     >
-      <TabsList className="grid grid-cols-5 mb-[80px]">
+      {/* <TabsList className="grid grid-cols-5 mb-[80px]">
         <TabsTrigger
           value="category"
           className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full"
@@ -59,7 +59,44 @@ export function BookingTabs() {
         >
           Confirm details
         </TabsTrigger>
-      </TabsList>
+      </TabsList> */}
+
+
+<TabsList className="flex min-h-[50px] sm:grid sm:grid-cols-5 overflow-x-auto whitespace-nowrap gap-4 sm:gap-0 mb-[80px] px-4">
+  <TabsTrigger
+    value="category"
+    className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
+  >
+    Category
+  </TabsTrigger>
+  <TabsTrigger
+    value="rooms"
+    className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
+  >
+    Rooms
+  </TabsTrigger>
+  <TabsTrigger
+    value="services"
+    className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
+  >
+    Services
+  </TabsTrigger>
+  <TabsTrigger
+    value="time"
+    className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
+  >
+    Time
+  </TabsTrigger>
+  <TabsTrigger
+    value="confirm"
+    className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
+  >
+    Confirm details
+  </TabsTrigger>
+</TabsList>
+
+
+
       <TabsContent value="category">
         <CategorySelection />
       </TabsContent>
