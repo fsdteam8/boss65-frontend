@@ -33,11 +33,11 @@ export default function Footer() {
             <Link href="#" className="hover:text-[#ff6b00] transition-colors">
               Our Unique Experience
             </Link>
-            <Link href="#" className="hover:text-[#ff6b00] transition-colors">
-              Updates
+            <Link href="/privacy" className="hover:text-[#ff6b00] transition-colors">
+              Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-[#ff6b00] transition-colors">
-              Contact Us
+            <Link href="/terms-condition" className="hover:text-[#ff6b00] transition-colors">
+              Terms & Conditions
             </Link>
           </nav>
 
