@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Globe, Instagram } from "lucide-react";
+import {  Instagram } from "lucide-react";
 import Image from "next/image";
 
 export default function Footer() {
