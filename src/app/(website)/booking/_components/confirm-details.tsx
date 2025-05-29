@@ -281,6 +281,7 @@ export default function ConfirmDetails() {
                         type="button"
                         size="icon"
                         variant="outline"
+                        disabled={field.value >= 5}
                         onClick={() => field.onChange(field.value + 1)}
                       >
                         +
