@@ -107,6 +107,11 @@ export default function ConfirmDetails() {
     },
   });
 
+
+  // for pirce update show 
+  const numberOfPeople = form.watch("numberOfPeople"); // live watch
+  const totalPrice = (service?.pricePerSlot ?? 0) * numberOfPeople;
+
   const roomId = room?._id;
   const mockData = {
     category: { id: "1", name: selectedCategoryName },
@@ -150,6 +155,8 @@ export default function ConfirmDetails() {
       promoCode: data.promoCode,
       numberOfPeople: data.numberOfPeople,
     };
+
+    // console.log("Booking Payload:", payload); 
 
     mutate(payload);
   };
@@ -342,7 +349,8 @@ export default function ConfirmDetails() {
           <div className="border-t pt-4 mt-6 flex justify-between items-center">
             <span className="font-medium">Total for booking:</span>
             <span className="text-xl font-bold">
-              ${mockData.service.price.toFixed(2)}
+              {/* ${mockData.service.price.toFixed(2)} */}
+              ${totalPrice.toFixed(2)}
             </span>
           </div>
         </div>
