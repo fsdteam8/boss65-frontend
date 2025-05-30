@@ -81,7 +81,7 @@ export default function SocialChamber() {
           </div>
 
           <div className="bg-[#E4E4E4] py-4 md:py-5 lg:py-6 px-3 md:px-4 text-lg text-[#FF6900] font-semibold text-left font-poppins rounded-b-[8px]">
-            A Private Space Made Just for You and Your Loved One
+            A Private Space Made Just for You and Your Love One
           </div>
         </div>
       </div>
