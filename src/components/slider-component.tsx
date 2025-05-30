@@ -8,7 +8,7 @@ export default function StaticSlider() {
     {
       id: 1,
       image: "/img/exp1.png",
-      title: "1. Place Made Just for You and Your Loved One",
+      title: "1. Place Made Just for You and Your Love One",
       subtitle: "No CCTV, No Disturbance!",
       description:
         "Create COZY moments together with your friends/date. A truly private immersive cinematic room",

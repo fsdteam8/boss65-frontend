@@ -18,7 +18,7 @@ export default function HowItWorks() {
           <div className="pr-12">
           <h3 className="text-xl md:text-2xl lg:text-[32px] font-semibold font-poppins leading-[120%] tracking-[0%] text-black">You Can Trust</h3>
             <p className="text-base md:text-lg text-black font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-            You Can Trust is a reliable room booking service offering comfortable, affordable stays with a seamless reservation experience. Book with confidence—your comfort is our priority.
+            You Can Trust is a reliable room booking service offering comfortable, affordable stays with a seamless reservation experience. Book with confidence your comfort is our priority.
             </p>
           </div>
           </div>
