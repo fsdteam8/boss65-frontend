@@ -41,7 +41,7 @@ export default function AsSeen() {
   ]
 
   return (
-    <section className="w-full bg-white pt-[50px] md:pt-[100px] lg:pt-[150px] pb-[40px] md:pb-[62px] lg:pb-[83px]">
+    <section className="w-full bg-white pt-[50px] md:pt-[50px] lg:pt-[50px] pb-[40px] md:pb-[62px] lg:pb-[83px]">
       <div className="container mx-auto">
         <h2 className="font-poppins text-4xl md:text-[40px] lg:text-[48px] font-semibold text-center text-[#FF6900] mb-10 md:mb-[60px] lg:mb-[80px]">As Seen On</h2>
 

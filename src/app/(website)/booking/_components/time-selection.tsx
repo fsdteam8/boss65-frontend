@@ -88,7 +88,12 @@ export default function TimeSelection() {
       </div>
 
       <div className="border rounded-lg p-4">
-        <h2 className="font-medium text-orange-500 mb-4">Available Times</h2>
+        <h2 className="font-medium text-orange-500 mb-4">
+          Available Times{" "}
+          <span className="text-sm">
+            (You can select multiple slots at once)
+          </span>
+        </h2>
 
         {!selectedDate ? (
           <p className="text-center py-8 text-gray-500">

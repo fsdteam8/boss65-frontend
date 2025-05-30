@@ -1,4 +1,4 @@
-import Faq from '@/components/Faq'
+// import Faq from '@/components/Faq'
 import HeroSection from '@/components/Hero'
 import { Experience } from '@/components/hero-title'
 import ReviewCarousel from '@/components/Review'
@@ -14,7 +14,7 @@ const page = () => {
       <SocialChamber/>
       <HowItWorks/>
       <RoomGallery/>
-      <Faq/>
+      {/* <Faq/> */}
       <ReviewCarousel/>
     </div>
   )

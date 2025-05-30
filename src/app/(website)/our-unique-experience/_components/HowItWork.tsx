@@ -18,7 +18,7 @@ export default function HowItWorks() {
           <div className="pr-12">
           <h3 className="text-xl md:text-2xl lg:text-[32px] font-semibold font-poppins leading-[120%] tracking-[0%] text-black">You Can Trust</h3>
             <p className="text-base md:text-lg text-black font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-              Lorem ipsum dolor sit amet consectetur. Donec blandit nisi elementum sed sed odio.
+            You Can Trust is a reliable room booking service offering comfortable, affordable stays with a seamless reservation experience. Book with confidence—your comfort is our priority.
             </p>
           </div>
           </div>
@@ -34,7 +34,7 @@ export default function HowItWorks() {
             <div className="pr-12">
             <h3 className="text-xl md:text-2xl lg:text-[32px] font-semibold font-poppins leading-[120%] tracking-[0%] text-black">Fast & Reliable</h3>
             <p className="text-base md:text-lg text-black font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-              Lorem ipsum dolor sit amet consectetur. Donec blandit nisi elementum sed sed odio.
+              Enjoy fast and reliable room booking with You Can Trust — secure your perfect stay in just a few clicks!
             </p>
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function HowItWorks() {
           <div className="pr-12">
           <h3 className="text-xl md:text-2xl lg:text-[32px] font-semibold font-poppins leading-[120%] tracking-[0%] text-black">Safety and Quality</h3>
             <p className="text-base md:text-lg text-black font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-              Lorem ipsum dolor sit amet consectetur. Donec blandit nisi elementum sed sed odio.
+           At You Can Trust, we prioritize safety and quality — offering clean, secure, and well-maintained rooms for a worry-free stay.
             </p>
           </div>
           </div>
