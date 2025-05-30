@@ -36,7 +36,7 @@ export default function RoomGallery() {
       },
     {
       id: 3,
-      title: "3. A Private Space Made Just for You and Your Loved One",
+      title: "3. A Private Space Made Just for You and Your Love One",
       image:
         "/img/exp3.png",
       alt: "Couple sharing a moment in a cozy living room",
