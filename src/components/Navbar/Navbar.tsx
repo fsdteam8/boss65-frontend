@@ -28,7 +28,7 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/space", label: "Space" },
     { href: "/our-unique-experience", label: "Our Unique Experience" },
-    { href: "/updates", label: "Updates" },
+    // { href: "/updates", label: "Updates" },
     { href: "/contact", label: "Contact Us" },
   ];
 

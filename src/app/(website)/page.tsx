@@ -6,10 +6,10 @@ import PrivateRoomPromo from "@/components/PrivateRoom";
 import ReviewCarousel from "@/components/Review";
 import ShowRoom from "@/components/ShowRoom";
 import SocialSide from "@/components/SocialSide";
-import Updates from "@/components/ui/Updates";
+// import Updates from "@/components/ui/Updates";
 
 export default function Home() {
-  const data = 10
+  // const data = 10
   return (
     <div>
       <HeroSection heading={<PrivateRoomH1 />} />
@@ -17,7 +17,7 @@ export default function Home() {
       <HowItWorks />
       <PrivateRoomPromo />
       <SocialSide />
-      <Updates data={data} />
+      {/* <Updates data={data} /> */}
       <AsSeen />
       <ReviewCarousel /> 
   

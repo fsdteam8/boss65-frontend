@@ -12,11 +12,11 @@ export function TermsConditionPage() {
         {/* Introduction */}
         <div>
           <p className="mb-4">
-            These Terms of Service govern your use of the website located at https://thesocialchamber.com and any
+            These Terms of Service govern your use of the website located at thesocialchamber.com and any
             related services provided by The Social Chamber.
           </p>
           <p className="mb-4">
-            By accessing https://thesocialchamber.com, you agree to abide by these Terms of Service and to comply with
+            By accessing thesocialchamber.com, you agree to abide by these Terms of Service and to comply with
             all applicable laws and regulations. If you do not agree with these Terms of Service, you are prohibited
             from using or accessing this website or using any other services provided by The Social Chamber.
           </p>
