@@ -1,11 +1,12 @@
-
 import Image from "next/image";
 
 export default function HowItWorks() {
   return (
     <section className="bg-[#D95900]">
       <div className="container mx-auto py-5 md:py-8 lg:py-[40px]">
-        <h2 className="pb-[30px] md:pb-[38px] lg:pb-[48px] font-poppins text-center text-3xl md:text-[35px] lg:text-[40px] font-bold tracking-[0%] leading-[120%] text-white">How It Works</h2>
+        <h2 className="pb-[30px] md:pb-[38px] lg:pb-[48px] font-poppins text-center text-3xl md:text-[35px] lg:text-[40px] font-bold tracking-[0%] leading-[120%] text-white">
+          How It Works
+        </h2>
         <div className="relative grid grid-cols-1 md:grid-cols-3 gap-[40px] md:gap-[80px] lg:gap-[120px] ">
           {/* Feature 1 - Positioned higher */}
           <div className="flex flex-col w-[353px] md:items-start  md:text-left md:self-start">
@@ -28,8 +29,9 @@ export default function HowItWorks() {
                 You Can Trust
               </h3>
               <p className="text-base md:text-lg text-white font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-                Lorem ipsum dolor sit amet consectetur. Donec blandit nisi
-                elementum sed sed odio.
+                You Can Trust is a reliable room booking service offering
+                comfortable, affordable stays with a seamless reservation
+                experience. Book with confidence—your comfort is our priority.
               </p>
             </div>
           </div>
@@ -55,8 +57,8 @@ export default function HowItWorks() {
                 Fast & Reliable
               </h3>
               <p className="text-base md:text-lg text-white font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-                Lorem ipsum dolor sit amet consectetur. Donec blandit nisi
-                elementum sed sed odio.
+                Enjoy fast and reliable room booking with You Can Trust — secure
+                your perfect stay in just a few clicks!.
               </p>
             </div>
           </div>
@@ -82,8 +84,8 @@ export default function HowItWorks() {
                 Safety and Quality
               </h3>
               <p className="text-base md:text-lg text-white font-normal font-poppins leadng-[120%] tracking-[0%] pt-[16px] md:pt-[20px] lg:pt-[26px]">
-                Lorem ipsum dolor sit amet consectetur. Donec blandit nisi
-                elementum sed sed odio.
+                At You Can Trust, we prioritize safety and quality — offering
+                clean, secure, and well-maintained rooms for a worry-free stay.
               </p>
             </div>
           </div>

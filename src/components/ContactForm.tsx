@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { MapPin, Mail, PhoneCall } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -67,30 +67,30 @@ export default function ContactForm() {
               Contact Information
             </h2>
             <p className="text-[#595959] text-base font-poppins leading-[120%] tracking-[0%]">
-              Say something to start a live chat!
+              Let&apos;s Talk – We&apos;re Here to Help!
             </p>
 
             <div className="space-y-6 md:space-y-7 lg:space-y-[30px] mt-10 md:mt-16 lg:mt-[120px]">
-              <div className="flex items-center gap-5 md:gap-[25px]">
+              {/* <div className="flex items-center gap-5 md:gap-[25px]">
                 <PhoneCall className="w-6 h-6" />
                 <span className="text-sm font-normal font-poppins leading-[120%] tracking-[0%] text-black">
                   +1 (888) 000-0000
                 </span>
-              </div>
+              </div> */}
 
               <div className="flex items-center gap-5 md:gap-[25px]">
                 <Mail className="w-6 h-6" />
                 <span className="text-sm font-normal font-poppins leading-[120%] tracking-[0%] text-black">
-                  info@abc223.com
+                  thesocialchambersg@gmail.com
                 </span>
               </div>
 
               <div className="flex items-start gap-5 md:gap-[25px]">
                 <MapPin className="w-6 h-6" />
                 <span className="text-sm font-normal font-poppins leading-[120%] tracking-[0%] text-black">
-                  00000 Artesia Blvd., Suite A-000. Cerritos,
+                11 Mosque St, #02-01, Singapore 
                   <br />
-                  CA 00000-0000
+                 059491
                 </span>
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function ContactForm() {
             <div>
               <textarea
                 name="body"
-                placeholder="Your Text......"
+                placeholder="Your Message......"
                 value={formData.body}
                 onChange={handleChange}
                 rows={5}
