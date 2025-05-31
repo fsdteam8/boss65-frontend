@@ -180,6 +180,9 @@ export function BookingTable() {
                 Name
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
+                Phone
+              </th>
+              <th className="px-4 py-3 text-sm font-medium text-gray-500">
                 Rooms
               </th>
               <th className="px-4 py-3 text-sm font-medium text-gray-500">
@@ -220,6 +223,10 @@ export function BookingTable() {
                   </td>
                   <td className="px-4 py-4 text-sm">
                     {booking.user?.firstName} {booking.user?.lastName}
+                  </td>
+                  <td className="px-4 py-4 text-sm">
+                     {booking.user?.phone}
+                  
                   </td>
                   <td className="px-4 py-4 text-sm">{booking.room?.title}</td>
                   <td className="px-4 py-4 text-sm">
