@@ -1,20 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
 import { format } from "date-fns"
 import { toast } from "sonner"
-import { Loader2, Mail } from "lucide-react"
+import { Loader2, Mail, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import EmailSendingModal from "@/components/ui/email-sending-modal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import type { BookingStatus } from "@/types/booking"
+// import type { BookingStatus } from "@/types/bookingDataType/bookingDataType"
 import type { BookingApiResponse } from "@/types/bookingDataType/bookingDataType"
 import DateRangePickerUpdate from "./DateRangePicker"
 import { Pagination } from "@/components/ui/pagination"
+import { BookingStatus } from "@/types/booking"
 
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
@@ -30,9 +31,40 @@ interface SelectedData {
   daysDifference: number
 }
 
+// interface TimeSlot {
+//   start?: string
+//   end?: string
+// }
+
+type SortOrder = "asc" | "desc" | null
+
+// Utility function to format time with proper type safety
+const formatTime = (timeStr: string | undefined): string => {
+  if (!timeStr) return ""
+
+  const [hourStr, minuteStr = "00"] = timeStr.split(":")
+  const hour = Number.parseInt(hourStr, 10)
+  const minute = Number.parseInt(minuteStr, 10)
+
+  if (isNaN(hour) || isNaN(minute)) return ""
+
+  const date = new Date()
+  date.setHours(hour)
+  date.setMinutes(minute)
+
+  return date
+    .toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase()
+}
+
 export function BookingTable() {
   const [status, setStatus] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const [sortOrder, setSortOrder] = useState<SortOrder>(null)
   const [defaultDateRange, setDefaultDateRange] = useState({
     from: new Date(),
     to: new Date(),
@@ -42,12 +74,11 @@ export function BookingTable() {
   const token = (session?.user as { accessToken: string })?.accessToken
 
   const [selectedData, setSelectedData] = useState<SelectedData | null>(null)
-  console.log(selectedData?.queryParams)
 
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
     queryKey: ["booking", currentPage, status, selectedData],
     queryFn: async () => {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}&${selectedData?.queryParams}&page=${currentPage}`
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking?status=${status || ""}&${selectedData?.queryParams || ""}&page=${currentPage}`
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -57,7 +88,41 @@ export function BookingTable() {
     enabled: !!token,
   })
 
-  // console.log(data?.data?.pagination);
+  // Sort bookings by date
+  const sortedBookings = useMemo(() => {
+    if (!data?.data?.bookings || !sortOrder) {
+      return data?.data?.bookings || []
+    }
+
+    const bookings = [...data.data.bookings]
+
+    return bookings.sort((a, b) => {
+      const dateA = new Date(a.date).getTime()
+      const dateB = new Date(b.date).getTime()
+
+      if (sortOrder === "asc") {
+        return dateA - dateB
+      } else {
+        return dateB - dateA
+      }
+    })
+  }, [data?.data?.bookings, sortOrder])
+
+  const handleSortByDate = () => {
+    if (sortOrder === null) {
+      setSortOrder("asc")
+    } else if (sortOrder === "asc") {
+      setSortOrder("desc")
+    } else {
+      setSortOrder(null)
+    }
+  }
+
+  const getSortIcon = () => {
+    if (sortOrder === "asc") return <ArrowUp className="h-4 w-4" />
+    if (sortOrder === "desc") return <ArrowDown className="h-4 w-4" />
+    return <ArrowUpDown className="h-4 w-4" />
+  }
 
   const updateBookingStatus = async (bookingId: string, newStatus: BookingStatus) => {
     setUpdatingId(bookingId)
@@ -80,27 +145,6 @@ export function BookingTable() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        <span className="ml-2">Loading ...</span>
-      </div>
-    )
-  }
-
-  // data picker
-
-  // const handleDateRangeChange = (data: {
-  //   dateRange: { from: Date | null; to: Date | null };
-  //   queryParams: string;
-  //   compare: boolean;
-  //   daysDifference: number;
-  // }) => {
-  //   setSelectedData(data);
-  //   console.log("Received in parent component:", data);
-  // };
-
   const handleDateRangeChange = (data: {
     dateRange: { from: Date | null; to: Date | null }
     queryParams: string
@@ -109,15 +153,21 @@ export function BookingTable() {
   }) => {
     setSelectedData(data)
 
-    // ✅ Update default date range based on the received range
     if (data.dateRange.from && data.dateRange.to) {
       setDefaultDateRange({
         from: data.dateRange.from,
         to: data.dateRange.to,
       })
     }
+  }
 
-    console.log("Received in parent component:", data)
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <span className="ml-2">Loading...</span>
+      </div>
+    )
   }
 
   return (
@@ -131,21 +181,12 @@ export function BookingTable() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="confirmed">Confirmed</SelectItem>
-              {/* <SelectItem value="pending">Pending</SelectItem> */}
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
           </Select>
 
-          <DateRangePickerUpdate
-            onDateRangeChange={handleDateRangeChange}
-            // defaultDateRange={{
-            //   from: new Date(2025, 4, 27), // May 27, 2025
-            //   to: new Date(2025, 5, 12), // June 12, 2025
-            // }}
-
-            defaultDateRange={defaultDateRange}
-          />
+          <DateRangePickerUpdate onDateRangeChange={handleDateRangeChange} defaultDateRange={defaultDateRange} />
         </div>
       </div>
 
@@ -161,78 +202,49 @@ export function BookingTable() {
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Category</th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500 text-center">People</th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Service</th>
-                <th className="px-4 py-3 text-sm font-medium text-gray-500 min-w-[140px]">Date & Time</th>
+                <th className="px-4 py-3 text-sm font-medium text-gray-500 min-w-[140px]">
+                  <button
+                    onClick={handleSortByDate}
+                    className="flex items-center gap-1 hover:text-gray-700 transition-colors"
+                  >
+                    Date & Time
+                    {getSortIcon()}
+                  </button>
+                </th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Amount</th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Status</th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Action</th>
               </tr>
             </thead>
             <tbody>
-              {data?.data?.bookings?.map((booking) => {
+              {sortedBookings?.map((booking) => {
                 const badgeClass = statusStyles[booking.status] ?? "bg-gray-100 text-gray-700 border-gray-300"
-
                 const isUpdating = updatingId === booking._id
 
                 return (
                   <tr key={booking._id} className="border-b">
                     <td className="px-4 py-4 text-sm">{booking._id?.slice(0, 6)}...</td>
                     <td className="px-4 py-4 text-sm">
-                      {booking.user?.firstName} {booking.user?.lastName}
+                      {booking.user?.firstName || ""} {booking.user?.lastName || ""}
                     </td>
-                    <td className="px-4 py-4 text-sm">{booking.user?.phone}</td>
-                    <td className="px-4 py-4 text-sm">{booking.room?.title}</td>
-                    <td className="px-4 py-4 text-sm">{booking?.service?.category?.name}</td>
-                    <td className="px-4 py-4 text-sm text-center">{booking.user?.numberOfPeople}</td>
-                    <td className="px-4 py-4 text-sm">{booking.service?.name}</td>
+                    <td className="px-4 py-4 text-sm">{booking.user?.phone || "-"}</td>
+                    <td className="px-4 py-4 text-sm">{booking.room?.title || "-"}</td>
+                    <td className="px-4 py-4 text-sm">{booking?.service?.category?.name || "-"}</td>
+                    <td className="px-4 py-4 text-sm text-center">{booking.user?.numberOfPeople || "-"}</td>
+                    <td className="px-4 py-4 text-sm">{booking.service?.name || "-"}</td>
                     <td className="px-4 py-4 text-sm min-w-[140px]">
                       <div className="space-y-1">
                         <div className="font-medium">{format(new Date(booking.date), "MMM dd, yyyy")}</div>
-                       
-{/*                        
                         <div className="space-y-0.5">
                           {booking.timeSlots?.map((slot, i) => (
                             <div key={i} className="text-xs text-gray-600 whitespace-nowrap">
-                              {slot.start}-{slot.end}
+                              {formatTime(slot.start)} - {formatTime(slot.end)}
                             </div>
                           ))}
-                        </div> */}
-
-<div className="space-y-0.5">
-  {booking.timeSlots?.map((slot, i) => {
-    const formatTime = (timeStr: string | undefined): string => {
-      if (!timeStr) return ''; // Guard clause for undefined/null
-
-      const [hourStr, minuteStr = '00'] = timeStr.split(':');
-      const hour = parseInt(hourStr, 10);
-      const minute = parseInt(minuteStr, 10);
-
-      if (isNaN(hour) || isNaN(minute)) return '';
-
-      const date = new Date();
-      date.setHours(hour);
-      date.setMinutes(minute);
-
-      return date.toLocaleTimeString([], {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      }).toLowerCase(); // e.g., "6:00 am"
-    };
-
-    return (
-      <div key={i} className="text-xs text-gray-600 whitespace-nowrap">
-        {formatTime(slot.start)} - {formatTime(slot.end)}
-      </div>
-    );
-  })}
-</div>
-
-
-
-
+                        </div>
                       </div>
                     </td>
-                    <td className="px-4 py-4 text-sm">${booking.total?.toFixed(2)}</td>
+                    <td className="px-4 py-4 text-sm">${booking.total?.toFixed(2) || "0.00"}</td>
                     <td className="px-4 py-4 text-sm">
                       <Select
                         defaultValue={booking.status}
@@ -244,7 +256,6 @@ export function BookingTable() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="confirmed">Confirmed</SelectItem>
-                          {/* <SelectItem value="pending">Pending</SelectItem> */}
                           <SelectItem value="refunded">Refunded</SelectItem>
                           <SelectItem value="cancelled">Cancelled</SelectItem>
                         </SelectContent>
@@ -267,11 +278,11 @@ export function BookingTable() {
             </tbody>
           </table>
           <div className="bg-white rounded-b-[8px] py-4">
-            {data && data?.data && data?.data?.pagination && data?.data?.pagination?.totalPages > 1 && (
+            {data?.data?.pagination?.totalPages && data.data.pagination.totalPages > 1 && (
               <div className="flex justify-center">
                 <Pagination
                   currentPage={currentPage}
-                  totalResults={data?.data?.pagination?.totalData}
+                  totalResults={data?.data?.pagination?.totalData || 0}
                   resultsPerPage={10}
                   onPageChange={setCurrentPage}
                 />
