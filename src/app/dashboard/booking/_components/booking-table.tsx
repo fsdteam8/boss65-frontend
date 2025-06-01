@@ -187,13 +187,49 @@ export function BookingTable() {
                     <td className="px-4 py-4 text-sm min-w-[140px]">
                       <div className="space-y-1">
                         <div className="font-medium">{format(new Date(booking.date), "MMM dd, yyyy")}</div>
+                       
+{/*                        
                         <div className="space-y-0.5">
                           {booking.timeSlots?.map((slot, i) => (
                             <div key={i} className="text-xs text-gray-600 whitespace-nowrap">
                               {slot.start}-{slot.end}
                             </div>
                           ))}
-                        </div>
+                        </div> */}
+
+<div className="space-y-0.5">
+  {booking.timeSlots?.map((slot, i) => {
+    const formatTime = (timeStr: string | undefined): string => {
+      if (!timeStr) return ''; // Guard clause for undefined/null
+
+      const [hourStr, minuteStr = '00'] = timeStr.split(':');
+      const hour = parseInt(hourStr, 10);
+      const minute = parseInt(minuteStr, 10);
+
+      if (isNaN(hour) || isNaN(minute)) return '';
+
+      const date = new Date();
+      date.setHours(hour);
+      date.setMinutes(minute);
+
+      return date.toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      }).toLowerCase(); // e.g., "6:00 am"
+    };
+
+    return (
+      <div key={i} className="text-xs text-gray-600 whitespace-nowrap">
+        {formatTime(slot.start)} - {formatTime(slot.end)}
+      </div>
+    );
+  })}
+</div>
+
+
+
+
                       </div>
                     </td>
                     <td className="px-4 py-4 text-sm">${booking.total?.toFixed(2)}</td>
