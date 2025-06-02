@@ -223,7 +223,8 @@ export function BookingTable() {
 
                 return (
                   <tr key={booking._id} className="border-b">
-                    <td className="px-4 py-4 text-sm">{booking._id?.slice(0, 6)}...</td>
+                    {/* <td className="px-4 py-4 text-sm">{booking._id?.slice(0, 6)}...</td>  */}
+                    <td className="px-4 py-4 text-sm">{booking._id}</td>
                     <td className="px-4 py-4 text-sm">
                       {booking.user?.firstName || ""} {booking.user?.lastName || ""}
                     </td>
