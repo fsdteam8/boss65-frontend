@@ -47,6 +47,11 @@ export function DashboardSidebar() {
       icon: Calendar,
     },
     {
+      name: "Manual Booking",
+      href: "/dashboard/manual-booking",
+      icon: Calendar,
+    },
+    {
       name: "Content",
       href: "/dashboard/content",
       icon: FileText,
