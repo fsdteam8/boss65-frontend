@@ -20,6 +20,10 @@ import { useBookingStore } from "@/store/booking";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { useSession } from "next-auth/react";
+
+
+
 const bookingSchema = z.object({
   firstName: z.string().min(1, "Required"),
   lastName: z.string().min(1, "Required"),
@@ -71,6 +75,10 @@ export default function ConfirmDetails() {
         window.location.href = data.data.url;
       },
     });
+
+  const { data: session } = useSession();
+  const token = (session?.user as { accessToken: string })?.accessToken;
+
 
   const { isPending, mutate } = useMutation({
     mutationKey: ["booking"],
@@ -162,6 +170,9 @@ export default function ConfirmDetails() {
     mutate(payload);
   };
   console.log();
+
+
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="border rounded-lg p-6">
@@ -307,6 +318,18 @@ export default function ConfirmDetails() {
                 </FormItem>
               )}
             />
+
+            {/* Menual Booking */}
+              {token ? (
+        <label>
+          <input className="my-5" type="checkbox" /> 
+       <span className="font-bold text-orange-500">    Menual Booking ( Only For Admin)</span>
+        </label>
+      ) : (
+        <p></p>
+      )}
+
+
 
             <Button
               type="submit"
