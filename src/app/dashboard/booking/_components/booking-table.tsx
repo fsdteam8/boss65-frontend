@@ -61,9 +61,9 @@ export function BookingTable() {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortOrder, setSortOrder] = useState<SortOrder>(null)
   const [showTodayOnly, setShowTodayOnly] = useState(false)
-  const [defaultDateRange, setDefaultDateRange] = useState({
-    from: new Date(),
-    to: new Date(),
+  const [defaultDateRange] = useState({
+    from: null,
+  to: null,
   })
   const [updatingId, setUpdatingId] = useState<string | null>(null)
   const { data: session } = useSession()
@@ -162,10 +162,10 @@ export function BookingTable() {
     setShowTodayOnly(false) // Reset today filter when date range changes
 
     if (data.dateRange.from && data.dateRange.to) {
-      setDefaultDateRange({
-        from: data.dateRange.from,
-        to: data.dateRange.to,
-      })
+      // setDefaultDateRange({
+      //   from: data.dateRange.from,
+      //   to: data.dateRange.to,
+      // })
     }
   }
 
