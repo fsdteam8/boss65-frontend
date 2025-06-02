@@ -3,9 +3,9 @@
 import { useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
-import { format } from "date-fns"
+import { format, isToday } from "date-fns"
 import { toast } from "sonner"
-import { Loader2, Mail, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
+import { Loader2, Mail, ArrowUpDown, ArrowUp, ArrowDown, Calendar } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import EmailSendingModal from "@/components/ui/email-sending-modal"
@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { BookingApiResponse } from "@/types/bookingDataType/bookingDataType"
 import DateRangePickerUpdate from "./DateRangePicker"
 import { Pagination } from "@/components/ui/pagination"
-import { BookingStatus } from "@/types/booking"
+import type { BookingStatus } from "@/types/booking"
 
 const statusStyles: Record<BookingStatus, string> = {
   confirmed: "bg-green-100 text-green-700 border-green-300",
@@ -30,11 +30,6 @@ interface SelectedData {
   compare: boolean
   daysDifference: number
 }
-
-// interface TimeSlot {
-//   start?: string
-//   end?: string
-// }
 
 type SortOrder = "asc" | "desc" | null
 
@@ -65,9 +60,10 @@ export function BookingTable() {
   const [status, setStatus] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [sortOrder, setSortOrder] = useState<SortOrder>(null)
-  const [defaultDateRange, setDefaultDateRange] = useState({
-    from: new Date(),
-    to: new Date(),
+  const [showTodayOnly, setShowTodayOnly] = useState(false)
+  const [defaultDateRange] = useState({
+    from: null,
+  to: null,
   })
   const [updatingId, setUpdatingId] = useState<string | null>(null)
   const { data: session } = useSession()
@@ -88,25 +84,31 @@ export function BookingTable() {
     enabled: !!token,
   })
 
-  // Sort bookings by date
-  const sortedBookings = useMemo(() => {
-    if (!data?.data?.bookings || !sortOrder) {
-      return data?.data?.bookings || []
+  // Filter and sort bookings
+  const filteredAndSortedBookings = useMemo(() => {
+    let bookings = data?.data?.bookings || []
+
+    // Filter for today's bookings if showTodayOnly is true
+    if (showTodayOnly) {
+      bookings = bookings.filter((booking) => isToday(new Date(booking.date)))
     }
 
-    const bookings = [...data.data.bookings]
+    // Sort bookings by date if sortOrder is set
+    if (sortOrder) {
+      bookings = [...bookings].sort((a, b) => {
+        const dateA = new Date(a.date).getTime()
+        const dateB = new Date(b.date).getTime()
 
-    return bookings.sort((a, b) => {
-      const dateA = new Date(a.date).getTime()
-      const dateB = new Date(b.date).getTime()
+        if (sortOrder === "asc") {
+          return dateA - dateB
+        } else {
+          return dateB - dateA
+        }
+      })
+    }
 
-      if (sortOrder === "asc") {
-        return dateA - dateB
-      } else {
-        return dateB - dateA
-      }
-    })
-  }, [data?.data?.bookings, sortOrder])
+    return bookings
+  }, [data?.data?.bookings, sortOrder, showTodayOnly])
 
   const handleSortByDate = () => {
     if (sortOrder === null) {
@@ -116,6 +118,11 @@ export function BookingTable() {
     } else {
       setSortOrder(null)
     }
+  }
+
+  const handleTodayFilter = () => {
+    setShowTodayOnly(!showTodayOnly)
+    setCurrentPage(1) // Reset to first page when filtering
   }
 
   const getSortIcon = () => {
@@ -152,12 +159,13 @@ export function BookingTable() {
     daysDifference: number
   }) => {
     setSelectedData(data)
+    setShowTodayOnly(false) // Reset today filter when date range changes
 
     if (data.dateRange.from && data.dateRange.to) {
-      setDefaultDateRange({
-        from: data.dateRange.from,
-        to: data.dateRange.to,
-      })
+      // setDefaultDateRange({
+      //   from: data.dateRange.from,
+      //   to: data.dateRange.to,
+      // })
     }
   }
 
@@ -185,6 +193,15 @@ export function BookingTable() {
               <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
           </Select>
+
+          <Button
+            onClick={handleTodayFilter}
+            variant={showTodayOnly ? "default" : "outline"}
+            className="w-full sm:w-auto"
+          >
+            <Calendar className="h-4 w-4 mr-2" />
+            Today
+          </Button>
 
           <DateRangePickerUpdate onDateRangeChange={handleDateRangeChange} defaultDateRange={defaultDateRange} />
         </div>
@@ -217,13 +234,13 @@ export function BookingTable() {
               </tr>
             </thead>
             <tbody>
-              {sortedBookings?.map((booking) => {
+              {filteredAndSortedBookings?.map((booking) => {
                 const badgeClass = statusStyles[booking.status] ?? "bg-gray-100 text-gray-700 border-gray-300"
                 const isUpdating = updatingId === booking._id
 
                 return (
                   <tr key={booking._id} className="border-b">
-                    <td className="px-4 py-4 text-sm">{booking._id?.slice(0, 6)}...</td>
+                    <td className="px-4 py-4 text-sm">{booking._id}</td>
                     <td className="px-4 py-4 text-sm">
                       {booking.user?.firstName || ""} {booking.user?.lastName || ""}
                     </td>
@@ -291,6 +308,14 @@ export function BookingTable() {
           </div>
         </div>
       </div>
+
+      {showTodayOnly && (
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-sm text-blue-700">
+            Showing only today&apos;s bookings ({filteredAndSortedBookings.length} found)
+          </p>
+        </div>
+      )}
     </div>
   )
 }
