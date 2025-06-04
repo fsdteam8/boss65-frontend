@@ -68,7 +68,6 @@ export function BookingTable() {
   const [updatingId, setUpdatingId] = useState<string | null>(null)
   const { data: session } = useSession()
   const token = (session?.user as { accessToken: string })?.accessToken
-
   const [selectedData, setSelectedData] = useState<SelectedData | null>(null)
 
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
@@ -273,8 +272,8 @@ export function BookingTable() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="confirmed">Confirmed</SelectItem>
-                          <SelectItem value="refunded">Refunded</SelectItem>
-                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                          <SelectItem value="refunded" disabled={booking.isManualBooking}>Refunded</SelectItem>
+                          <SelectItem value="cancelled" disabled={booking.isManualBooking}>Cancelled</SelectItem>
                         </SelectContent>
                       </Select>
                     </td>
