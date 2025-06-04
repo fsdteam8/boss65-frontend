@@ -46,11 +46,7 @@ export function DashboardSidebar() {
       href: "/dashboard/booking",
       icon: Calendar,
     },
-    {
-      name: "Manual Booking",
-      href: "/dashboard/manual-booking",
-      icon: Calendar,
-    },
+  
     {
       name: "Content",
       href: "/dashboard/content",

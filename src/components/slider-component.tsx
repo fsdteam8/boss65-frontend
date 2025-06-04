@@ -15,7 +15,7 @@ export default function StaticSlider() {
     },
     {
       id: 2,
-      image: "/img/exp2.png",
+      image: "/img/img1.jpg",
       title: "1. Private Movie Room Experience",
       subtitle: "No CCTV, No Disturbance!",
       description:
@@ -23,7 +23,7 @@ export default function StaticSlider() {
     },
     {
       id: 3,
-      image: "/img/exp3.png",
+      image: "/img/exp2.png",
       title: "2. HUGE place for group gathering",
       subtitle: "No CCTV, No Disturbance!",
       description:
