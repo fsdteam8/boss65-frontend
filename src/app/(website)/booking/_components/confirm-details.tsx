@@ -20,6 +20,10 @@ import { useBookingStore } from "@/store/booking";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { useSession } from "next-auth/react";
+
+
+
 const bookingSchema = z.object({
   firstName: z.string().min(1, "Required"),
   lastName: z.string().min(1, "Required"),
@@ -72,28 +76,76 @@ export default function ConfirmDetails() {
       },
     });
 
-  const { isPending, mutate } = useMutation({
-    mutationKey: ["booking"],
-    mutationFn: (body: any) =>
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }).then((res) => res.json()),
-    onSuccess: (data) => {
-      if (!data.status) {
-        toast.error(data.message);
-        return;
-      }
-      // call with booking id
-      paymentIntent(data.data._id);
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { data: session } = useSession();
+  const token = (session?.user as { accessToken: string })?.accessToken;
+
+// bokking 
+  // const { isPending, mutate } = useMutation({
+  //   mutationKey: ["booking"],
+  //   mutationFn: (body: any) =>
+  //     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking`, {
+  //       method: "POST",
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //       body: JSON.stringify(body),
+  //     }).then((res) => res.json()),
+  //   onSuccess: (data) => {
+  //     if (!data.status) {
+  //       toast.error(data.message);
+  //       return;
+  //     }
+  //     // call with booking id
+  //     paymentIntent(data.data._id);
+  //   },
+  //   onError: (err) => {
+  //     toast.error(err.message);
+  //   },
+  // });
+
+
+  // manual booking 
+
+const { isPending, mutate } = useMutation({
+  mutationKey: ["booking"],
+  mutationFn: (body: any) => {
+    const headers: HeadersInit = {
+      "content-type": "application/json",
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    }).then((res) => res.json());
+  },
+  onSuccess: (data) => {
+    if (!data.status) {
+      toast.error(data.message);
+      return;
+    }
+
+    // Conditional logic based on token
+    if (!token) {
+      paymentIntent(data.data._id); // Guests go to payment
+    } else {
+      toast.success("Manual booking completed successfully");
+      // setStep("success"); // Show success to admin
+    }
+  },
+  onError: (err: any) => {
+    toast.error(err.message);
+  },
+});
+
+
+
+
+
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -162,6 +214,9 @@ export default function ConfirmDetails() {
     mutate(payload);
   };
   console.log();
+
+
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="border rounded-lg p-6">
@@ -307,6 +362,18 @@ export default function ConfirmDetails() {
                 </FormItem>
               )}
             />
+
+            {/* Menual Booking */}
+              {token ? (
+        <div>
+          {/* <input className="my-5" type="checkbox" />  */}
+       <p className="font-bold text-orange-500 my-2">    Menual Booking ( Only For Admin)</p>
+        </div>
+      ) : (
+        <p></p>
+      )}
+
+
 
             <Button
               type="submit"

@@ -8,6 +8,7 @@ export interface BookingApiResponse {
 }
 
 export interface Booking {
+   isManualBooking: boolean;
   user: {
     firstName: string;
     lastName: string;
