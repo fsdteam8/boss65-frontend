@@ -1,9 +1,9 @@
 "use client";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Calendar } from "lucide-react";
+import { X, Calendar as CalendarIcon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { DayPicker } from "react-day-picker";
@@ -103,15 +103,14 @@ export default function CreatePromoModal({
     const data = {
       code: promoCode,
       discountType,
-      discountValue,
-      expiryDate: expirationDate.toISOString().split("T")[0], // format YYYY-MM-DD
+      discountValue: Number(discountValue),
+      expiryDate: expirationDate.toISOString().split("T")[0],
       usageLimit: Number(usageLimit),
     };
 
     mutation.mutate({ data, token });
   };
 
-  // Close calendar on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -139,7 +138,12 @@ export default function CreatePromoModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px] p-6 overflow-hidden rounded-lg">
+     <DialogHeader>
+       <DialogTitle >
+        .
+      </DialogTitle>
+     </DialogHeader>
+      <DialogContent className="sm:max-w-[700px] p-6 overflow-visible rounded-lg">
         <div className="p-4">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-medium text-[#FF6B00]">
@@ -180,6 +184,7 @@ export default function CreatePromoModal({
           <div className="grid grid-cols-[120px,1fr] items-center gap-2">
             <div className="text-sm font-medium">Discount Value :</div>
             <Input
+              type="number"
               value={discountValue}
               onChange={(e) => setDiscountValue(e.target.value)}
               className="bg-white"
@@ -200,12 +205,12 @@ export default function CreatePromoModal({
                 onClick={() => setCalendarOpen((open) => !open)}
                 className="bg-white cursor-pointer pr-10"
               />
-              <Calendar
+              <CalendarIcon
                 onClick={() => setCalendarOpen((open) => !open)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
               />
               {calendarOpen && (
-                <div className="absolute z-50 mt-2 bg-white rounded-md shadow-lg">
+                <div className="absolute top-full left-0 z-50 mt-2 bg-white rounded-md shadow-lg overflow-visible">
                   <DayPicker
                     mode="single"
                     selected={expirationDate}
