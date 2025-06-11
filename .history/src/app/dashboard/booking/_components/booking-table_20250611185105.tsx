@@ -85,7 +85,6 @@ export function BookingTable() {
     },
     enabled: !!token,
   })
-  
   useEffect(() => {
     if (data?.data?.pagination?.currentPage && data.data.pagination.currentPage !== currentPage) {
       setCurrentPage(data.data.pagination.currentPage)
