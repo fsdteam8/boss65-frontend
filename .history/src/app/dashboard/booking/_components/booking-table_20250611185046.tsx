@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
@@ -71,7 +70,11 @@ export function BookingTable() {
   const token = (session?.user as { accessToken: string })?.accessToken
   const [selectedData, setSelectedData] = useState<SelectedData | null>(null)
 
- 
+  useEffect(() => {
+    if (data?.data?.pagination?.currentPage && data.data.pagination.currentPage !== currentPage) {
+      setCurrentPage(data.data.pagination.currentPage)
+    }
+  }, [data?.data?.pagination?.currentPage])
 
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
     queryKey: ["booking", currentPage, status, selectedData],
@@ -85,12 +88,6 @@ export function BookingTable() {
     },
     enabled: !!token,
   })
-  
-  useEffect(() => {
-    if (data?.data?.pagination?.currentPage && data.data.pagination.currentPage !== currentPage) {
-      setCurrentPage(data.data.pagination.currentPage)
-    }
-  }, [data?.data?.pagination?.currentPage])
 
   // Filter and sort bookings
   const filteredAndSortedBookings = useMemo(() => {

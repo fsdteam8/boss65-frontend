@@ -129,8 +129,7 @@ const { isPending, mutate } = useMutation({
       toast.error(data.message);
       return;
     }
-
-    form.reset(); // Reset the form after successful booking
+    
 
     // Conditional logic based on token
     if (!token) {

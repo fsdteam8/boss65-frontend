@@ -130,7 +130,7 @@ const { isPending, mutate } = useMutation({
       return;
     }
 
-    form.reset(); // Reset the form after successful booking
+    
 
     // Conditional logic based on token
     if (!token) {
