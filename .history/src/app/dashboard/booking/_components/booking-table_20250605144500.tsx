@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
 import { format, isToday } from "date-fns"
@@ -64,14 +63,12 @@ export function BookingTable() {
   const [showTodayOnly, setShowTodayOnly] = useState(false)
   const [defaultDateRange] = useState({
     from: null,
-    to: null,
+  to: null,
   })
   const [updatingId, setUpdatingId] = useState<string | null>(null)
   const { data: session } = useSession()
   const token = (session?.user as { accessToken: string })?.accessToken
   const [selectedData, setSelectedData] = useState<SelectedData | null>(null)
-
- 
 
   const { data, isLoading, refetch } = useQuery<BookingApiResponse>({
     queryKey: ["booking", currentPage, status, selectedData],
@@ -85,12 +82,6 @@ export function BookingTable() {
     },
     enabled: !!token,
   })
-  
-  useEffect(() => {
-    if (data?.data?.pagination?.currentPage && data.data.pagination.currentPage !== currentPage) {
-      setCurrentPage(data.data.pagination.currentPage)
-    }
-  }, [data?.data?.pagination?.currentPage])
 
   // Filter and sort bookings
   const filteredAndSortedBookings = useMemo(() => {
@@ -168,7 +159,6 @@ export function BookingTable() {
   }) => {
     setSelectedData(data)
     setShowTodayOnly(false) // Reset today filter when date range changes
-    setCurrentPage(1) // Reset to first page when date range changes
 
     if (data.dateRange.from && data.dateRange.to) {
       // setDefaultDateRange({
@@ -190,15 +180,9 @@ export function BookingTable() {
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-[30px] md:mb-[60px]">
-        <h1 className="text-2xl font-bold">Booking 41561Management</h1>
+        <h1 className="text-2xl font-bold">Booking Management</h1>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-10">
-          <Select
-            value={status}
-            onValueChange={(value) => {
-              setStatus(value)
-              setCurrentPage(1) // Reset to first page when status changes
-            }}
-          >
+          <Select value={status} onValueChange={(value) => setStatus(value)}>
             <SelectTrigger className="w-full sm:w-[180px] bg-white placeholder:text-black text-black/90 font-bold focus:ring-0 border border-black/20">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -288,12 +272,8 @@ export function BookingTable() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="confirmed">Confirmed</SelectItem>
-                          <SelectItem value="refunded" disabled={booking.isManualBooking}>
-                            Refunded
-                          </SelectItem>
-                          <SelectItem value="cancelled" disabled={booking.isManualBooking}>
-                            Cancelled
-                          </SelectItem>
+                          <SelectItem value="refunded" disabled={booking.isManualBooking}>Refunded</SelectItem>
+                          <SelectItem value="cancelled" disabled={booking.isManualBooking}>Cancelled</SelectItem>
                         </SelectContent>
                       </Select>
                     </td>
@@ -317,11 +297,9 @@ export function BookingTable() {
             {data?.data?.pagination?.totalPages && data.data.pagination.totalPages > 1 && (
               <div className="flex justify-center">
                 <Pagination
-                  currentPage={data?.data?.pagination?.currentPage || 1}
+                  currentPage={currentPage}
                   totalResults={data?.data?.pagination?.totalData || 0}
-                  resultsPerPage={Math.ceil(
-                    (data?.data?.pagination?.totalData || 0) / (data?.data?.pagination?.totalPages || 1),
-                  )}
+                  resultsPerPage={10}
                   onPageChange={setCurrentPage}
                 />
               </div>
