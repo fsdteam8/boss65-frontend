@@ -25,16 +25,16 @@ export default function SendModal({
   onClose,
   promoCode,
 }: SendPromoCodeModalProps) {
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("Space Room");
   const [body, setBody] = useState("Text");
   const token = localStorage.getItem("token");
 
   const handleSend = async () => {
-    // if (!email || !subject || !body) {
-    //   toast.error("All fields are required.");
-    //   return;
-    // }
+    if (!email || !subject || !body) {
+      toast.error("All fields are required.");
+      return;
+    }
 
     try {
       toast.loading("Sending promo code...", { id: "sendToast" });
@@ -47,7 +47,7 @@ export default function SendModal({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({  subject, body, promoCode }),
+          body: JSON.stringify({ email, subject, body, promoCode }),
         }
       );
 
@@ -97,7 +97,7 @@ export default function SendModal({
   </div>
 
   {/* Email */}
-  {/* <div className="grid grid-cols-[100px_1fr] gap-4 items-center">
+  <div className="grid grid-cols-[100px_1fr] gap-4 items-center">
     <Label className="text-sm font-medium text-black">Email:</Label>
     <Input
       type="email"
@@ -106,7 +106,7 @@ export default function SendModal({
       placeholder="example@mail.com"
       className="bg-gray-50 border-gray-200 w-full"
     />
-  </div> */}
+  </div>
 
   {/* Subject */}
   <div className="grid grid-cols-[100px_1fr] gap-4 items-center">

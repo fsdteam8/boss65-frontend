@@ -47,7 +47,7 @@ export default function SendModal({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({  subject, body, promoCode }),
+          body: JSON.stringify({ email, subject, body, promoCode }),
         }
       );
 

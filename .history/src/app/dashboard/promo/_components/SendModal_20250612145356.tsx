@@ -25,16 +25,16 @@ export default function SendModal({
   onClose,
   promoCode,
 }: SendPromoCodeModalProps) {
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("Space Room");
   const [body, setBody] = useState("Text");
   const token = localStorage.getItem("token");
 
   const handleSend = async () => {
-    // if (!email || !subject || !body) {
-    //   toast.error("All fields are required.");
-    //   return;
-    // }
+    if (!email || !subject || !body) {
+      toast.error("All fields are required.");
+      return;
+    }
 
     try {
       toast.loading("Sending promo code...", { id: "sendToast" });
@@ -47,7 +47,7 @@ export default function SendModal({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({  subject, body, promoCode }),
+          body: JSON.stringify({ email, subject, body, promoCode }),
         }
       );
 
