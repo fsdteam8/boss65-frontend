@@ -6,10 +6,10 @@ import { useQuery } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
 import { format, isToday } from "date-fns"
 import { toast } from "sonner"
-import { Loader2, ArrowUpDown, ArrowUp, ArrowDown, Calendar } from "lucide-react"
+import { Loader2, Mail, ArrowUpDown, ArrowUp, ArrowDown, Calendar } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-// import EmailSendingModal from "@/components/ui/email-sending-modal"
+import EmailSendingModal from "@/components/ui/email-sending-modal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // import type { BookingStatus } from "@/types/bookingDataType/bookingDataType"

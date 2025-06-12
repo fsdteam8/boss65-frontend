@@ -6,10 +6,10 @@ import { useQuery } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
 import { format, isToday } from "date-fns"
 import { toast } from "sonner"
-import { Loader2, ArrowUpDown, ArrowUp, ArrowDown, Calendar } from "lucide-react"
+import { Loader2, Mail, ArrowUpDown, ArrowUp, ArrowDown, Calendar } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-// import EmailSendingModal from "@/components/ui/email-sending-modal"
+import EmailSendingModal from "@/components/ui/email-sending-modal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // import type { BookingStatus } from "@/types/bookingDataType/bookingDataType"
@@ -241,7 +241,7 @@ export function BookingTable() {
                 </th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Amount</th>
                 <th className="px-4 py-3 text-sm font-medium text-gray-500">Status</th>
-                {/* <th className="px-4 py-3 text-sm font-medium text-gray-500">Action</th> */}
+                <th className="px-4 py-3 text-sm font-medium text-gray-500">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -293,7 +293,7 @@ export function BookingTable() {
                         </SelectContent>
                       </Select>
                     </td>
-                    {/* <td className="px-4 py-4 text-sm">
+                    <td className="px-4 py-4 text-sm">
                       <EmailSendingModal
                         recipientEmail={booking.user?.email}
                         trigger={
@@ -303,7 +303,7 @@ export function BookingTable() {
                           </Button>
                         }
                       />
-                    </td> */}
+                    </td>
                   </tr>
                 )
               })}
