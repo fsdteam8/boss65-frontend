@@ -9,7 +9,7 @@ import { toast } from "sonner"
 import { Loader2, ArrowUpDown, ArrowUp, ArrowDown, Calendar } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-// import EmailSendingModal from "@/components/ui/email-sending-modal"
+import EmailSendingModal from "@/components/ui/email-sending-modal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // import type { BookingStatus } from "@/types/bookingDataType/bookingDataType"
