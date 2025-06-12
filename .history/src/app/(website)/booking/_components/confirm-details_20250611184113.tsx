@@ -70,7 +70,7 @@ export default function ConfirmDetails() {
         }
 
         // handle success
-        console.log("Payment Intent Success:", data.data);
+         // console.log("Payment Intent Success:", data.data);
 
         window.location.href = data.data.url;
       },
@@ -212,11 +212,11 @@ const { isPending, mutate } = useMutation({
       numberOfPeople: data.numberOfPeople,
     };
 
-    // console.log("Booking Payload:", payload);
+    //  // console.log("Booking Payload:", payload);
 
     mutate(payload);
   };
-  console.log();
+   // console.log();
 
 
 
