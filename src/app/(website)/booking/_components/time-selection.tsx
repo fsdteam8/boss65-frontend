@@ -22,7 +22,7 @@ interface TimeSlotsApiRes {
 
 export default function TimeSelection() {
   const { service, setStep } = useBookingStore();
-  const { selectedDate, selectDate, selectTimeSlot, selectedTimeSlot } =
+  const { selectedDate, selectDate, selectTimeSlot, selectedTimeSlot, room } =
     useBookingStore();
 
   const serviceId = service?._id;
@@ -43,6 +43,7 @@ export default function TimeSelection() {
           body: JSON.stringify({
             date: dateOnly,
             serviceId: serviceId,
+            roomId: room?._id
           }),
         }
       ).then((res) => res.json()),

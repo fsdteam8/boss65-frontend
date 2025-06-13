@@ -103,7 +103,7 @@ export default function CreatePromoModal({
     const data = {
       code: promoCode,
       discountType,
-      discountValue,
+      discountValue: Number(discountValue),
       expiryDate: expirationDate.toISOString().split("T")[0], // format YYYY-MM-DD
       usageLimit: Number(usageLimit),
     };
@@ -180,6 +180,7 @@ export default function CreatePromoModal({
           <div className="grid grid-cols-[120px,1fr] items-center gap-2">
             <div className="text-sm font-medium">Discount Value :</div>
             <Input
+            type="number"
               value={discountValue}
               onChange={(e) => setDiscountValue(e.target.value)}
               className="bg-white"
@@ -205,7 +206,7 @@ export default function CreatePromoModal({
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
               />
               {calendarOpen && (
-                <div className="absolute z-50 mt-2 bg-white rounded-md shadow-lg">
+                <div className="absolute z-50 mt-2 bg-white rounded-md shadow-lg overflow-visible">
                   <DayPicker
                     mode="single"
                     selected={expirationDate}
