@@ -25,13 +25,14 @@ export default function TimeSelection() {
   const { selectedDate, selectDate, selectTimeSlot, selectedTimeSlot, room } = useBookingStore()
 
   const serviceId = service?._id
+  const roomId = room?._id;
 
   // Keep using moment for API request format as before
   const dateOnly = selectedDate ? moment(selectedDate).format("YYYY-MM-DD") : ""
 
   // Fetch available time slots for the selected date
   const { data, isLoading: loadingTimeSlots } = useQuery<TimeSlotsApiRes>({
-    queryKey: ["timeSlots", service, selectedDate?.toISOString()],
+    queryKey: ["timeSlots", service, selectedDate?.toISOString(), roomId],
     queryFn: () =>
       fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/booking/check-availability`, {
         method: "POST",
@@ -41,11 +42,13 @@ export default function TimeSelection() {
         body: JSON.stringify({
           date: dateOnly,
           serviceId: serviceId,
-          roomId: room?._id,
+          roomId: roomId,
         }),
       }).then((res) => res.json()),
     enabled: !!serviceId && !!dateOnly,
   })
+
+  console.log("data", data);
 
   // Function to format time in 12-hour format
   const formatTime = (timeString: string): string => {
@@ -65,34 +68,7 @@ export default function TimeSelection() {
     return `${hours12}:${minutes.toString().padStart(2, "0")} ${period}`
   }
 
-  // Function to ensure we have all 24 time slots
-  const ensureComplete24HourSlots = (slots: TimeSlot[]): TimeSlot[] => {
-    if (!slots || slots.length === 0) return []
 
-    // Create a map of existing slots for quick lookup
-    const slotMap = new Map<string, TimeSlot>()
-    slots.forEach((slot) => {
-      slotMap.set(slot.start, slot)
-    })
-
-    // Generate all 24 hour slots
-    const complete24HourSlots: TimeSlot[] = []
-
-    for (let hour = 0; hour < 24; hour++) {
-      const startHour = hour.toString().padStart(2, "0") + ":00"
-      const endHour = ((hour + 1) % 24).toString().padStart(2, "0") + ":00"
-
-      // Use existing slot data if available, otherwise create a default available slot
-      const existingSlot = slotMap.get(startHour)
-      complete24HourSlots.push({
-        start: startHour,
-        end: endHour,
-        available: existingSlot ? existingSlot.available : true,
-      })
-    }
-
-    return complete24HourSlots
-  }
 
   // Redirect if no service is selected
   if (!serviceId) {
@@ -112,7 +88,7 @@ export default function TimeSelection() {
   }
 
   // Ensure we have complete 24-hour slots
-  const timeSlots = data?.data ? ensureComplete24HourSlots(data.data) : []
+  const timeSlots = data?.data ?? undefined
   const isDisabled = !selectedTimeSlot ? true : selectedTimeSlot.length === 0
 
   return (
@@ -162,9 +138,13 @@ export default function TimeSelection() {
                   !slot.available && "bg-orange-100 cursor-not-allowed",
                   selectedTimeSlot?.some((s) => s.start === slot.start && s.end === slot.end) &&
                     "bg-orange-500 text-white",
+                    
                 )}
+                
               >
                 {formatTime(slot.start)} - {formatTime(slot.end)} {!slot.available && "(Already Booked!)"}
+                
+                
               </button>
             ))}
           </div>
