@@ -30,7 +30,7 @@ export default function BookingConfirmation({ bookingId }: Props) {
   });
 
   const successData = data?.data || [];
-   // console.log(successData);
+  // console.log(successData);
 
   return (
     <div className="my-32">
@@ -107,8 +107,13 @@ export default function BookingConfirmation({ bookingId }: Props) {
           </div>
         </CardContent>
 
-        <CardFooter className="px-6 py-4">
-          <Link href={"/"}>
+        <CardFooter className="px-6 py-4 flex flex-col items-center gap-4">
+          <p className="text-sm text-gray-600 text-center">
+            📬 Please check your email for the confirmation message. If you
+            don&apos;t see it, make sure to check your spam or junk folder as
+            well.
+          </p>
+          <Link href={"/"} className="w-full">
             <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
               Go to Home
             </Button>
