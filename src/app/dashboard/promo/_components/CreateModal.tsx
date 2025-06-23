@@ -134,8 +134,11 @@ export default function CreatePromoModal({
   }, [calendarOpen]);
 
   const formattedDate = expirationDate
-    ? expirationDate.toLocaleDateString("en-CA")
-    : "";
+  ? new Date(expirationDate.toLocaleString("en-US", { timeZone: "Asia/Singapore" }))
+      .toISOString()
+      .slice(0, 10)
+  : "";
+
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -206,21 +209,28 @@ export default function CreatePromoModal({
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
               />
               {calendarOpen && (
-                <div className="absolute z-50 mt-2 bg-white rounded-md shadow-lg overflow-visible">
-                  <DayPicker
-                    mode="single"
-                    selected={expirationDate}
-                    onSelect={(date) => {
-                      if (date) {
-                        setExpirationDate(date);
-                        setCalendarOpen(false);
-                      }
-                    }}
-                    fromDate={new Date()}
-                    initialFocus
-                  />
-                </div>
-              )}
+  <div className="absolute z-50 mt-2 bg-white rounded-md shadow-lg overflow-visible">
+    <DayPicker
+      mode="single"
+      selected={expirationDate}
+      onSelect={(date) => {
+        if (date) {
+          // ✅ Normalize to local midnight to prevent timezone shift
+          const normalizedDate = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + 1
+          );
+          setExpirationDate(normalizedDate);
+          setCalendarOpen(false);
+        }
+      }}
+      fromDate={new Date()}
+      initialFocus
+    />
+  </div>
+)}
+
             </div>
           </div>
 
