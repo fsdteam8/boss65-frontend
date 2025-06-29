@@ -79,7 +79,7 @@ export function BookingTabs() {
     value="services"
     className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
   >
-    Services
+    Book Now
   </TabsTrigger>
   <TabsTrigger
     value="time"
