@@ -95,7 +95,7 @@ export default function SocialSide() {
 
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
               <h3 className="font-manrope text-white text-lg font-bold leading-[120%] tracking-[0%] pl-4 md:pl-6 lg:pl-8 ">
-                {video.authorName || "Unknown Author"}
+                {video.authorName || "Albert Flores"}
               </h3>
               <p className="text-sm font-normal font-manrope leading-[120%] text-[#D4D4D8] pt-[5px] pl-4 md:pl-6 lg:pl-8 pb-4 md:pb-6 lg:pb-8">
                 {video.authorTitle || "Founder"}
