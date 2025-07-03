@@ -1,7 +1,7 @@
 import ContactForm from '@/components/ContactForm'
 import HeroSection from '@/components/Hero'
 import { Contact } from '@/components/hero-title'
-import ReviewCarousel from '@/components/Review'
+// import ReviewCarousel from '@/components/Review'
 import React from 'react'
 
 const page = () => {
@@ -9,7 +9,7 @@ const page = () => {
     <div>
       <HeroSection heading={<Contact/>}/> 
       <ContactForm/>
-      <ReviewCarousel/>
+      {/* <ReviewCarousel/> */}
     </div>
   )
 }
