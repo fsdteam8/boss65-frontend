@@ -79,7 +79,7 @@ export function BookingTabs() {
     value="services"
     className="data-[state=active]:bg-orange-500 data-[state=active]:text-white rounded-full min-w-max"
   >
-    Services
+    Book Now
   </TabsTrigger>
   <TabsTrigger
     value="time"
@@ -104,6 +104,7 @@ export function BookingTabs() {
         <RoomSelection />
       </TabsContent>
       <TabsContent value="services">
+        <p className="text-center md:text-xl text-base font-medium text-gray-700">You can book any day - any time 24/7h </p>
         <ServiceSelection />
       </TabsContent>
       <TabsContent value="time">
