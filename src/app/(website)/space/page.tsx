@@ -4,7 +4,7 @@ import { PrivateEscapeH1 } from "@/components/hero-title";
 import HowItWorks from "@/components/HowItWork";
 import MovieRoomSection from "@/components/MovieRoomSection";
 import Pricing from "@/components/Pricing";
-import ReviewCarousel from "@/components/Review";
+// import ReviewCarousel from "@/components/Review";
 import SliderComponent from "@/components/slider-component";
 import SocialChamberRoom from "@/components/SocialChamberRoom";
 // import Updates from "@/components/ui/Updates";
@@ -22,7 +22,7 @@ const page = () => {
       <SocialChamberRoom/>
       {/* <Faq /> */}
       {/* <Updates data={data} /> */}
-      <ReviewCarousel />
+      {/* <ReviewCarousel /> */}
     </div>
   );
 };
