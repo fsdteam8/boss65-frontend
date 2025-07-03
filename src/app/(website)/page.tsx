@@ -3,7 +3,7 @@ import HeroSection from "@/components/Hero";
 import PrivateRoomH1 from "@/components/hero-title";
 import HowItWorks from "@/components/HowItWork";
 import PrivateRoomPromo from "@/components/PrivateRoom";
-import ReviewCarousel from "@/components/Review";
+// import ReviewCarousel from "@/components/Review";
 import ShowRoom from "@/components/ShowRoom";
 import SocialSide from "@/components/SocialSide";
 // import Updates from "@/components/ui/Updates";
@@ -19,7 +19,7 @@ export default function Home() {
       <SocialSide />
       {/* <Updates data={data} /> */}
       <AsSeen />
-      <ReviewCarousel /> 
+      {/* <ReviewCarousel />  */}
   
     </div>
   );

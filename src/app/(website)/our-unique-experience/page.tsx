@@ -1,7 +1,7 @@
 // import Faq from '@/components/Faq'
 import HeroSection from '@/components/Hero'
 import { Experience } from '@/components/hero-title'
-import ReviewCarousel from '@/components/Review'
+// import ReviewCarousel from '@/components/Review'
 import RoomGallery from '@/components/RoomGallery'
 import SocialChamber from '@/components/SocialChamber'
 import React from 'react'
@@ -15,7 +15,7 @@ const page = () => {
       <HowItWorks/>
       <RoomGallery/>
       {/* <Faq/> */}
-      <ReviewCarousel/>
+      {/* <ReviewCarousel/> */}
     </div>
   )
 }
