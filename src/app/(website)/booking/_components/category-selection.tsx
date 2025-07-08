@@ -38,7 +38,7 @@ export default function CategorySelection() {
         </p>
       </div>
     );
-  } else if (data?.data.length === 0) {
+  } else if (data?.data?.length === 0) {
     content = (
       <div className="w-full flex justify-center items-center min-h-[400px]">
         <h1 className="text-[18px] text-gray-400">No Category Found</h1>
@@ -47,7 +47,7 @@ export default function CategorySelection() {
   } else {
     content = (
       <div className="grid md:grid-cols-2 gap-6">
-        {data?.data.map((n) => <CategoryCard key={n._id} category={n} />)}
+        {data?.data?.map((n) => <CategoryCard key={n._id} category={n} />)}
       </div>
     );
   }
