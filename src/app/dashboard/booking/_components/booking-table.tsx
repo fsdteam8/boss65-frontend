@@ -581,7 +581,7 @@ export function BookingTable() {
                           </SelectItem>
                           <SelectItem
                             value="cancelled"
-                            disabled={booking.isManualBooking}
+                            // disabled={booking.isManualBooking}
                           >
                             Cancelled
                           </SelectItem>
